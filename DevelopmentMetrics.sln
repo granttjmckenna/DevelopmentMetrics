@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevelopmentMetrics.Console", "DevelopmentMetrics.Console.csproj", "{5C2E5633-F9DD-4633-B406-F720028BEE3F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevelopmentMetrics.Console", "DevelopmentMetrics.Console/DevelopmentMetrics.Console.csproj", "{5C2E5633-F9DD-4633-B406-F720028BEE3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevelopmentMetrics.Tests", "..\DevelopmentMetrics.Tests\DevelopmentMetrics.Tests.csproj", "{76E8FB0D-3689-44A8-95D6-D4BA6D90C72D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevelopmentMetrics.Tests", "DevelopmentMetrics.Tests\DevelopmentMetrics.Tests.csproj", "{76E8FB0D-3689-44A8-95D6-D4BA6D90C72D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevelopmentMetrics", "..\DevelopmentMetrics\DevelopmentMetrics.csproj", "{1DCA05E1-FC8B-4C83-978E-5A1CD4FBC1E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevelopmentMetrics", "DevelopmentMetrics\DevelopmentMetrics.csproj", "{1DCA05E1-FC8B-4C83-978E-5A1CD4FBC1E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
