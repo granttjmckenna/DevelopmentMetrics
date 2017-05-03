@@ -8,6 +8,6 @@ namespace DevelopmentMetrics.Models
         public int Count { get; set; }
 
         [JsonProperty(PropertyName = "Project")]
-        public List<Project> ProjectList { get; set; }
+        public List<ProjectDto> ProjectList { get; set; }
     }
 }

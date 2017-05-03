@@ -47,7 +47,7 @@
     <Compile Include="Models\AgentDto.cs" />
     <Compile Include="Models\BuildDto.cs" />
     <Compile Include="Models\BuildDetail.cs" />
-    <Compile Include="Models\Project.cs" />
+    <Compile Include="Models\ProjectDto.cs" />
     <Compile Include="Models\ProjectBuild.cs" />
     <Compile Include="Models\Projects.cs" />
     <Compile Include="Models\RootProject.cs" />
