@@ -29,6 +29,14 @@ namespace DevelopmentMetrics.Models
 
         public List<BuildMetric> GetBuildMetrics()
         {
+            var buildMetrics = Helpers.CacheHelper.GetObjectFromCache<List<BuildMetric>>("buildMetrics", 20,
+                GetBuildMetricsFromRepo);
+
+            return buildMetrics;
+        }
+
+        private List<BuildMetric> GetBuildMetricsFromRepo()
+        {
             var rootProjectJson = _buildRepository.GetRoot();
 
             var rootProject = GetProject(rootProjectJson);
@@ -49,7 +57,6 @@ namespace DevelopmentMetrics.Models
                         State = buildDetail.State,
                         Status = buildDetail.Status,
                         AgentName = buildDetail.AgentDto.Name,
-
                     })
                 .ToList();
         }
