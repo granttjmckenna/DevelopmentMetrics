@@ -84,12 +84,26 @@ namespace DevelopmentMetrics.Tests
             Assert.That(projectBuildMetrics.First(c => c.Key.Equals("Different project id")).Value, Is.EqualTo(0));
         }
 
+        [TestCase("2017-01-01")]
+        [TestCase("2016-06-01")]
+        [TestCase("2017-06-01")]
+        public void Should_calculate_failure_percentage_by_month_for_one_year(string fromDate)
+        {
+            var buildMetrics = GetBuildMetricsData(360);
+
+            var monthlyBuildMetrics = new BuildCalculators().CalculateBuildFailingRateByMonthFrom(DateTime.Parse(fromDate), buildMetrics);
+
+            Assert.That(monthlyBuildMetrics.Keys.Count, Is.EqualTo(12));
+        }
+
         private List<BuildMetric> GetBuildMetricsData(int rows)
         {
             var dummyBuildMetrics = new List<BuildMetric>();
 
             for (var i = 1; i <= rows; i++)
             {
+                var baseDateTime = new DateTime(2017, 1, 1, 12, 0, 0);
+
                 dummyBuildMetrics.Add(
                     new BuildMetric
                     {
@@ -98,9 +112,9 @@ namespace DevelopmentMetrics.Tests
                         BuildTypeId = "Blah_blah",
                         BuildId = i,
                         AgentName = "Blah",
-                        StartDateTime = DateTime.Now,
-                        FinishDateTime = DateTime.Now,
-                        QueueDateTime = DateTime.Now,
+                        StartDateTime = baseDateTime.AddDays(i).AddMinutes(1),
+                        FinishDateTime = baseDateTime.AddDays(i).AddMinutes(2),
+                        QueueDateTime = baseDateTime.AddDays(i),
                         State = "Finished",
                         Status = GetStatus(i)
                     }

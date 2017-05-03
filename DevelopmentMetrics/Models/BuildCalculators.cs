@@ -57,9 +57,44 @@ namespace DevelopmentMetrics.Models
                         b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase) &&
                         b.Status.Equals("Failure", StringComparison.CurrentCultureIgnoreCase));
 
-            var failingRate = Math.Round((double) (100 * failing) / total, 2);
+            var failingRate = CalculateFailingRate(failing, total);
 
             return failingRate;
+        }
+
+        public Dictionary<string, double> CalculateBuildFailingRateByMonthFrom(DateTime fromDate, List<BuildMetric> buildMetrics)
+        {
+            var results = new Dictionary<string, double>();
+
+            for (var i = 0; i < 12; i++)
+            {
+                var queryDate = fromDate.AddMonths(i);
+
+                var monthBuildMetrics =
+                    buildMetrics
+                        .Where(b => b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase)
+                                    && b.StartDateTime.Month.Equals(queryDate.Month)
+                                    && b.StartDateTime.Year.Equals(queryDate.Year))
+                        .ToList();
+
+                var total = monthBuildMetrics.Count();
+
+                var failing =
+                    monthBuildMetrics.Count(b => b.Status.Equals("Failure", StringComparison.CurrentCultureIgnoreCase));
+
+                var failingRate = CalculateFailingRate(failing, total);
+
+                results.Add(queryDate.ToString("MMM-yyyy"), failingRate);
+            }
+
+            return results;
+        }
+
+        private static double CalculateFailingRate(int failing, int total)
+        {
+            return (total == 0)
+                ? 0
+                : Math.Round((double)(100 * failing) / total, 2);
         }
     }
 }
