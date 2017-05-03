@@ -45,7 +45,7 @@ namespace DevelopmentMetrics.Tests
 
             Assert.That(buildDetail.Id, Is.EqualTo(360907));
             Assert.That(buildDetail.BuildTypeId, Is.EqualTo("Consumer_Funnel_31ProductionSmokeTests"));
-            Assert.That(buildDetail.Agent.Name, Is.EqualTo("lon-devtcagent3"));
+            Assert.That(buildDetail.AgentDto.Name, Is.EqualTo("lon-devtcagent3"));
             Assert.That(!string.IsNullOrWhiteSpace(buildDetail.StartDateTime));
             Assert.That(!string.IsNullOrWhiteSpace(buildDetail.FinishDateTime));
             Assert.That(!string.IsNullOrWhiteSpace(buildDetail.QueuedDateTime));

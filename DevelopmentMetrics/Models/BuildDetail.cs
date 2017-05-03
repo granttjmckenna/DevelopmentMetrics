@@ -10,7 +10,8 @@ namespace DevelopmentMetrics.Models
 
         public string BuildTypeId { get; set; }
 
-        public Agent Agent { get; set; }
+        [JsonProperty(PropertyName = "Agent")]
+        public AgentDto AgentDto { get; set; }
 
         [JsonProperty(PropertyName = "startDate")]
         public string StartDateTime { get; set; }

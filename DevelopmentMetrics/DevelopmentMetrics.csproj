@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Agent.cs" />
+    <Compile Include="Models\AgentDto.cs" />
     <Compile Include="Models\Build.cs" />
     <Compile Include="Models\BuildDetail.cs" />
     <Compile Include="Models\Project.cs" />

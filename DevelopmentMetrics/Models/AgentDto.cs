@@ -1,6 +1,6 @@
 ﻿namespace DevelopmentMetrics.Models
 {
-    public class Agent  
+    public class AgentDto  
     {
         public string Name { get; set; }
     }

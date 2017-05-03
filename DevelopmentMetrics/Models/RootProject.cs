@@ -47,7 +47,7 @@ namespace DevelopmentMetrics.Models
                         //QueueDateTime = DateTime.Parse(buildDetail.QueuedDateTime),
                         State = buildDetail.State,
                         Status = buildDetail.Status,
-                        AgentName = buildDetail.Agent.Name,
+                        AgentName = buildDetail.AgentDto.Name,
 
                     })
                 .ToList();
