@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DevelopmentMetrics.Repository;
 using Newtonsoft.Json;
 
@@ -17,18 +16,18 @@ namespace DevelopmentMetrics.Models
             _buildRepository = buildRepository;
         }
 
-        public ProjectBuild GetBuilds(string returnedJson)
-        {
-            var projectBuild = JsonConvert.DeserializeObject<ProjectBuild>(returnedJson);
-
-            return projectBuild;
-        }
-
         public List<Build> GetBuildsFor(string buildHref)
         {
             var returnedJson = _buildRepository.GetJsonFor(buildHref);
 
             return GetBuilds(returnedJson).BuildList;
+        }
+
+        private ProjectBuild GetBuilds(string returnedJson)
+        {
+            var projectBuild = JsonConvert.DeserializeObject<ProjectBuild>(returnedJson);
+
+            return projectBuild;
         }
     }
 }

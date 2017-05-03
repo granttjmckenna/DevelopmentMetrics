@@ -32,12 +32,10 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_deserialise_json_to_project_builds()
         {
-            var returnedJson = _fakeRepository.GetProjectBuild();
+            var projects = new ProjectBuild(_fakeRepository).GetBuildsFor("projects");
 
-            var projectBuild = new ProjectBuild(_fakeRepository).GetBuilds(returnedJson);
-
-            Assert.That(projectBuild.BuildList.Any());
-            Assert.That(projectBuild.BuildList.Count, Is.EqualTo(200));
+            Assert.That(projects.Any());
+            Assert.That(projects.Count, Is.EqualTo(200));
         }
 
         [Test]
