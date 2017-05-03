@@ -5,5 +5,7 @@ namespace DevelopmentMetrics.Repository
         string GetRoot();
 
         string GetProjectBuild();
+
+        string GetJsonFor(string path);
     }
 }

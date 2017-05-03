@@ -26,7 +26,7 @@ namespace DevelopmentMetrics.Models
 
         public List<Build> GetBuildsFor(string buildHref)
         {
-            var returnedJson = _buildRepository.GetProjectBuild();
+            var returnedJson = _buildRepository.GetJsonFor(buildHref);
 
             return GetBuilds(returnedJson).BuildList;
         }

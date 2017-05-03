@@ -33,15 +33,23 @@ namespace DevelopmentMetrics.Models
             var rootProject = GetProject(rootProjectJson);
 
             return (from project in rootProject.Projects.ProjectList
-                let builds = new ProjectBuild(_buildRepository).GetBuildsFor(project.Href)
-                from build in builds
-                let buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsFor(build.Href)
-                select new BuildMetric
-                {
-                    ProjectId = project.Id,
-                    ProjectName = project.Name,
-                    BuildTypeId = build.BuildTypeId,
-                })
+                    let builds = new ProjectBuild(_buildRepository).GetBuildsFor(project.Href)
+                    from build in builds
+                    let buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsFor(build.Href)
+                    select new BuildMetric
+                    {
+                        ProjectId = project.Id,
+                        ProjectName = project.Name,
+                        BuildTypeId = build.BuildTypeId,
+                        BuildId = buildDetail.Id,
+                        //StartDateTime = DateTime.Parse(buildDetail.StartDateTime),
+                        //FinishDateTime = DateTime.Parse(buildDetail.FinishDateTime),
+                        //QueueDateTime = DateTime.Parse(buildDetail.QueuedDateTime),
+                        State = buildDetail.State,
+                        Status = buildDetail.Status,
+                        AgentName = buildDetail.Agent.Name,
+
+                    })
                 .ToList();
         }
 
@@ -80,16 +88,19 @@ namespace DevelopmentMetrics.Models
         public string ProjectName { get; set; }
 
         public string BuildTypeId { get; set; }
-        
 
-        //Start, Finish & queue date/times
+        public DateTime StartDateTime { get; set; }
 
-        //State
+        public DateTime FinishDateTime { get; set; }
 
-        //Status
+        public DateTime QueueDateTime { get; set; }
 
-        //BuildId
+        public string State { get; set; }
 
-        //AgentName
+        public string Status { get; set; }
+
+        public string AgentName { get; set; }
+
+        public int BuildId { get; set; }
     }
 }

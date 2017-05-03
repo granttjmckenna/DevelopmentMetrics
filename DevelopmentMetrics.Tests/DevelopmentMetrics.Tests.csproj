@@ -57,6 +57,7 @@
     <Compile Include="BuildMetricTests.cs" />
     <Compile Include="BuildRepositoryTests.cs" />
     <Compile Include="DeserialiserTests.cs" />
+    <Compile Include="FakeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

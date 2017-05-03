@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DevelopmentMetrics.Models;
 using NUnit.Framework;
 
@@ -49,11 +50,12 @@ namespace DevelopmentMetrics.Tests
             Assert.That(buildDetail.Id, Is.EqualTo(360907));
             Assert.That(buildDetail.BuildTypeId, Is.EqualTo("Consumer_Funnel_31ProductionSmokeTests"));
             Assert.That(buildDetail.Agent.Name, Is.EqualTo("lon-devtcagent3"));
-            Assert.IsNotNull(buildDetail.StartDateTime);
-            Assert.IsNotNull(buildDetail.FinishDateTime);
-            Assert.IsNotNull(buildDetail.QueuedDateTime);
-            Assert.IsNotNull(buildDetail.State);
-            Assert.IsNotNull(buildDetail.Status);
+            Assert.That(!string.IsNullOrWhiteSpace(buildDetail.StartDateTime));
+            Assert.That(!string.IsNullOrWhiteSpace(buildDetail.FinishDateTime));
+            Assert.That(!string.IsNullOrWhiteSpace(buildDetail.QueuedDateTime));
+            Assert.That(buildDetail.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase));
+            Assert.That(buildDetail.Status.Equals("Success", StringComparison.InvariantCultureIgnoreCase));
+            //todo agent name assert
         }
 
         private static RootProject GetExpectedRootProject()

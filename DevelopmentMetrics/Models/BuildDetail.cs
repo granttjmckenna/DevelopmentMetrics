@@ -1,6 +1,7 @@
 ﻿using System;
 using DevelopmentMetrics.Repository;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace DevelopmentMetrics.Models
 {
@@ -13,11 +14,14 @@ namespace DevelopmentMetrics.Models
 
         public Agent Agent { get; set; }
 
-        public DateTime StartDateTime { get; set; }
+        [JsonProperty(PropertyName = "startDate")]
+        public string StartDateTime { get; set; }
 
-        public DateTime FinishDateTime { get; set; }
+        [JsonProperty(PropertyName = "finishDate")]
+        public string FinishDateTime { get; set; }
 
-        public DateTime QueuedDateTime { get; set; }
+        [JsonProperty(PropertyName = "queuedDate")]
+        public string QueuedDateTime { get; set; }
 
         public string State { get; set; }
 
@@ -37,7 +41,7 @@ namespace DevelopmentMetrics.Models
 
         public BuildDetail GetBuildDetailsFor(string buildHref)
         {
-            var returnedJson = _buildRepository.GetProjectBuild();
+            var returnedJson = _buildRepository.GetJsonFor(buildHref);
 
             return GetDetails(returnedJson);
         }
