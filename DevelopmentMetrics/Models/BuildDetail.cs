@@ -1,7 +1,5 @@
-﻿using System;
-using DevelopmentMetrics.Repository;
+﻿using DevelopmentMetrics.Repository;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace DevelopmentMetrics.Models
 {
@@ -32,18 +30,18 @@ namespace DevelopmentMetrics.Models
             _buildRepository = buildRepository;
         }
 
-        public BuildDetail GetDetails(string returnedJson)
-        {
-            var buildDetail = JsonConvert.DeserializeObject<BuildDetail>(returnedJson);
-
-            return buildDetail;
-        }
-
         public BuildDetail GetBuildDetailsFor(string buildHref)
         {
             var returnedJson = _buildRepository.GetJsonFor(buildHref);
 
             return GetDetails(returnedJson);
+        }
+
+        private BuildDetail GetDetails(string returnedJson)
+        {
+            var buildDetail = JsonConvert.DeserializeObject<BuildDetail>(returnedJson);
+
+            return buildDetail;
         }
     }
 }

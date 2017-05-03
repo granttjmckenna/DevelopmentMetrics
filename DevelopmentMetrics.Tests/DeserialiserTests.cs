@@ -43,9 +43,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_deserialise_json_to_build_details()
         {
-            var returnedJson = _fakeRepository.GetBuildDetails();
-
-            var buildDetail = new BuildDetail(_fakeRepository).GetDetails(returnedJson);
+            var buildDetail = new BuildDetail(_fakeRepository).GetBuildDetailsFor("builds/id");
 
             Assert.That(buildDetail.Id, Is.EqualTo(360907));
             Assert.That(buildDetail.BuildTypeId, Is.EqualTo("Consumer_Funnel_31ProductionSmokeTests"));
@@ -55,7 +53,6 @@ namespace DevelopmentMetrics.Tests
             Assert.That(!string.IsNullOrWhiteSpace(buildDetail.QueuedDateTime));
             Assert.That(buildDetail.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase));
             Assert.That(buildDetail.Status.Equals("Success", StringComparison.InvariantCultureIgnoreCase));
-            //todo agent name assert
         }
 
         private static RootProject GetExpectedRootProject()
