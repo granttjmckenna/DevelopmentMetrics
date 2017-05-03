@@ -39,7 +39,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_calculate_failure_percentage()
         {
-            var buildMetrics = GetBuildMetricsData();
+            var buildMetrics = GetBuildMetricsData(10);
 
             var failingRate = new BuildCalculators().CalculateBuildFailingRate(buildMetrics);
 
@@ -49,9 +49,9 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_calculate_failure_percentage_for_project()
         {
-            var buildMetrics = GetBuildMetricsData();
+            var buildMetrics = GetBuildMetricsData(10);
 
-            buildMetrics[9].ProjectId = "Exclude from calculation";
+            buildMetrics[1].ProjectId = "Exclude from calculation";
 
             var failingRate = new BuildCalculators().CalculateProjectBuildFailingRateFor(buildMetrics, "Blah");
 
@@ -61,9 +61,9 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_calculate_failure_percentage_for_agent_name()
         {
-            var buildMetrics = GetBuildMetricsData();
+            var buildMetrics = GetBuildMetricsData(10);
 
-            buildMetrics[9].AgentName = "Exclude from calculation";
+            buildMetrics[1].AgentName = "Exclude from calculation";
 
             var failingRate = new BuildCalculators().CalculateAgentBuildFailingRateFor(buildMetrics, "Blah");
 
@@ -73,9 +73,9 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_calculate_failure_percentage_by_project()
         {
-            var buildMetrics = GetBuildMetricsData();
+            var buildMetrics = GetBuildMetricsData(10);
 
-            buildMetrics[9].ProjectId = "Different project id";
+            buildMetrics[1].ProjectId = "Different project id";
 
             var projectBuildMetrics = new BuildCalculators().CalculateProjectBuildFailingRate(buildMetrics);
 
@@ -84,11 +84,11 @@ namespace DevelopmentMetrics.Tests
             Assert.That(projectBuildMetrics.First(c => c.Key.Equals("Different project id")).Value, Is.EqualTo(0));
         }
 
-        private List<BuildMetric> GetBuildMetricsData()
+        private List<BuildMetric> GetBuildMetricsData(int rows)
         {
             var dummyBuildMetrics = new List<BuildMetric>();
 
-            for (var i = 1; i < 11; i++)
+            for (var i = 1; i <= rows; i++)
             {
                 dummyBuildMetrics.Add(
                     new BuildMetric
