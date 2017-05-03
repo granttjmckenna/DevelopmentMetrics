@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using DevelopmentMetrics.Repository;
 using Newtonsoft.Json;
@@ -42,9 +43,9 @@ namespace DevelopmentMetrics.Models
                         ProjectName = project.Name,
                         BuildTypeId = build.BuildTypeId,
                         BuildId = buildDetail.Id,
-                        //StartDateTime = DateTime.Parse(buildDetail.StartDateTime),
-                        //FinishDateTime = DateTime.Parse(buildDetail.FinishDateTime),
-                        //QueueDateTime = DateTime.Parse(buildDetail.QueuedDateTime),
+                        StartDateTime = ParseDateTimeString(buildDetail.StartDateTime),
+                        FinishDateTime = ParseDateTimeString(buildDetail.FinishDateTime),
+                        QueueDateTime = ParseDateTimeString(buildDetail.QueuedDateTime),
                         State = buildDetail.State,
                         Status = buildDetail.Status,
                         AgentName = buildDetail.AgentDto.Name,
@@ -58,6 +59,16 @@ namespace DevelopmentMetrics.Models
             var project = JsonConvert.DeserializeObject<RootProject>(returnedJson);
 
             return project;
+        }
+
+        private static DateTime ParseDateTimeString(string dateTimeString)
+        {
+            var newDateTimeString = dateTimeString
+                .Replace("T", "")
+                .Substring(0, dateTimeString.IndexOf("+", StringComparison.InvariantCultureIgnoreCase) - 1);
+
+            return DateTime.ParseExact(newDateTimeString, "yyyyMMddHHmmss", CultureInfo.InvariantCulture,
+                DateTimeStyles.AdjustToUniversal);
         }
 
         public override bool Equals(object obj)
