@@ -19,7 +19,7 @@ namespace DevelopmentMetrics.Models
 
         public string WebUrl { get; set; }
 
-        public Projects Projects { get; set; }
+        public ProjectsDto Projects { get; set; }
 
         public RootProject(IBuildRepository repository)
         {

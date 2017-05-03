@@ -62,7 +62,7 @@ namespace DevelopmentMetrics.Tests
                 Description = "Contains all other projects",
                 Href = "/guestAuth/app/rest/projects/id:_Root",
                 WebUrl = "http://teamcity.energyhelpline.local/project.html?projectId=_Root",
-                Projects = new Projects
+                Projects = new ProjectsDto
                 {
                     Count = 17
                 }

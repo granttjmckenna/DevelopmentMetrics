@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace DevelopmentMetrics.Models
 {
-    public class Projects
+    public class ProjectsDto
     {
         public int Count { get; set; }
 

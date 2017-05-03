@@ -49,7 +49,7 @@
     <Compile Include="Models\BuildDetail.cs" />
     <Compile Include="Models\ProjectDto.cs" />
     <Compile Include="Models\ProjectBuild.cs" />
-    <Compile Include="Models\Projects.cs" />
+    <Compile Include="Models\ProjectsDto.cs" />
     <Compile Include="Models\RootProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\IBuildRepository.cs" />
