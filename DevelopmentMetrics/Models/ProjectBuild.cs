@@ -9,14 +9,14 @@ namespace DevelopmentMetrics.Models
         private readonly IBuildRepository _buildRepository;
 
         [JsonProperty(PropertyName = "Build")]
-        public List<Build> BuildList { get; set; }
+        public List<BuildDto> BuildList { get; set; }
 
         public ProjectBuild(IBuildRepository buildRepository)
         {
             _buildRepository = buildRepository;
         }
 
-        public List<Build> GetBuildsFor(string buildHref)
+        public List<BuildDto> GetBuildsFor(string buildHref)
         {
             var returnedJson = _buildRepository.GetJsonFor(buildHref);
 

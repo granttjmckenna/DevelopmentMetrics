@@ -1,6 +1,6 @@
 ﻿namespace DevelopmentMetrics.Models
 {
-    public class Build
+    public class BuildDto
     {
         public int Id { get; set; }
         public string BuildTypeId { get; set; }
