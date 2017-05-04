@@ -19,7 +19,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_deserialise_json_to_root_project_object()
         {
-            var returnedJson = _fakeRepository.GetRoot();
+            var returnedJson = _fakeRepository.GetJsonFor("_root");
 
             var expected = GetExpectedRootProject();
 
