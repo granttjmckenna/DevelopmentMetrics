@@ -41,7 +41,7 @@ namespace DevelopmentMetrics.Tests
         {
             var buildMetrics = GetBuildMetricsData(10);
 
-            var failingRate = new BuildCalculators().CalculateBuildFailingRate(buildMetrics);
+            var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics);
 
             Assert.That(failingRate, Is.EqualTo(30));
         }
@@ -53,7 +53,8 @@ namespace DevelopmentMetrics.Tests
 
             buildMetrics[1].ProjectId = "Exclude from calculation";
 
-            var failingRate = new BuildCalculators().CalculateProjectBuildFailingRateFor(buildMetrics, "Blah");
+            var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics,
+                b => b.ProjectId.Equals("Blah", StringComparison.CurrentCultureIgnoreCase));
 
             Assert.That(failingRate, Is.EqualTo(33.33));
         }
@@ -65,7 +66,8 @@ namespace DevelopmentMetrics.Tests
 
             buildMetrics[1].AgentName = "Exclude from calculation";
 
-            var failingRate = new BuildCalculators().CalculateAgentBuildFailingRateFor(buildMetrics, "Blah");
+            var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics,
+                b => b.AgentName.Equals("Blah", StringComparison.CurrentCultureIgnoreCase));
 
             Assert.That(failingRate, Is.EqualTo(33.33));
         }

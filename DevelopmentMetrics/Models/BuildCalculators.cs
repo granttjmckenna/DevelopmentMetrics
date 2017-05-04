@@ -6,9 +6,18 @@ namespace DevelopmentMetrics.Models
 {
     public class BuildCalculators
     {
-        public double CalculateBuildFailingRate(List<BuildMetric> buildMetrics)
+        public static double CalculateBuildFailureRate(List<BuildMetric> buildMetrics)
         {
-            return CalculateFailingRate(buildMetrics);
+            Func<BuildMetric, bool> predicate = b => b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase);
+
+            return CalculateBuildFailureRate(buildMetrics, predicate);
+        }
+
+        public static double CalculateBuildFailureRate(List<BuildMetric> buildMetrics, Func<BuildMetric, bool> predicate)
+        {
+            var filteredBuildMetrics = buildMetrics.Where(predicate);
+
+            return CalculateFailingRate(filteredBuildMetrics);
         }
 
         public Dictionary<string, double> CalculateProjectBuildFailingRate(List<BuildMetric> buildMetrics)
@@ -20,8 +29,8 @@ namespace DevelopmentMetrics.Models
                 if (projectBuildMetrics.ContainsKey(buildMetric.ProjectId))
                     continue;
 
-                var failureRate = new BuildCalculators().CalculateProjectBuildFailingRateFor(buildMetrics,
-                    buildMetric.ProjectId);
+                var failureRate = CalculateBuildFailureRate(buildMetrics,
+                    b => b.ProjectId.Equals(buildMetric.ProjectId, StringComparison.InvariantCultureIgnoreCase));
 
                 projectBuildMetrics.Add(buildMetric.ProjectId, failureRate);
             }
@@ -29,33 +38,15 @@ namespace DevelopmentMetrics.Models
             return projectBuildMetrics;
         }
 
-        public double CalculateProjectBuildFailingRateFor(List<BuildMetric> buildMetrics, string projectId)
+        private static double CalculateFailingRate(IEnumerable<BuildMetric> buildMetrics)
         {
-            var projectBuildMetrics = buildMetrics
-                .Where(b => b.ProjectId.Equals(projectId, StringComparison.InvariantCultureIgnoreCase))
+            var metrics = buildMetrics
+                .Where(b => b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
 
-            return CalculateFailingRate(projectBuildMetrics);
-        }
+            var total = metrics.Count;
 
-        public double CalculateAgentBuildFailingRateFor(List<BuildMetric> buildMetrics, string agentName)
-        {
-            var projectBuildMetrics = buildMetrics
-                .Where(b => b.AgentName.Equals(agentName, StringComparison.InvariantCultureIgnoreCase))
-                .ToList();
-
-            return CalculateFailingRate(projectBuildMetrics);
-        }
-
-        private static double CalculateFailingRate(IReadOnlyCollection<BuildMetric> buildMetrics)
-        {
-            var total = buildMetrics.Count;
-
-            var failing =
-                buildMetrics.Count(
-                    b =>
-                        b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase) &&
-                        b.Status.Equals("Failure", StringComparison.CurrentCultureIgnoreCase));
+            var failing = metrics.Count(b => b.Status.Equals("Failure", StringComparison.CurrentCultureIgnoreCase));
 
             var failingRate = CalculateFailingRate(failing, total);
 
