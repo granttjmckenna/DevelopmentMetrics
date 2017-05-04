@@ -4,7 +4,7 @@ namespace DevelopmentMetrics.Tests
 {
     public class FakeRepository : IBuildRepository
     {
-        public string GetJsonFor(string path)
+        public string GetDataFor(string path)
         {
             if (path.Contains("projects"))
             {

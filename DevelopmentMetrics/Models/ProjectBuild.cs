@@ -18,7 +18,7 @@ namespace DevelopmentMetrics.Models
 
         public List<BuildDto> GetBuildsFor(string buildHref)
         {
-            var returnedJson = _buildRepository.GetJsonFor(buildHref);
+            var returnedJson = _buildRepository.GetDataFor(buildHref);
 
             return GetBuilds(returnedJson).BuildList;
         }

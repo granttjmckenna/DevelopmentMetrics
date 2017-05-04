@@ -37,7 +37,7 @@ namespace DevelopmentMetrics.Models
 
         private List<BuildMetric> GetBuildMetricsFromRepo()
         {
-            var rootProjectJson = _buildRepository.GetJsonFor("_root");
+            var rootProjectJson = _buildRepository.GetDataFor("_root");
 
             var rootProject = GetProject(rootProjectJson);
 

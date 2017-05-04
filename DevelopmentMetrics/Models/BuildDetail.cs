@@ -33,7 +33,7 @@ namespace DevelopmentMetrics.Models
 
         public BuildDetail GetBuildDetailsFor(string buildHref)
         {
-            var returnedJson = _buildRepository.GetJsonFor(buildHref);
+            var returnedJson = _buildRepository.GetDataFor(buildHref);
 
             return GetDetails(returnedJson);
         }
