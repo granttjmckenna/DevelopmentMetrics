@@ -59,6 +59,7 @@
     <Compile Include="DeserialiserTests.cs" />
     <Compile Include="FakeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
