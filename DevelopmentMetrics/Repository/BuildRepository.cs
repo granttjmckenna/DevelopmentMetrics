@@ -1,5 +1,10 @@
 namespace DevelopmentMetrics.Repository
 {
+    public interface IBuildRepository
+    {
+        string GetDataFor(string path);
+    }
+
     public class BuildRepository : IBuildRepository
     {
         private readonly IWebClient _webClient;
