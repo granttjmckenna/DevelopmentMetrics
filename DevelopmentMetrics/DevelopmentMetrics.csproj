@@ -55,7 +55,9 @@
     <Compile Include="Models\ProjectsDto.cs" />
     <Compile Include="Models\RootProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\BuildRepository.cs" />
     <Compile Include="Repository\IBuildRepository.cs" />
+    <Compile Include="Repository\WebClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

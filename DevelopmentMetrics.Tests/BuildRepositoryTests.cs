@@ -1,5 +1,4 @@
-﻿using DevelopmentMetrics.Repository;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace DevelopmentMetrics.Tests
 {
@@ -36,24 +35,6 @@ namespace DevelopmentMetrics.Tests
             var actual = new FakeRepository().GetDataFor("/guestAuth/app/rest/builds/id:360905");
 
             Assert.That(actual, Is.EqualTo(expected));
-        }
-    }
-
-    public class BuildRepository : IBuildRepository
-    {
-        public string GetRoot()
-        {
-            return null;
-        }
-
-        public string GetProjectBuild()
-        {
-            return null;
-        }
-
-        public string GetDataFor(string path)
-        {
-            return null;
         }
     }
 }
