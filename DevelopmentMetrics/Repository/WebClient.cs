@@ -14,7 +14,7 @@ namespace DevelopmentMetrics.Repository
         public string Get(string url)
         {
             var result = string.Empty;
-            var absoluteUrl = GetAsbsoluteUrlFor(url);
+            var absoluteUrl = GetAsbsoluteUrlWith(url);
 
             var webRequest = WebRequest.Create(absoluteUrl);
             webRequest.Headers.Add(HttpRequestHeader.Accept, "application/json");
@@ -35,9 +35,9 @@ namespace DevelopmentMetrics.Repository
             return result;
         }
 
-        private string GetAsbsoluteUrlFor(string relativeUrlPart)
+        private string GetAsbsoluteUrlWith(string relativePart)
         {
-            var absoluteUrl = $"http://teamcity.energyhelpline.local/{relativeUrlPart}";
+            var absoluteUrl = $"http://teamcity.energyhelpline.local/{relativePart}";
 
             return GetUrlWithQueryStringCount(absoluteUrl);
         }
