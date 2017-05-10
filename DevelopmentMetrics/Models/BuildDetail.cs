@@ -31,18 +31,11 @@ namespace DevelopmentMetrics.Models
             _buildRepository = buildRepository;
         }
 
-        public BuildDetail GetBuildDetailsFor(string buildHref)
+        public BuildDetail GetBuildDetailsFor(string buildUrl)
         {
-            var returnedJson = _buildRepository.GetDataFor(buildHref);
+            var returnedJson = _buildRepository.GetDataFor(buildUrl);
 
-            return GetDetails(returnedJson);
-        }
-
-        private BuildDetail GetDetails(string returnedJson)
-        {
-            var buildDetail = JsonConvert.DeserializeObject<BuildDetail>(returnedJson);
-
-            return buildDetail;
+            return JsonConvert.DeserializeObject<BuildDetail>(returnedJson);
         }
     }
 }
