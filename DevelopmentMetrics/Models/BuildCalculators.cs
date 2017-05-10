@@ -8,7 +8,8 @@ namespace DevelopmentMetrics.Models
     {
         public static double CalculateBuildFailureRate(List<BuildMetric> buildMetrics)
         {
-            Func<BuildMetric, bool> predicate = b => b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase);
+            Func<BuildMetric, bool> predicate =
+                b => b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase);
 
             return CalculateBuildFailureRate(buildMetrics, predicate);
         }
@@ -53,7 +54,8 @@ namespace DevelopmentMetrics.Models
             return failingRate;
         }
 
-        public Dictionary<string, double> CalculateBuildFailingRateByMonthFrom(DateTime fromDate, List<BuildMetric> buildMetrics)
+        public Dictionary<string, double> CalculateBuildFailingRateByMonthFrom(DateTime fromDate,
+            List<BuildMetric> buildMetrics)
         {
             var results = new Dictionary<string, double>();
 
@@ -86,6 +88,26 @@ namespace DevelopmentMetrics.Models
             return (total == 0)
                 ? 0
                 : Math.Round((double)(100 * failing) / total, 2);
+        }
+
+        public static List<BuildMetric> GetFirstFailingBuildsByProject(List<BuildMetric> buildMetrics)
+        {
+            var failingBuilds =
+                buildMetrics.Where(b => b.Status.Equals("Failure", StringComparison.InvariantCultureIgnoreCase));
+
+            return failingBuilds
+                .Where(failingBuild => PreviousBuildSucceeded(buildMetrics, failingBuild))
+                .ToList();
+        }
+
+        private static bool PreviousBuildSucceeded(List<BuildMetric> buildMetrics, BuildMetric failingBuild)
+        {
+            var previousBuild =
+                buildMetrics.LastOrDefault(
+                    b => b.ProjectId.Equals(failingBuild.ProjectId, StringComparison.InvariantCultureIgnoreCase)
+                         && b.BuildId < failingBuild.BuildId);
+
+            return previousBuild == null || previousBuild.Status.Equals("Success", StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

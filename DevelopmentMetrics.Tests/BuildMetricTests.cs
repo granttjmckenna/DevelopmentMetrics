@@ -98,6 +98,90 @@ namespace DevelopmentMetrics.Tests
             Assert.That(monthlyBuildMetrics.Keys.Count, Is.EqualTo(12));
         }
 
+        [Test]
+        public void Should_return_first_failing_buil_by_project()
+        {
+            var buildMetrics = GetBuildMetricsData(10);
+
+            //add consecutive failing builds to dummy data with one for a separate project
+            buildMetrics[1].Status = "Failure";
+            buildMetrics[2].Status = "Failure";
+            buildMetrics[3].Status = "Failure";
+            buildMetrics[3].ProjectId = "Different project id";
+
+            var failingBuilds = BuildCalculators.GetFirstFailingBuildsByProject(buildMetrics);
+
+            Assert.That(failingBuilds.Count, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void Should_return_failing_build_and_milliseconds_to_next_succeeding_build()
+        {
+            var buildMetrics = GetBuildMetricsData(10);
+
+            var results = GetFailingBuildResults(buildMetrics);
+
+            Assert.That(results.Count, Is.EqualTo(3));
+            Assert.That(results.All(b => b.MillisecondsUntilBuildSucceeded > 0));
+        }
+
+        [Test]
+        public void Should_return_average_in_milliseconds_between_failing_and_succeeding_builds_by_month()
+        {
+            var buildMetrics = GetBuildMetricsData(350);
+
+            var results = GetAverageMillisecondsBetweenFailingAndSucceedingBuildsByMonthFrom(new DateTime(2017, 1, 1), buildMetrics);
+
+            Assert.That(results.Keys.Count, Is.EqualTo(12));
+        }
+
+        private Dictionary<string, long> GetAverageMillisecondsBetweenFailingAndSucceedingBuildsByMonthFrom(DateTime fromDate, List<BuildMetric> buildMetrics)
+        {
+            var results = new Dictionary<string, long>();
+
+            var failingBuildMetrics = GetFailingBuildResults(buildMetrics);
+
+            for (var i = 0; i < 12; i++)
+            {
+                var whereDate = fromDate.AddMonths(i);
+
+                var average =
+                    failingBuildMetrics.Where(
+                            b =>
+                                b.FailingBuild.StartDateTime.Month.Equals(whereDate.Month) &&
+                                b.FailingBuild.StartDateTime.Year.Equals(whereDate.Year))
+                        .Average(b => b.MillisecondsUntilBuildSucceeded);
+
+                results.Add(whereDate.ToString("MMM-yyyy"), (long)average);
+            }
+
+            return results;
+        }
+
+        private List<FailingBuildResults> GetFailingBuildResults(List<BuildMetric> buildMetrics)
+        {
+            return
+                BuildCalculators.GetFirstFailingBuildsByProject(buildMetrics)
+                    .Select(failingBuild => new FailingBuildResults
+                    {
+                        FailingBuild = failingBuild,
+                        MillisecondsUntilBuildSucceeded = GetMillisecondsUntilBuildSucceeded(buildMetrics, failingBuild)
+                    })
+                    .ToList();
+        }
+
+        private double GetMillisecondsUntilBuildSucceeded(List<BuildMetric> buildMetrics, BuildMetric failingBuild)
+        {
+            var firstSucceedingBuild = buildMetrics
+                .FirstOrDefault(b => b.Status.Equals("Success", StringComparison.InvariantCultureIgnoreCase)
+                                     &&
+                                     b.ProjectId.Equals(failingBuild.ProjectId,
+                                         StringComparison.InvariantCultureIgnoreCase)
+                                     && b.BuildId > failingBuild.BuildId);
+
+            return firstSucceedingBuild?.FinishDateTime.Subtract(failingBuild.FinishDateTime).TotalMilliseconds ?? DateTime.Now.Subtract(failingBuild.FinishDateTime).TotalMilliseconds;
+        }
+
         private List<BuildMetric> GetBuildMetricsData(int rows)
         {
             var dummyBuildMetrics = new List<BuildMetric>();
@@ -130,5 +214,12 @@ namespace DevelopmentMetrics.Tests
         {
             return ((i % 3) == 0) ? "Failure" : "Success";
         }
+    }
+
+    internal class FailingBuildResults
+    {
+        public BuildMetric FailingBuild { get; set; }
+
+        public double MillisecondsUntilBuildSucceeded { get; set; }
     }
 }
