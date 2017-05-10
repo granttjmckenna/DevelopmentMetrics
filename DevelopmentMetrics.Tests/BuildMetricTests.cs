@@ -104,9 +104,9 @@ namespace DevelopmentMetrics.Tests
             var buildMetrics = GetBuildMetricsData(10);
 
             //add consecutive failing builds to dummy data with one for a separate project
-            buildMetrics[1].Status = "Failure";
-            buildMetrics[2].Status = "Failure";
-            buildMetrics[3].Status = "Failure";
+            buildMetrics[1].Status = Helpers.BuildStatus.Failure.ToString();
+            buildMetrics[2].Status = Helpers.BuildStatus.Failure.ToString();
+            buildMetrics[3].Status = Helpers.BuildStatus.Failure.ToString();
             buildMetrics[3].ProjectId = "Different project id";
 
             var failingBuilds = BuildCalculators.GetFirstFailingBuildsByProject(buildMetrics);
@@ -212,7 +212,7 @@ namespace DevelopmentMetrics.Tests
 
         private string GetStatus(int i)
         {
-            return ((i % 3) == 0) ? "Failure" : "Success";
+            return ((i % 3) == 0) ? Helpers.BuildStatus.Failure.ToString() : Helpers.BuildStatus.Success.ToString();
         }
     }
 

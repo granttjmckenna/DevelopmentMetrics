@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CacheHelper.cs" />
+    <Compile Include="Helpers\Configuration.cs" />
     <Compile Include="Models\AgentDto.cs" />
     <Compile Include="Models\BuildCalculators.cs" />
     <Compile Include="Models\BuildDto.cs" />
