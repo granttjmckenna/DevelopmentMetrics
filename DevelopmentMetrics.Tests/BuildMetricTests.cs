@@ -136,14 +136,28 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
-        public void Should_return_standard_deviation_between_failing_and_succeeding_builds_by_month()
+        public void Should_return_average_in_hours_between_failing_and_succeeding_builds_by_month()
         {
             var buildMetrics = GetBuildMetricsData(350);
 
-            var results = GetStandardDeviationBetweenFailingAndSucceedingBuildsByMonthFrom(new DateTime(2017, 1, 1), buildMetrics);
+            var results = GetAverageHoursBetweenFailingAndSucceedingBuildsByMonthFrom(new DateTime(2017, 1, 1),
+                buildMetrics);
 
             Assert.That(results.Keys.Count, Is.EqualTo(12));
         }
+
+        private Dictionary<string, double> GetAverageHoursBetweenFailingAndSucceedingBuildsByMonthFrom(DateTime fromDate, List<BuildMetric> buildMetrics)
+        {
+            var failingBuildsInMilliseconds =
+                GetAverageMillisecondsBetweenFailingAndSucceedingBuildsByMonthFrom(fromDate, buildMetrics);
+
+            var millisecondsPerHour = 3600000;
+
+            return
+                failingBuildsInMilliseconds.ToDictionary<KeyValuePair<string, long>, string, double>(
+                    failingBuild => failingBuild.Key, failingBuild => failingBuild.Value / millisecondsPerHour);
+        }
+
 
         private Dictionary<string, double> GetStandardDeviationBetweenFailingAndSucceedingBuildsByMonthFrom(
             DateTime fromDate, List<BuildMetric> buildMetrics)
