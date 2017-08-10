@@ -51,6 +51,7 @@
     <Compile Include="Models\BuildCalculators.cs" />
     <Compile Include="Models\BuildDto.cs" />
     <Compile Include="Models\BuildDetail.cs" />
+    <Compile Include="Models\BuildStability.cs" />
     <Compile Include="Models\ProjectDto.cs" />
     <Compile Include="Models\ProjectBuild.cs" />
     <Compile Include="Models\ProjectsDto.cs" />
