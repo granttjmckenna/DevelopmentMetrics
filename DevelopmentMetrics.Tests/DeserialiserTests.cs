@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using DevelopmentMetrics.Models;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace DevelopmentMetrics.Tests
@@ -32,16 +33,28 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_deserialise_json_to_project_builds()
         {
-            var projects = new ProjectBuild(_fakeRepository).GetBuildsFor("projects");
+            var buildJson = _fakeRepository.GetDataFor("projects");
 
-            Assert.That(projects.Any());
-            Assert.That(projects.Count, Is.EqualTo(200));
+            var projectBuildTypes = JsonConvert.DeserializeObject<ProjectBuildTypes>(buildJson);
+
+            Assert.That(projectBuildTypes.BuildTypes.BuildTypeList.Any());
+        }
+
+        [Test]
+        public void Should_deserialise_json_to_build_types()
+        {
+            var buildJson = _fakeRepository.GetDataFor("BuildTypes");
+
+            var projectBuildTypes = JsonConvert.DeserializeObject<ProjectBuildTypes>(buildJson);
+
+            Assert.That(projectBuildTypes.BuildTypes.BuildTypeList.Any());
+            Assert.That(projectBuildTypes.BuildTypes.Count, Is.EqualTo(1));
         }
 
         [Test]
         public void Should_deserialise_json_to_build_details()
         {
-            var buildDetail = new BuildDetail(_fakeRepository).GetBuildDetailsFor("builds/id");
+            var buildDetail = new BuildDetail(_fakeRepository).GetBuildDetailsFor("builds");
 
             Assert.That(buildDetail.Id, Is.EqualTo(360907));
             Assert.That(buildDetail.BuildTypeId, Is.EqualTo("Consumer_Funnel_31ProductionSmokeTests"));
