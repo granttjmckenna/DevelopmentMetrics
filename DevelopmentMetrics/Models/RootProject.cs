@@ -47,7 +47,7 @@ namespace DevelopmentMetrics.Models
                     where projectBuilds != null
                     from buildType in projectBuilds.BuildTypes.BuildTypeList
                     let buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsFor(buildType.Href + "/builds")
-                    where buildDetail != null
+                    where buildDetail != null && buildDetail.Status.Equals("finished", StringComparison.InvariantCultureIgnoreCase)
                     select new BuildMetric
                     {
                         ProjectId = project.Id,
