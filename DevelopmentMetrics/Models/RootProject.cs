@@ -37,19 +37,22 @@ namespace DevelopmentMetrics.Models
 
         private List<BuildMetric> GetBuildMetricsFromRepo()
         {
-            var rootProjectJson = _buildRepository.GetDataFor("_root");
+            var rootProjectJson = _buildRepository.GetDataFor("guestAuth/app/rest/projects/id:_root");
 
             var rootProject = GetProject(rootProjectJson);
 
-            return (from project in rootProject.Projects.ProjectList
-                    let builds = new ProjectBuild(_buildRepository).GetBuildsFor(project.Href)
-                    from build in builds
-                    let buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsFor(build.Href)
+            return (from project in rootProject.Projects.ProjectList.Where(p => p.Name != "_root")
+                    let buildJson = _buildRepository.GetDataFor(project.Href)
+                    let projectBuilds = JsonConvert.DeserializeObject<ProjectBuildTypes>(buildJson)
+                    where projectBuilds != null
+                    from buildType in projectBuilds.BuildTypes.BuildTypeList
+                    let buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsFor(buildType.Href + "/builds")
+                    where buildDetail != null
                     select new BuildMetric
                     {
                         ProjectId = project.Id,
                         ProjectName = project.Name,
-                        BuildTypeId = build.BuildTypeId,
+                        BuildTypeId = buildType.Id,
                         BuildId = buildDetail.Id,
                         StartDateTime = ParseDateTimeString(buildDetail.StartDateTime),
                         FinishDateTime = ParseDateTimeString(buildDetail.FinishDateTime),

@@ -14,10 +14,12 @@ namespace DevelopmentMetrics.Repository
         public string Get(string url)
         {
             var result = string.Empty;
-            var absoluteUrl = GetAsbsoluteUrlWith(url);
+            var absoluteUrl = GetAbsoluteUrlWith(url);
 
-            var webRequest = WebRequest.Create(absoluteUrl);
-            webRequest.Headers.Add(HttpRequestHeader.Accept, "application/json");
+            var webRequest = (HttpWebRequest)WebRequest.Create(absoluteUrl);
+
+            webRequest.Accept = "application/json";
+            webRequest.ContentType = "application/json; charset=utf-8;";
 
             using (var webResponse = webRequest.GetResponse())
             {
@@ -35,7 +37,7 @@ namespace DevelopmentMetrics.Repository
             return result;
         }
 
-        private string GetAsbsoluteUrlWith(string relativePart)
+        private string GetAbsoluteUrlWith(string relativePart)
         {
             var absoluteUrl = $"http://teamcity.energyhelpline.local/{relativePart}";
 

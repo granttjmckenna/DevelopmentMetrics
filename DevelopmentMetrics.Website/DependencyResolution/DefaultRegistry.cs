@@ -34,6 +34,7 @@ namespace DevelopmentMetrics.Website.DependencyResolution {
 
             For<IBuildStability>().Use<BuildStability>();
             For<IBuildRepository>().Use<BuildRepository>();
+            For<IWebClient>().Use<WebClient>();
         }
 
         #endregion
