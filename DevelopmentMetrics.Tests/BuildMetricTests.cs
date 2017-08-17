@@ -20,7 +20,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_populate_build_metric()
         {
-            var buildMetrics = new RootProject(_fakeRepository).GetBuildMetrics();
+            var buildMetrics = new Project(_fakeRepository).GetBuildMetrics();
 
             var firstBuildMetric = buildMetrics.First(b => b.ProjectName.Equals("Admin", StringComparison.InvariantCultureIgnoreCase));
 

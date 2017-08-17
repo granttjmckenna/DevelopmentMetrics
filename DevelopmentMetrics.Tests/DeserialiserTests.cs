@@ -21,7 +21,7 @@ namespace DevelopmentMetrics.Tests
         {
             var expected = GetExpectedRootProject();
 
-            var rootProject = new RootProject(_fakeRepository).GetProject();
+            var rootProject = new Project(_fakeRepository).GetProject();
 
             Assert.AreEqual(expected, rootProject);
             Assert.That(rootProject.Projects.ProjectList.Any());
@@ -61,9 +61,9 @@ namespace DevelopmentMetrics.Tests
             Assert.That(buildDetail.Status.Equals("Success", StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private static RootProject GetExpectedRootProject()
+        private static Project GetExpectedRootProject()
         {
-            return new RootProject(new FakeRepository())
+            return new Project(new FakeRepository())
             {
                 Id = "_Root",
                 Name = "<Root project>",

@@ -19,7 +19,7 @@ namespace DevelopmentMetrics.Models
 
         public List<BuildMetric> GetBuildStabilityMetrics()
         {
-            return new RootProject(_buildRepository).GetBuildMetrics();
+            return new Project(_buildRepository).GetBuildMetrics();
         }
     }
 }
