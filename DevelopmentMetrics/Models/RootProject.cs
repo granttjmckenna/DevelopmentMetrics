@@ -37,35 +37,84 @@ namespace DevelopmentMetrics.Models
 
         private List<BuildMetric> GetBuildMetricsFromRepo()
         {
-            var rootProjectJson = _buildRepository.GetDataFor("guestAuth/app/rest/projects/id:_root");
+            var buildMetrics = new List<BuildMetric>();
 
-            var rootProject = GetProject(rootProjectJson);
+            var rootProject = GetProject();
 
-            return (from project in rootProject.Projects.ProjectList.Where(p => p.Name != "_root")
-                    let buildJson = _buildRepository.GetDataFor(project.Href)
-                    let projectBuilds = JsonConvert.DeserializeObject<ProjectBuildTypes>(buildJson)
-                    where projectBuilds != null
-                    from buildType in projectBuilds.BuildTypes.BuildTypeList
-                    let buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsFor(buildType.Href + "/builds")
-                    where buildDetail != null && buildDetail.Status.Equals("finished", StringComparison.InvariantCultureIgnoreCase)
-                    select new BuildMetric
+            //projects
+            foreach (var project in rootProject.Projects.ProjectList.Where(p => p.Name != "_root"))
+            {
+                //build types
+                var buildTypes = new ProjectBuildTypes(_buildRepository).GetProjectBuildTypesFor(project.Href);
+
+                if (buildTypes != null)
+                {
+                    foreach (var buildType in buildTypes.BuildTypes.BuildTypeList)
                     {
-                        ProjectId = project.Id,
-                        ProjectName = project.Name,
-                        BuildTypeId = buildType.Id,
-                        BuildId = buildDetail.Id,
-                        StartDateTime = ParseDateTimeString(buildDetail.StartDateTime),
-                        FinishDateTime = ParseDateTimeString(buildDetail.FinishDateTime),
-                        QueueDateTime = ParseDateTimeString(buildDetail.QueuedDateTime),
-                        State = buildDetail.State,
-                        Status = buildDetail.Status,
-                        AgentName = buildDetail.AgentDto.Name,
-                    })
-                .ToList();
+                        //builds
+                        var builds = new ProjectBuild(_buildRepository).GetBuildsFor(buildType.Href + "/builds"); //TODO: use builds property for url
+
+                        if (builds != null)
+                        {
+                            foreach (var build in builds)
+                            {
+                                //build details
+                                var buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsFor(build.Href);
+
+                                if (buildDetail != null)
+                                {
+                                    buildMetrics.Add(
+                                        new BuildMetric
+                                        {
+                                            ProjectId = project.Id,
+                                            ProjectName = project.Name,
+                                            BuildTypeId = buildType.Id,
+                                            BuildId = buildDetail.Id,
+                                            StartDateTime = ParseDateTimeString(buildDetail.StartDateTime),
+                                            FinishDateTime = ParseDateTimeString(buildDetail.FinishDateTime),
+                                            QueueDateTime = ParseDateTimeString(buildDetail.QueuedDateTime),
+                                            State = buildDetail.State,
+                                            Status = buildDetail.Status,
+                                            AgentName = buildDetail.AgentDto.Name,
+                                        });
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+            }
+
+            return buildMetrics;
+
+            //return (from project in rootProject.Projects.ProjectList.Where(p => p.Name != "_root")
+            //        let buildJson = _buildRepository.GetDataFor(project.Href)
+            //        let projectBuilds = JsonConvert.DeserializeObject<ProjectBuildTypes>(buildJson)
+            //        where projectBuilds != null
+            //        from buildType in projectBuilds.BuildTypes.BuildTypeList
+            //        let buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsFor(buildType.Href + "/builds")
+            //        where buildDetail != null && buildDetail.Status.Equals("finished", StringComparison.InvariantCultureIgnoreCase)
+            //        select new BuildMetric
+            //        {
+            //            ProjectId = project.Id,
+            //            ProjectName = project.Name,
+            //            BuildTypeId = buildType.Id,
+            //            BuildId = buildDetail.Id,
+            //            StartDateTime = ParseDateTimeString(buildDetail.StartDateTime),
+            //            FinishDateTime = ParseDateTimeString(buildDetail.FinishDateTime),
+            //            QueueDateTime = ParseDateTimeString(buildDetail.QueuedDateTime),
+            //            State = buildDetail.State,
+            //            Status = buildDetail.Status,
+            //            AgentName = buildDetail.AgentDto.Name,
+            //        })
+            //    .ToList();
         }
 
-        public RootProject GetProject(string returnedJson)
+        public RootProject GetProject()
         {
+            var returnedJson = _buildRepository.GetDataFor("guestAuth/app/rest/projects/id:_root");
+
             var project = JsonConvert.DeserializeObject<RootProject>(returnedJson);
 
             return project;
