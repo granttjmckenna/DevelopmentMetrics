@@ -1,7 +1,13 @@
-﻿
+﻿@model DevelopmentMetrics.Website.Models.BuildStabilityMetrics
 @{
     ViewBag.Title = "Build Stability";
 }
 
 <h2>Build Stability</h2>
+
+@foreach (var metric in Model.BuildFailureRate)
+{
+    <p>@metric.Key</p>
+    <p>@metric.Value</p>
+}
 
