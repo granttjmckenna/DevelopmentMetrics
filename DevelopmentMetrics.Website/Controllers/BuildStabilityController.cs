@@ -21,7 +21,7 @@ namespace DevelopmentMetrics.Website.Controllers
 
             var model = new BuildStabilityViewModel
             {
-                BuildFailureRate = new BuildCalculators().CalculateBuildFailingRateByMonth(metrics)
+                BuildFailureRate = new BuildCalculators().CalculateBuildFailingRateByMonthFrom(new DateTime(2017, 1, 1), metrics)
             };
 
             return View(model);
