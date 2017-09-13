@@ -18,7 +18,7 @@
 namespace DevelopmentMetrics.Website.DependencyResolution {
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
-    using Models;
+    using DevelopmentMetrics.Models;
     using Repository;
     
     public class DefaultRegistry : Registry {
