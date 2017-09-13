@@ -99,7 +99,20 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
-        public void Should_return_first_failing_buil_by_project()
+        public void Should_calculate_failure_percentage_by_month_for_build_metrics()
+        {
+            var dummyBuildMetrics = GetBuildMetricsData(360);
+
+            var buildMetrics = dummyBuildMetrics.Where(b => b.StartDateTime >= new DateTime(2017, 7, 1)).ToList();
+            
+            var monthlyBuildMetrics = new BuildCalculators().CalculateBuildFailingRateByMonth(buildMetrics);
+
+            Assert.That(monthlyBuildMetrics.Keys.Count, Is.EqualTo(6));
+            Assert.That(monthlyBuildMetrics.Keys.First(), Is.EqualTo("Jul-2017"));
+        }
+
+        [Test]
+        public void Should_return_first_failing_build_by_project()
         {
             var buildMetrics = GetBuildMetricsData(10);
 

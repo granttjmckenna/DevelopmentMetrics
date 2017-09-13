@@ -72,6 +72,9 @@ namespace DevelopmentMetrics.Models
 
                 var total = monthBuildMetrics.Count();
 
+                if (total == 0)
+                    continue;
+
                 var failing =
                     monthBuildMetrics.Count(b => b.Status.Equals(Helpers.BuildStatus.Failure.ToString(), StringComparison.CurrentCultureIgnoreCase));
 
@@ -81,6 +84,17 @@ namespace DevelopmentMetrics.Models
             }
 
             return results;
+        }
+
+        public Dictionary<string, double> CalculateBuildFailingRateByMonth(List<BuildMetric> buildMetrics)
+        {
+            var firstBuildStart =
+                buildMetrics
+                    .OrderBy(b => b.StartDateTime)
+                    .First(b => b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
+                    .StartDateTime;
+
+            return CalculateBuildFailingRateByMonthFrom(firstBuildStart, buildMetrics);
         }
 
         private static double CalculateFailingRate(int failing, int total)
