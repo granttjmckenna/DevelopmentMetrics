@@ -26,5 +26,10 @@ namespace DevelopmentMetrics.Website.Controllers
 
             return View(model);
         }
+
+        public ActionResult DrawChart()
+        {
+            return View("BuildStabilityChart");
+        }
     }
 }
