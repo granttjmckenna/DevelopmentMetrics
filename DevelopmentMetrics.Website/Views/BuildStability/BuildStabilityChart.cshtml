@@ -1,9 +1,17 @@
-﻿
+﻿@model DevelopmentMetrics.Website.Models.BuildStabilityChart
+
 @{
-    var myChart = new Chart(width: 600, height: 400);
-
-    myChart.AddTitle("Chart Title");
-    myChart.AddSeries(name: "Employee",xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },yValues: new[] { "2", "6", "4", "5", "3" });
-
-    myChart.Write();
+    var myChart = new Chart(width: 1000, height: 600)
+        .AddTitle(Model.ChartTitle)
+        .AddSeries(
+            name: "BuildStability",
+            chartType: "Line",
+            xValue: Model.SeriesX,
+            yValues: Model.SeriesY)
+        .AddSeries(
+            name: "Build2",
+            chartType: "Line",
+            xValue: Model.SeriesX,
+            yValues: new[] { "30", "50", "75" })
+        .Write();
 }

@@ -17,19 +17,21 @@ namespace DevelopmentMetrics.Website.Controllers
         // GET: BuildStability
         public ActionResult Index()
         {
-            var metrics = _buildStability.GetBuildStabilityMetrics();
-
-            var model = new BuildStabilityViewModel
-            {
-                BuildFailureRate = new BuildCalculators().CalculateBuildFailingRateByMonthFrom(new DateTime(2017, 1, 1), metrics)
-            };
-
-            return View(model);
+            return View();
         }
 
         public ActionResult DrawChart()
         {
-            return View("BuildStabilityChart");
+            var metrics = _buildStability.GetBuildStabilityMetrics();
+
+            var buildStabilityViewModel = new BuildStabilityViewModel
+            {
+                BuildFailureRate = new BuildCalculators().CalculateBuildFailingRateByMonthFrom(new DateTime(2017, 1, 1), metrics)
+            };
+
+            var model = new BuildStabilityChart(buildStabilityViewModel);
+
+            return View("BuildStabilityChart", model);
         }
     }
 }

@@ -1,15 +1,9 @@
-﻿@model DevelopmentMetrics.Website.Models.BuildStabilityViewModel
+﻿
 @{
     ViewBag.Title = "Build Stability";
 }
 
 <h2>Build Stability</h2>
-
-@foreach (var metric in Model.BuildFailureRate)
-{
-    <p>@metric.Key</p>
-    <p>@metric.Value</p>
-}
 
 <p>
     <img src="@Url.Action("DrawChart")"/>
