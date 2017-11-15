@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using NUnit.Framework;
 
 namespace DevelopmentMetrics.Tests
@@ -207,9 +210,10 @@ namespace DevelopmentMetrics.Tests
     {
         public enum Status
         {
-            Todo,
-            Doing,
-            Done
+            Todo = 1,
+            Doing = 2,
+            Done = 3,
+            Archived = 99
         };
     }
 
