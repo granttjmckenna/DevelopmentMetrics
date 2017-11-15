@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace DevelopmentMetrics.Tests
 {
@@ -87,11 +86,6 @@ namespace DevelopmentMetrics.Tests
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 03)).DoneTotal, Is.EqualTo(4));
 
             Assert.That(countByDays.All(c => c.Date != new DateTime(2017, 10, 04)));
-        }
-
-        private int GetCardCountsFor(Func<Card, bool> func)
-        {
-            return _cards.Count(func);
         }
 
         private static IEnumerable<Card> GetCards()
