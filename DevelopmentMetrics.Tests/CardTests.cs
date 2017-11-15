@@ -167,7 +167,7 @@ namespace DevelopmentMetrics.Tests
         public int DoneTotal { get; set; }
         public int Total { get; set; }
 
-        public CardCount() { }
+        private CardCount() { }
 
         public CardCount(IEnumerable<Card> cards)
         {
