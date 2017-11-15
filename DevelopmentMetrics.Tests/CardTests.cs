@@ -212,8 +212,7 @@ namespace DevelopmentMetrics.Tests
         {
             Todo = 1,
             Doing = 2,
-            Done = 3,
-            Archived = 99
+            Done = 3
         };
     }
 
@@ -223,5 +222,29 @@ namespace DevelopmentMetrics.Tests
         public DateTime CreatedDate { get; set; }
         public int Id { get; set; }
         public string Title { get; set; }
+
+        public static CardStatus.Status GetCardStatusFor(int laneType)
+        {
+            switch (laneType)
+            {
+                case (int)CardStatus.Status.Todo:
+                    {
+                        return CardStatus.Status.Todo;
+                    }
+                case (int)CardStatus.Status.Doing:
+                    {
+                        return CardStatus.Status.Doing;
+                    }
+                case (int)CardStatus.Status.Done:
+                case 99:
+                    {
+                        return CardStatus.Status.Done;
+                    }
+                default:
+                    {
+                        throw new Exception($"Lane type not recognised: {laneType}");
+                    }
+            }
+        }
     }
 }
