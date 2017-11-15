@@ -66,7 +66,7 @@ namespace DevelopmentMetrics.Tests
         {
             var dateTime = new DateTime(2017, 10, 03);
 
-            var workInProcess = CalculateWorkInProcessFor(dateTime);
+            var workInProcess = new CardMetric(_cards).CalculateWorkInProcessFor(dateTime);
 
             Assert.That(workInProcess, Is.EqualTo(6));
         }
@@ -86,20 +86,6 @@ namespace DevelopmentMetrics.Tests
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 03)).DoneTotal, Is.EqualTo(4));
 
             Assert.That(countByDays.All(c => c.Date != new DateTime(2017, 10, 04)));
-        }
-
-        private int CalculateWorkInProcessFor(DateTime dateTime)
-        {
-            var cardCount = _cards.Count(c => c.CreatedDate <= dateTime);
-
-            var doneCardCount = _cards.Count(DonePredicateFor(dateTime));
-
-            return cardCount - doneCardCount;
-        }
-
-        private static Func<Card, bool> DonePredicateFor(DateTime dateTime)
-        {
-            return c => c.CreatedDate <= dateTime && c.Status.Equals(CardStatus.Status.Done);
         }
 
         private int GetCardCountsFor(Func<Card, bool> func)
@@ -163,6 +149,15 @@ namespace DevelopmentMetrics.Tests
         private static Func<Card, bool> DonePredicateFor(DateTime calculationDate)
         {
             return c => c.CreatedDate <= calculationDate && c.Status.Equals(CardStatus.Status.Done);
+        }
+
+        public int CalculateWorkInProcessFor(DateTime calculationDateTime)
+        {
+            var cardCount = _cards.Count(c => c.CreatedDate <= calculationDateTime);
+
+            var doneCardCount = _cards.Count(DonePredicateFor(calculationDateTime));
+
+            return cardCount - doneCardCount;
         }
     }
 
