@@ -29,24 +29,25 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
-        [Ignore("Replaced by card count tests")]
+        [Description("Card count metric test")]
         public void Return_card_count_for_all_cards_in_the_process_for_a_given_day()
         {
-            Assert.That(GetCardCountsFor(c => c.CreatedDate <= new DateTime(2017, 10, 01)), Is.EqualTo(4));
-            Assert.That(GetCardCountsFor(c => c.CreatedDate <= new DateTime(2017, 10, 02)), Is.EqualTo(8));
+            var calculationDate = new DateTime(2017, 10, 01);
+
+            var cardCount = new CardCount(_cards).GetCardCountByDayFrom(calculationDate);
+
+            Assert.That(cardCount.First(c => c.Date == calculationDate).Total, Is.EqualTo(4));
         }
 
         [Test]
-        [Ignore("Replaced by card count tests")]
+        [Description("Card count metric test")]
         public void Return_card_count_for_done_cards_in_the_process_for_a_given_day()
         {
-            Assert.That(
-                GetCardCountsFor(c => c.CreatedDate <= new DateTime(2017, 10, 01)
-                                      && c.Status.Equals(CardStatus.Status.Done)), Is.EqualTo(3));
+            var calculationDate = new DateTime(2017, 10, 01);
 
-            Assert.That(
-                GetCardCountsFor(c => c.CreatedDate <= new DateTime(2017, 10, 03)
-                                      && c.Status.Equals(CardStatus.Status.Done)), Is.EqualTo(4));
+            var cardCount = new CardCount(_cards).GetCardCountByDayFrom(calculationDate);
+
+            Assert.That(cardCount.First(c => c.Date == calculationDate).DoneTotal, Is.EqualTo(3));
         }
 
         [Test]
