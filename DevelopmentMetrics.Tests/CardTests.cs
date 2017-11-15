@@ -133,8 +133,8 @@ namespace DevelopmentMetrics.Tests
     {
         private readonly IEnumerable<Card> _cards;
         public DateTime Date { get; set; }
-        public int Total { get; set; }
         public int DoneTotal { get; set; }
+        public int Total { get; set; }
 
         public CardCount(){}
 
