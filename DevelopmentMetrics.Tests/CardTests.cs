@@ -218,5 +218,6 @@ namespace DevelopmentMetrics.Tests
         public CardStatus.Status Status { get; set; }
         public DateTime CreatedDate { get; set; }
         public int Id { get; set; }
+        public string Title { get; set; }
     }
 }
