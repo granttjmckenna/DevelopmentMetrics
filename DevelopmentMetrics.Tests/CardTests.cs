@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
@@ -223,7 +224,24 @@ namespace DevelopmentMetrics.Tests
         public int Id { get; set; }
         public string Title { get; set; }
 
-        public static CardStatus.Status GetCardStatusFor(int laneType)
+        public IEnumerable<Card> GetCardsFromReplyData()
+        {
+            var jsonResponse = GetJsonResponse();
+
+            var rootObject = JsonConvert.DeserializeObject<RootObject>(jsonResponse);
+
+            return (from lane in rootObject.ReplyData.First().Lanes
+                    from card in lane.Cards
+                    select new Card
+                    {
+                        Id = card.Id,
+                        Title = card.Title,
+                        Status = GetCardStatusFor(lane.Type),
+                        CreatedDate = GetCardCreatedDateFor(card.Id)
+                    }).ToList();
+        }
+
+        private CardStatus.Status GetCardStatusFor(int laneType)
         {
             switch (laneType)
             {
@@ -236,7 +254,7 @@ namespace DevelopmentMetrics.Tests
                         return CardStatus.Status.Doing;
                     }
                 case (int)CardStatus.Status.Done:
-                case 99:
+                case 99: //archived
                     {
                         return CardStatus.Status.Done;
                     }
@@ -246,5 +264,44 @@ namespace DevelopmentMetrics.Tests
                     }
             }
         }
+
+        private static DateTime GetCardCreatedDateFor(int cardId)
+        {
+            //https://myaccount.leankit.com/kanban/api/board/256064019/GetCard/256395058
+
+            return new DateTime();
+        }
+
+        private string GetJsonResponse()
+        {
+            const string filePath = @"C:\code\DevelopmentMetrics\DevelopmentMetrics.Tests\leankit json response.txt";
+            string jsonResponse;
+
+            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
+            using (var streamReader = new StreamReader(fileStream))
+                jsonResponse = streamReader.ReadToEnd();
+
+            return jsonResponse;
+        }
+    }
+
+    internal class Lane
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public int Type { get; set; }
+        public List<Card> Cards { get; set; }
+    }
+
+    internal class RootObject
+    {
+        public List<ReplyData> ReplyData { get; set; }
+    }
+
+    internal class ReplyData
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public List<Lane> Lanes { get; set; }
     }
 }
