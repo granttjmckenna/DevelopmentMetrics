@@ -66,7 +66,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_collection_of_count_by_day_for_all_cards()
         {
-            var countByDays = GetCardCountByDayFrom(new DateTime(2017, 10, 01));
+            var countByDays = new CardCount(_cards).GetCardCountByDayFrom(new DateTime(2017, 10, 01));
 
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 01)).Total, Is.EqualTo(4));
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 02)).Total, Is.EqualTo(8));
@@ -77,24 +77,6 @@ namespace DevelopmentMetrics.Tests
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 03)).DoneTotal, Is.EqualTo(4));
 
             Assert.That(countByDays.All(c => c.Date != new DateTime(2017, 10, 04)));
-        }
-
-        private List<CardCount> GetCardCountByDayFrom(DateTime dateTime)
-        {
-            var maxCreatedDate = GetCards().Max(c => c.CreatedDate);
-
-            var days = Enumerable.Range(0, 1 + maxCreatedDate.Subtract(dateTime).Days)
-                .Select(o => dateTime.AddDays(o)).ToList();
-
-            return (from day in days
-                let countByDay = GetCardCountsFor(c => c.CreatedDate <= day)
-                let doneCountByDay = GetCardCountsFor(DonePredicateFor(day))
-                select new CardCount
-                {
-                    Date = day,
-                    DoneTotal = doneCountByDay,
-                    Total = countByDay
-                }).ToList();
         }
 
         private int CalculateWorkInProcessFor(DateTime dateTime)
@@ -147,11 +129,52 @@ namespace DevelopmentMetrics.Tests
         }
     }
 
-    internal class CardCount
+    public class CardCount
     {
+        private readonly IEnumerable<Card> _cards;
         public DateTime Date { get; set; }
         public int Total { get; set; }
         public int DoneTotal { get; set; }
+
+        public CardCount(){}
+
+        public CardCount(IEnumerable<Card> cards)
+        {
+            _cards = cards;
+        }
+
+        public List<CardCount> GetCardCountByDayFrom(DateTime dateTime)
+        {
+            var maxCreatedDate = _cards.Max(c => c.CreatedDate);
+
+            var days = Enumerable.Range(0, 1 + maxCreatedDate.Subtract(dateTime).Days)
+                .Select(o => dateTime.AddDays(o)).ToList();
+
+            return (from day in days
+                let countByDay = GetCardCountsFor(AllPredicateFor(day))
+                let doneCountByDay = GetCardCountsFor(DonePredicateFor(day))
+                select new CardCount
+                {
+                    Date = day,
+                    DoneTotal = doneCountByDay,
+                    Total = countByDay
+                }).ToList();
+        }
+
+        private static Func<Card, bool> AllPredicateFor(DateTime day)
+        {
+            return c => c.CreatedDate <= day;
+        }
+
+        private static Func<Card, bool> DonePredicateFor(DateTime dateTime)
+        {
+            return c => c.CreatedDate <= dateTime && c.Status.Equals(CardStatus.Status.Done);
+        }
+
+        private int GetCardCountsFor(Func<Card, bool> func)
+        {
+            return _cards.Count(func);
+        }
     }
 
     public static class CardStatus
