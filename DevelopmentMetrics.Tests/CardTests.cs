@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace DevelopmentMetrics.Tests
 {
@@ -54,7 +55,7 @@ namespace DevelopmentMetrics.Tests
         {
             var dateTime = new DateTime(2017, 10, 03);
 
-            var leadTime = CalculateLeadTimeFor(dateTime);
+            var leadTime = new CardMetric(_cards).CalculateLeadTimeFor(dateTime);
 
             Assert.That(leadTime, Is.EqualTo(2));
         }
@@ -94,17 +95,6 @@ namespace DevelopmentMetrics.Tests
             var doneCardCount = _cards.Count(DonePredicateFor(dateTime));
 
             return cardCount - doneCardCount;
-        }
-
-        private int CalculateLeadTimeFor(DateTime dateTime)
-        {
-            var cardPosition = _cards
-                .OrderBy(c => c.CreatedDate)
-                .Count(DonePredicateFor(dateTime));
-
-            var cardDate = _cards.OrderBy(c => c.CreatedDate).Take(cardPosition).Max(c => c.CreatedDate);
-
-            return (dateTime - cardDate).Days;
         }
 
         private static Func<Card, bool> DonePredicateFor(DateTime dateTime)
@@ -157,6 +147,22 @@ namespace DevelopmentMetrics.Tests
 
 
             return result;
+        }
+
+        public int CalculateLeadTimeFor(DateTime calculationDate)
+        {
+            var cardPosition = _cards
+                .OrderBy(c => c.CreatedDate)
+                .Count(DonePredicateFor(calculationDate));
+
+            var cardDate = _cards.OrderBy(c => c.CreatedDate).Take(cardPosition).Max(c => c.CreatedDate);
+
+            return (calculationDate - cardDate).Days;
+        }
+
+        private static Func<Card, bool> DonePredicateFor(DateTime calculationDate)
+        {
+            return c => c.CreatedDate <= calculationDate && c.Status.Equals(CardStatus.Status.Done);
         }
     }
 
