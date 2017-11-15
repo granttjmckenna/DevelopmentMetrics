@@ -17,6 +17,7 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        [Description("Card metric test")]
         public void Return_card_count_by_status()
         {
             Assert.That(_cards.Count(x => x.Status.Equals(CardStatus.Status.Todo)), Is.EqualTo(4));
@@ -25,6 +26,7 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        [Ignore("Replaced by card count tests")]
         public void Return_card_count_for_all_cards_in_the_process_for_a_given_day()
         {
             Assert.That(GetCardCountsFor(c => c.CreatedDate <= new DateTime(2017, 10, 01)), Is.EqualTo(4));
@@ -32,6 +34,7 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        [Ignore("Replaced by card count tests")]
         public void Return_card_count_for_done_cards_in_the_process_for_a_given_day()
         {
             Assert.That(
@@ -44,6 +47,7 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        [Description("Card metric test")]
         public void Return_lead_time_for_a_given_day()
         {
             var dateTime = new DateTime(2017, 10, 03);
@@ -54,6 +58,7 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        [Description("Card metric test")]
         public void Return_work_in_process_for_a_given_day()
         {
             var dateTime = new DateTime(2017, 10, 03);
@@ -64,6 +69,7 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        [Description("Card count tests")]
         public void Return_collection_of_count_by_day_for_all_cards()
         {
             var countByDays = new CardCount(_cards).GetCardCountByDayFrom(new DateTime(2017, 10, 01));
