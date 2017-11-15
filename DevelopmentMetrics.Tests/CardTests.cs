@@ -20,9 +20,11 @@ namespace DevelopmentMetrics.Tests
         [Description("Card metric test")]
         public void Return_card_count_by_status()
         {
-            Assert.That(_cards.Count(x => x.Status.Equals(CardStatus.Status.Todo)), Is.EqualTo(4));
-            Assert.That(_cards.Count(x => x.Status.Equals(CardStatus.Status.Doing)), Is.EqualTo(2));
-            Assert.That(_cards.Count(x => x.Status.Equals(CardStatus.Status.Done)), Is.EqualTo(4));
+            var cardMetric = new CardMetric(_cards).GetCountByStatus();
+
+            Assert.That(cardMetric[CardStatus.Status.Todo], Is.EqualTo(4));
+            Assert.That(cardMetric[CardStatus.Status.Doing], Is.EqualTo(2));
+            Assert.That(cardMetric[CardStatus.Status.Done], Is.EqualTo(4));
         }
 
         [Test]
@@ -135,6 +137,29 @@ namespace DevelopmentMetrics.Tests
         }
     }
 
+    public class CardMetric
+    {
+        private readonly IEnumerable<Card> _cards;
+
+        public CardMetric(IEnumerable<Card> cards)
+        {
+            _cards = cards;
+        }
+
+        public Dictionary<CardStatus.Status, int> GetCountByStatus()
+        {
+            var result = new Dictionary<CardStatus.Status, int>
+            {
+                {CardStatus.Status.Todo, _cards.Count(c => c.Status.Equals(CardStatus.Status.Todo))},
+                {CardStatus.Status.Doing, _cards.Count(c => c.Status.Equals(CardStatus.Status.Doing))},
+                {CardStatus.Status.Done, _cards.Count(c => c.Status.Equals(CardStatus.Status.Done))}
+            };
+
+
+            return result;
+        }
+    }
+
     public class CardCount
     {
         private readonly IEnumerable<Card> _cards;
@@ -142,7 +167,7 @@ namespace DevelopmentMetrics.Tests
         public int DoneTotal { get; set; }
         public int Total { get; set; }
 
-        public CardCount(){}
+        public CardCount() { }
 
         public CardCount(IEnumerable<Card> cards)
         {
@@ -157,14 +182,14 @@ namespace DevelopmentMetrics.Tests
                 .Select(o => dateTime.AddDays(o)).ToList();
 
             return (from day in days
-                let countByDay = GetCardCountsFor(AllPredicateFor(day))
-                let doneCountByDay = GetCardCountsFor(DonePredicateFor(day))
-                select new CardCount
-                {
-                    Date = day,
-                    DoneTotal = doneCountByDay,
-                    Total = countByDay
-                }).ToList();
+                    let countByDay = GetCardCountsFor(AllPredicateFor(day))
+                    let doneCountByDay = GetCardCountsFor(DonePredicateFor(day))
+                    select new CardCount
+                    {
+                        Date = day,
+                        DoneTotal = doneCountByDay,
+                        Total = countByDay
+                    }).ToList();
         }
 
         private static Func<Card, bool> AllPredicateFor(DateTime day)
