@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using NUnit.Framework;
 
 namespace DevelopmentMetrics.Tests
@@ -211,9 +209,9 @@ namespace DevelopmentMetrics.Tests
     {
         public enum Status
         {
-            Todo = 1,
-            Doing = 2,
-            Done = 3
+            Todo,
+            Doing,
+            Done
         };
     }
 
@@ -241,27 +239,19 @@ namespace DevelopmentMetrics.Tests
                     }).ToList();
         }
 
-        private CardStatus.Status GetCardStatusFor(int laneType)
+        private CardStatus.Status GetCardStatusFor(int laneTypeId)
         {
-            switch (laneType)
+            switch (laneTypeId)
             {
-                case (int)CardStatus.Status.Todo:
-                    {
-                        return CardStatus.Status.Todo;
-                    }
-                case (int)CardStatus.Status.Doing:
-                    {
-                        return CardStatus.Status.Doing;
-                    }
-                case (int)CardStatus.Status.Done:
+                case 1:
+                    return CardStatus.Status.Todo;
+                case 2:
+                    return CardStatus.Status.Doing;
+                case 3:
                 case 99: //archived
-                    {
-                        return CardStatus.Status.Done;
-                    }
+                    return CardStatus.Status.Done;
                 default:
-                    {
-                        throw new Exception($"Lane type not recognised: {laneType}");
-                    }
+                    throw new Exception($"Lane type not recognised: {laneTypeId}");
             }
         }
 
