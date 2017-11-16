@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -229,7 +231,7 @@ namespace DevelopmentMetrics.Tests
             _leanKitLeanKitWebClient = leanKitWebClient;
         }
 
-        public IEnumerable<Card> GetCardsFromReplyData()
+        public IEnumerable<Card> GetCards()
         {
             var boardData = _leanKitLeanKitWebClient.GetBoardData();
 
@@ -262,12 +264,26 @@ namespace DevelopmentMetrics.Tests
             }
         }
 
-        private static DateTime GetCardCreatedDateFor(int cardId)
+        private DateTime GetCardCreatedDateFor(int cardId)
         {
-            //https://myaccount.leankit.com/kanban/api/board/256064019/GetCard/256395058
+            var cardData = _leanKitLeanKitWebClient.GetCardDataFor(cardId);
 
-            return new DateTime();
+            var cardDetail = JsonConvert.DeserializeObject<CardDetail>(cardData);
+
+            return cardDetail.CreatedDate;
         }
+    }
+
+    internal class ReplyData
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public List<Lane> Lanes { get; set; }
+    }
+
+    internal class RootObject
+    {
+        public List<ReplyData> ReplyData { get; set; }
     }
 
     internal class Lane
@@ -278,28 +294,57 @@ namespace DevelopmentMetrics.Tests
         public List<Card> Cards { get; set; }
     }
 
-    internal class RootObject
+    internal class CardDetail
     {
-        public List<ReplyData> ReplyData { get; set; }
-    }
-
-    internal class ReplyData
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public List<Lane> Lanes { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 
     public interface ILeanKitWebClient
     {
         string GetBoardData();
+
+        string GetCardDataFor(int cardId);
     }
 
     public class LeanKitWebClient : ILeanKitWebClient
     {
         public string GetBoardData()
         {
-            return "";
+            const string url = @"https://ehl.leankit.com/kanban/api/boards/566488298";
+
+            return Get(url);
+        }
+
+        public string GetCardDataFor(int cardId)
+        {
+            var url = $"https://ehl.leankit.com/kanban/api/board/566488298/GetCard/{cardId}";
+
+            return Get(url);
+        }
+
+        private string Get(string url)
+        {
+            var result = string.Empty;
+
+            var webRequest = (HttpWebRequest)WebRequest.Create(url);
+
+            webRequest.Accept = "application/json";
+            webRequest.ContentType = "application/json; charset=utf-8;";
+
+            using (var webResponse = webRequest.GetResponse())
+            {
+                using (var responseStream = webResponse.GetResponseStream())
+                {
+                    if (responseStream == null)
+                        return result;
+
+                    var streamReader = new StreamReader(responseStream);
+
+                    result = streamReader.ReadToEnd();
+                }
+            }
+
+            return result;
         }
     }
 }

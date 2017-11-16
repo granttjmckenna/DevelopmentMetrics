@@ -15,7 +15,9 @@ namespace DevelopmentMetrics.Tests
 
             leanKitWebClient.GetBoardData().Returns(GetJsonResponse());
 
-            var cards = new Card(leanKitWebClient).GetCardsFromReplyData().ToList();
+            leanKitWebClient.GetCardDataFor(Arg.Any<int>()).Returns(@"{""CreatedDate"":""2017-10-01""}");
+
+            var cards = new Card(leanKitWebClient).GetCards().ToList();
 
             Assert.That(cards.Any(c => c.Status.Equals(CardStatus.Status.Todo)));
             Assert.That(cards.Any(c => c.Status.Equals(CardStatus.Status.Doing)));
