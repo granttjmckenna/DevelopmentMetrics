@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -217,16 +216,24 @@ namespace DevelopmentMetrics.Tests
 
     public class Card
     {
+        private readonly ILeanKitWebClient _leanKitLeanKitWebClient;
         public CardStatus.Status Status { get; set; }
         public DateTime CreatedDate { get; set; }
         public int Id { get; set; }
         public string Title { get; set; }
 
+        public Card() { }
+
+        public Card(ILeanKitWebClient leanKitWebClient)
+        {
+            _leanKitLeanKitWebClient = leanKitWebClient;
+        }
+
         public IEnumerable<Card> GetCardsFromReplyData()
         {
-            var jsonResponse = GetJsonResponse();
+            var boardData = _leanKitLeanKitWebClient.GetBoardData();
 
-            var rootObject = JsonConvert.DeserializeObject<RootObject>(jsonResponse);
+            var rootObject = JsonConvert.DeserializeObject<RootObject>(boardData);
 
             return (from lane in rootObject.ReplyData.First().Lanes
                     from card in lane.Cards
@@ -236,7 +243,7 @@ namespace DevelopmentMetrics.Tests
                         Title = card.Title,
                         Status = GetCardStatusFor(lane.Type),
                         CreatedDate = GetCardCreatedDateFor(card.Id)
-                    }).ToList();
+                    });
         }
 
         private CardStatus.Status GetCardStatusFor(int laneTypeId)
@@ -261,18 +268,6 @@ namespace DevelopmentMetrics.Tests
 
             return new DateTime();
         }
-
-        private string GetJsonResponse()
-        {
-            const string filePath = @"C:\code\DevelopmentMetrics\DevelopmentMetrics.Tests\leankit json response.txt";
-            string jsonResponse;
-
-            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
-            using (var streamReader = new StreamReader(fileStream))
-                jsonResponse = streamReader.ReadToEnd();
-
-            return jsonResponse;
-        }
     }
 
     internal class Lane
@@ -293,5 +288,18 @@ namespace DevelopmentMetrics.Tests
         public int Id { get; set; }
         public string Title { get; set; }
         public List<Lane> Lanes { get; set; }
+    }
+
+    public interface ILeanKitWebClient
+    {
+        string GetBoardData();
+    }
+
+    public class LeanKitWebClient : ILeanKitWebClient
+    {
+        public string GetBoardData()
+        {
+            return "";
+        }
     }
 }
