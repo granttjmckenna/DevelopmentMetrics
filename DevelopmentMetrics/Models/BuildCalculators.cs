@@ -70,17 +70,15 @@ namespace DevelopmentMetrics.Models
                                     && b.StartDateTime.Year.Equals(queryDate.Year))
                         .ToList();
 
+                if (!monthBuildMetrics.Any())
+                    continue;
+
                 var total = monthBuildMetrics.Count();
 
-
-
-                var failing =
-                    monthBuildMetrics.Count(b => b.Status.Equals(Helpers.BuildStatus.Failure.ToString(), StringComparison.CurrentCultureIgnoreCase));
+                var failing = monthBuildMetrics
+                    .Count(b => b.Status.Equals(Helpers.BuildStatus.Failure.ToString(), StringComparison.CurrentCultureIgnoreCase));
 
                 var failingRate = CalculateFailingRate(failing, total);
-
-                if (total == 0 || failing == 0)
-                    continue;
 
                 results.Add(queryDate.ToString("MMM-yyyy"), failingRate);
             }

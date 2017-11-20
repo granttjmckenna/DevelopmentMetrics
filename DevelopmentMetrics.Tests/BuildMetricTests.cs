@@ -86,25 +86,26 @@ namespace DevelopmentMetrics.Tests
             Assert.That(projectBuildMetrics.First(c => c.Key.Equals("Different project id")).Value, Is.EqualTo(0));
         }
 
-        [TestCase("2017-01-01")]
-        [TestCase("2016-06-01")]
-        [TestCase("2017-06-01")]
-        public void Should_calculate_failure_percentage_by_month_for_one_year(string fromDate)
+        [TestCase("2017-01-01", ExpectedResult = 12)]
+        [TestCase("2016-06-01", ExpectedResult = 5)]
+        [TestCase("2017-06-01", ExpectedResult = 7)]
+        public int Should_calculate_failure_percentage_by_month_for_one_year(string fromDate)
         {
             var buildMetrics = GetBuildMetricsData(360);
 
-            var monthlyBuildMetrics = new BuildCalculators().CalculateBuildFailingRateByMonthFrom(DateTime.Parse(fromDate), buildMetrics);
+            var monthlyBuildMetrics = new BuildCalculators()
+                .CalculateBuildFailingRateByMonthFrom(DateTime.Parse(fromDate), buildMetrics);
 
-            Assert.That(monthlyBuildMetrics.Keys.Count, Is.EqualTo(12));
+            return monthlyBuildMetrics.Keys.Count;
         }
 
         [Test]
-        public void Should_calculate_failure_percentage_by_month_for_build_metrics()
+        public void Should_calculate_failure_percentage_by_month_for_build_metrics_up_to_and_including_query_month()
         {
             var dummyBuildMetrics = GetBuildMetricsData(360);
 
             var buildMetrics = dummyBuildMetrics.Where(b => b.StartDateTime >= new DateTime(2017, 7, 1)).ToList();
-            
+
             var monthlyBuildMetrics = new BuildCalculators().CalculateBuildFailingRateByMonth(buildMetrics);
 
             Assert.That(monthlyBuildMetrics.Keys.Count, Is.EqualTo(6));
