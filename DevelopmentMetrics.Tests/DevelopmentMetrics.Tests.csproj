@@ -64,7 +64,6 @@
     <Compile Include="BuildRepositoryTests.cs" />
     <Compile Include="CardTests.cs" />
     <Compile Include="LeanKitDeserialiserTests.cs" />
-    <Compile Include="Foo.cs" />
     <Compile Include="DeserialiserTests.cs" />
     <Compile Include="FakeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

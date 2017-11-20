@@ -308,16 +308,19 @@ namespace DevelopmentMetrics.Tests
 
     public class LeanKitWebClient : ILeanKitWebClient
     {
+        private const string ApiDomain = "https://ehl.leankit.com/kanban/api";
+        private const int BoardId = 566488298;
+
         public string GetBoardData()
         {
-            const string url = @"https://ehl.leankit.com/kanban/api/boards/566488298";
+            var url = $"{ApiDomain}/boards/{BoardId}";
 
             return Get(url);
         }
 
         public string GetCardDataFor(int cardId)
         {
-            var url = $"https://ehl.leankit.com/kanban/api/board/566488298/GetCard/{cardId}";
+            var url = $"{ApiDomain}/board/{BoardId}/GetCard/{cardId}";
 
             return Get(url);
         }
@@ -330,6 +333,8 @@ namespace DevelopmentMetrics.Tests
 
             webRequest.Accept = "application/json";
             webRequest.ContentType = "application/json; charset=utf-8;";
+
+            webRequest.Headers.Add(HttpRequestHeader.Authorization, "some string");//TODO get base64 encoded string
 
             using (var webResponse = webRequest.GetResponse())
             {
