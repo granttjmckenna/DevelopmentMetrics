@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
+using DevelopmentMetrics.Models;
+using DevelopmentMetrics.Repository;
 using NSubstitute;
 using NUnit.Framework;
 
