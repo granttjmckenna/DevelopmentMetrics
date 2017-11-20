@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using DevelopmentMetrics.Models;
 using DevelopmentMetrics.Repository;
@@ -24,6 +25,7 @@ namespace DevelopmentMetrics.Tests
             Assert.That(cards.Any(c => c.Status.Equals(CardStatus.Status.Todo)));
             Assert.That(cards.Any(c => c.Status.Equals(CardStatus.Status.Doing)));
             Assert.That(cards.Any(c => c.Status.Equals(CardStatus.Status.Done)));
+            Assert.That(cards.All(c => c.CreatedDate == new DateTime(2017, 10, 01)));
         }
 
         private string GetJsonResponse()
