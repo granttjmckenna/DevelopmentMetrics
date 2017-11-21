@@ -57,6 +57,8 @@
     <Compile Include="Models\BuildTypeDto.cs" />
     <Compile Include="Models\BuildTypesDto.cs" />
     <Compile Include="Models\Card.cs" />
+    <Compile Include="Models\CardCount.cs" />
+    <Compile Include="Models\CardMetric.cs" />
     <Compile Include="Models\CardStatus.cs" />
     <Compile Include="Models\ProjectDto.cs" />
     <Compile Include="Models\ProjectBuild.cs" />
