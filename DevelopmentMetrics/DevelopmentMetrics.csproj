@@ -56,10 +56,10 @@
     <Compile Include="Models\BuildStability.cs" />
     <Compile Include="Models\BuildTypeDto.cs" />
     <Compile Include="Models\BuildTypesDto.cs" />
-    <Compile Include="Models\Card.cs" />
-    <Compile Include="Models\CardCount.cs" />
-    <Compile Include="Models\CardMetric.cs" />
-    <Compile Include="Models\CardStatus.cs" />
+    <Compile Include="Cards\Card.cs" />
+    <Compile Include="Cards\CardCount.cs" />
+    <Compile Include="Cards\CardMetric.cs" />
+    <Compile Include="Cards\CardStatus.cs" />
     <Compile Include="Models\ProjectDto.cs" />
     <Compile Include="Models\ProjectBuild.cs" />
     <Compile Include="Models\ProjectsDto.cs" />

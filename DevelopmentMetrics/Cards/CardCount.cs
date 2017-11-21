@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DevelopmentMetrics.Models
+namespace DevelopmentMetrics.Cards
 {
     public class CardCount
     {

@@ -1,4 +1,4 @@
-﻿namespace DevelopmentMetrics.Models
+﻿namespace DevelopmentMetrics.Cards
 {
     public static class CardStatus
     {

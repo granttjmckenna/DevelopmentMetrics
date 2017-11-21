@@ -4,7 +4,7 @@ using System.Linq;
 using DevelopmentMetrics.Repository;
 using Newtonsoft.Json;
 
-namespace DevelopmentMetrics.Models
+namespace DevelopmentMetrics.Cards
 {
     public class Card
     {
