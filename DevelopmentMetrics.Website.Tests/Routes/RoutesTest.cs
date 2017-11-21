@@ -45,5 +45,11 @@ namespace DevelopmentMetrics.Website.Tests.Routes
         {
             RouteAssert.HasRoute(_routeCollection, "/buildstability", new {Controller = "BuildStability", Action = "Index"});
         }
+
+        [Test]
+        public void Should_return_card_controller_and_index_action()
+        {
+            RouteAssert.HasRoute(_routeCollection, "/cards", new { Controller = "Cards", Action = "Index" });
+        }
     }
 }
