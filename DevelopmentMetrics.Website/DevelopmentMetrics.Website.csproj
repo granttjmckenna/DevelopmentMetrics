@@ -171,6 +171,7 @@
     </Compile>
     <Compile Include="Models\BuildStabilityChart.cs" />
     <Compile Include="Models\BuildStabilityViewModel.cs" />
+    <Compile Include="Models\CardsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

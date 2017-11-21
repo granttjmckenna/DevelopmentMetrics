@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using DevelopmentMetrics.Website.Models;
 
 namespace DevelopmentMetrics.Website.Controllers
 {
@@ -7,7 +8,10 @@ namespace DevelopmentMetrics.Website.Controllers
         // GET: Cards
         public ActionResult Index()
         {
-            return View();
+            var model = new CardsViewModel();
+
+
+            return View(model);
         }
     }
 }
