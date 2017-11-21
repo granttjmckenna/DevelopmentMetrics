@@ -5,3 +5,9 @@
 
 <h2>Card metrics</h2>
 
+@foreach (var metric in @Model.GetCardCountByStatus())
+{
+    <p>@metric.Key.ToString()</p>
+    <p>@metric.Value</p>
+}
+

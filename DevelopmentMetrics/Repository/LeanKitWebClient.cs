@@ -13,7 +13,7 @@ namespace DevelopmentMetrics.Repository
     public class LeanKitWebClient : ILeanKitWebClient
     {
         private const string ApiDomain = "https://ehl.leankit.com/kanban/api";
-        private const int BoardId = 566488298;
+        private const int BoardId = 311598445;
 
         public string GetBoardData()
         {
@@ -38,7 +38,8 @@ namespace DevelopmentMetrics.Repository
             webRequest.Accept = "application/json";
             webRequest.ContentType = "application/json; charset=utf-8;";
 
-            webRequest.Headers.Add(HttpRequestHeader.Authorization, "some string");//TODO get base64 encoded string
+            webRequest.Headers[HttpRequestHeader.Authorization] =
+                "Basic Z3JhbnQubWNrZW5uYUBlbmVyZ3loZWxwbGluZS5jb206TWFudXRkMDE=";
 
             using (var webResponse = webRequest.GetResponse())
             {
