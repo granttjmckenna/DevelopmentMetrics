@@ -11,3 +11,8 @@
     <p>@metric.Value</p>
 }
 
+@foreach (var cardCount in @Model.GetCardCountByDay())
+{
+    <p>@cardCount.Date - @cardCount.Total of which @cardCount.DoneTotal are done</p>
+}
+
