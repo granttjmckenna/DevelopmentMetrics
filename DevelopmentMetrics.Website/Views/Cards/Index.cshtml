@@ -7,6 +7,8 @@
 
 <h2>Card metrics</h2>
 
+<p>Lead time (in days): @leadTime</p>
+
 @foreach (var metric in @Model.GetCardCountByStatus())
 {
     <p>@metric.Key.ToString()</p>
@@ -15,7 +17,5 @@
 
 @foreach (var cardCount in @Model.GetCardCountByDay())
 {
-    <p>@cardCount.Date - @cardCount.Total of which @cardCount.DoneTotal are done</p>
+    <p>@cardCount.Date.ToString("dd-MMM") - @cardCount.Total of which @cardCount.DoneTotal are done</p>
 }
-
-<p>Lead time (in days): @leadTime</p>
