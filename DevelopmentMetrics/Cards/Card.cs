@@ -21,21 +21,29 @@ namespace DevelopmentMetrics.Cards
             _leanKitLeanKitWebClient = leanKitWebClient;
         }
 
-        public IEnumerable<Card> GetCards()
+        public List<Card> GetCards()
+        {
+            var cards = Helpers.CacheHelper.GetObjectFromCache<List<Card>>("cards", 60, GetCardsFromRepo);
+
+            return cards;
+        }
+
+        private List<Card> GetCardsFromRepo()
         {
             var boardData = _leanKitLeanKitWebClient.GetBoardData();
 
             var rootObject = JsonConvert.DeserializeObject<RootObject>(boardData);
 
             return (from lane in rootObject.ReplyData.First().Lanes
-                from card in lane.Cards
-                select new Card
-                {
-                    Id = card.Id,
-                    Title = card.Title,
-                    Status = GetCardStatusFor(lane.Type),
-                    CreatedDate = GetCardCreatedDateFor(card.Id)
-                });
+                    from card in lane.Cards
+                    select new Card
+                    {
+                        Id = card.Id,
+                        Title = card.Title,
+                        Status = GetCardStatusFor(lane.Type),
+                        CreatedDate = GetCardCreatedDateFor(card.Id)
+                    })
+                .ToList();
         }
 
         private CardStatus.Status GetCardStatusFor(int laneTypeId)
