@@ -10,7 +10,7 @@ namespace DevelopmentMetrics.Cards
     {
         private readonly ILeanKitWebClient _leanKitLeanKitWebClient;
         public CardStatus.Status Status { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public int Id { get; set; }
         public string Title { get; set; }
 
@@ -41,7 +41,7 @@ namespace DevelopmentMetrics.Cards
                         Id = card.Id,
                         Title = card.Title,
                         Status = GetCardStatusFor(lane.Type),
-                        CreatedDate = GetCardCreatedDateFor(card.Id)
+                        CreateDate = GetCardCreateDateFor(card.Id)
                     })
                 .ToList();
         }
@@ -64,13 +64,13 @@ namespace DevelopmentMetrics.Cards
             }
         }
 
-        private DateTime GetCardCreatedDateFor(int cardId)
+        private DateTime GetCardCreateDateFor(int cardId)
         {
             var cardData = _leanKitLeanKitWebClient.GetCardDataFor(cardId);
 
-            var cardDetail = JsonConvert.DeserializeObject<CardDetail>(cardData);
+            var replyData = JsonConvert.DeserializeObject<RootObject>(cardData);
 
-            return cardDetail.CreatedDate;
+            return DateTime.Parse(replyData.ReplyData.First().CreateDate);
         }
     }
     internal class ReplyData
@@ -78,6 +78,7 @@ namespace DevelopmentMetrics.Cards
         public int Id { get; set; }
         public string Title { get; set; }
         public List<Lane> Lanes { get; set; }
+        public string CreateDate { get; set; }
     }
 
     internal class RootObject
@@ -91,10 +92,5 @@ namespace DevelopmentMetrics.Cards
         public string Title { get; set; }
         public int Type { get; set; }
         public List<Card> Cards { get; set; }
-    }
-
-    internal class CardDetail
-    {
-        public DateTime CreatedDate { get; set; }
     }
 }

@@ -22,17 +22,17 @@ namespace DevelopmentMetrics.Tests
         {
             var cards = new List<Card>
             {
-                new Card { Id = 1, Status = CardStatus.Status.Todo,CreatedDate = new DateTime(2017,10,01)},
-                new Card { Id = 2, Status = CardStatus.Status.Todo,CreatedDate = new DateTime(2017,10,02) },
-                new Card { Id = 3, Status = CardStatus.Status.Todo,CreatedDate = new DateTime(2017,10,02) },
-                new Card { Id = 4, Status = CardStatus.Status.Todo,CreatedDate = new DateTime(2017,10,03) },
-                new Card { Id = 5, Status = CardStatus.Status.Done,CreatedDate = new DateTime(2017,10,01) },
-                new Card { Id = 6, Status = CardStatus.Status.Done,CreatedDate = new DateTime(2017,10,01) },
-                new Card { Id = 7, Status = CardStatus.Status.Done,CreatedDate = new DateTime(2017,10,01) },
-                new Card { Id = 8, Status = CardStatus.Status.Done,CreatedDate = new DateTime(2017,10,03) },
-                new Card { Id = 9, Status = CardStatus.Status.Doing,CreatedDate = new DateTime(2017,10,02) },
-                new Card { Id = 10, Status = CardStatus.Status.Doing,CreatedDate = new DateTime(2017,10,02) },
-                new Card { Id = 11, Status = CardStatus.Status.Unassigned,CreatedDate = new DateTime(2017,10,02) },
+                new Card { Id = 1, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,01)},
+                new Card { Id = 2, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,02) },
+                new Card { Id = 3, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,02) },
+                new Card { Id = 4, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,03) },
+                new Card { Id = 5, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,01) },
+                new Card { Id = 6, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,01) },
+                new Card { Id = 7, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,01) },
+                new Card { Id = 8, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,03) },
+                new Card { Id = 9, Status = CardStatus.Status.Doing,CreateDate = new DateTime(2017,10,02) },
+                new Card { Id = 10, Status = CardStatus.Status.Doing,CreateDate = new DateTime(2017,10,02) },
+                new Card { Id = 11, Status = CardStatus.Status.Unassigned,CreateDate = new DateTime(2017,10,02) },
             };
 
             return cards;

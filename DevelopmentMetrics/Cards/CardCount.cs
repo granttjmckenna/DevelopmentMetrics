@@ -20,7 +20,7 @@ namespace DevelopmentMetrics.Cards
 
         public List<CardCount> GetCardCountByDayFrom(DateTime dateTime)
         {
-            var maxCreatedDate = _cards.Max(c => c.CreatedDate);
+            var maxCreatedDate = _cards.Max(c => c.CreateDate);
 
             var days = Enumerable.Range(0, 1 + maxCreatedDate.Subtract(dateTime).Days)
                 .Select(o => dateTime.AddDays(o)).ToList();
@@ -33,17 +33,18 @@ namespace DevelopmentMetrics.Cards
                     Date = day,
                     DoneTotal = doneCountByDay,
                     Total = countByDay
-                }).ToList();
+                })
+                .ToList();
         }
 
         private static Func<Card, bool> AllPredicateFor(DateTime day)
         {
-            return c => c.CreatedDate <= day;
+            return c => c.CreateDate <= day;
         }
 
         private static Func<Card, bool> DonePredicateFor(DateTime dateTime)
         {
-            return c => c.CreatedDate <= dateTime && c.Status.Equals(CardStatus.Status.Done);
+            return c => c.CreateDate <= dateTime && c.Status.Equals(CardStatus.Status.Done);
         }
 
         private int GetCardCountsFor(Func<Card, bool> func)

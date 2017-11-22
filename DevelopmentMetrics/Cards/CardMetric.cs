@@ -29,22 +29,22 @@ namespace DevelopmentMetrics.Cards
         public int CalculateLeadTimeFor(DateTime calculationDate)
         {
             var cardPosition = _cards
-                .OrderBy(c => c.CreatedDate)
+                .OrderBy(c => c.CreateDate)
                 .Count(DonePredicateFor(calculationDate));
 
-            var cardDate = _cards.OrderBy(c => c.CreatedDate).Take(cardPosition).Max(c => c.CreatedDate);
+            var cardDate = _cards.OrderBy(c => c.CreateDate).Take(cardPosition).Max(c => c.CreateDate);
 
             return (calculationDate - cardDate).Days;
         }
 
         private static Func<Card, bool> DonePredicateFor(DateTime calculationDate)
         {
-            return c => c.CreatedDate <= calculationDate && c.Status.Equals(CardStatus.Status.Done);
+            return c => c.CreateDate <= calculationDate && c.Status.Equals(CardStatus.Status.Done);
         }
 
         public int CalculateWorkInProcessFor(DateTime calculationDateTime)
         {
-            var cardCount = _cards.Count(c => c.CreatedDate <= calculationDateTime);
+            var cardCount = _cards.Count(c => c.CreateDate <= calculationDateTime);
 
             var doneCardCount = _cards.Count(DonePredicateFor(calculationDateTime));
 
