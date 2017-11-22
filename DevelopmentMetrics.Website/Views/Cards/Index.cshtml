@@ -83,7 +83,8 @@
             type: "POST",
             error: function (xhr, status, error) {
                 var err = eval("(" + xhr.responseText + ")");
-                alert(err.message);
+
+                showChartMessage(err.message);
             },
             beforeSend: function () {
                 showChartLoading();
@@ -99,12 +100,18 @@
         return false;
     };
 
+    function showChartMessage(msg) {
+        var cardChart = $("#CardChart");
+
+        cardChart.text(msg);
+    }
+
     function showChartLoading() {
         var cardChart = $("#CardChart");
 
         cardChart.addClass("loading");
 
-        cardChart.text('Loading');
+        showChartMessage("Loading");
     }
 
     function hideChartLoading() {
