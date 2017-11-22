@@ -22,5 +22,10 @@ namespace DevelopmentMetrics.Website.Models
         {
             return new CardMetric(_cards).GetCountByStatus();
         }
+
+        public int CalculateLeadTime()
+        {
+            return new CardMetric(_cards).CalculateLeadTimeFor(DateTime.Now.AddDays(-1));
+        }
     }
 }

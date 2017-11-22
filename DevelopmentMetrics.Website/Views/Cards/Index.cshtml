@@ -1,6 +1,8 @@
 ﻿@model DevelopmentMetrics.Website.Models.CardsViewModel
 @{
     ViewBag.Title = "Cards";
+
+    var leadTime = @Model.CalculateLeadTime();
 }
 
 <h2>Card metrics</h2>
@@ -16,3 +18,4 @@
     <p>@cardCount.Date - @cardCount.Total of which @cardCount.DoneTotal are done</p>
 }
 
+<p>Lead time (in days): @leadTime</p>
