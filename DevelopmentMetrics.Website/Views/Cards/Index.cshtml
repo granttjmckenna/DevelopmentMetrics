@@ -33,6 +33,16 @@
     <div id="CardChart" class="chartWrapper"></div>
 </div>
 
+<div class="row">
+    <h4>Cards in process (@metrics[CardStatus.Status.Doing]):</h4>
+    @foreach (var card in Model.GetCardsInProcess())
+    {
+        <div class="col-lg-3">
+            @card.Title
+        </div>
+    }
+</div>
+
 <script type="text/javascript">
     google.load("visualization", "1",
         {
@@ -99,7 +109,7 @@
                 color: '#00BBF1',
                 fontSize: '20'
             },
-            height: 650,
+            height: 600,
             pointSize: 3,
             curveType: 'function',
             chartArea: {
