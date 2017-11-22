@@ -14,11 +14,6 @@ namespace DevelopmentMetrics.Website.Models
             _cards = cards;
         }
 
-        public List<CardCount> GetCardCountByDay()
-        {
-            return new CardCount(_cards).GetCardCountByDayFrom(DateTime.Now.AddDays(-42));
-        }
-
         public Dictionary<CardStatus.Status, int> GetCardCountByStatus()
         {
             return new CardMetric(_cards).GetCountByStatus();
@@ -26,7 +21,7 @@ namespace DevelopmentMetrics.Website.Models
 
         public int CalculateLeadTime()
         {
-            return new CardMetric(_cards).CalculateLeadTimeFor(DateTime.Now.AddDays(-1));
+            return new CardMetric(_cards).CalculateLeadTimeFor(DateTime.Now);
         }
 
         public List<Card> GetCardsInProcess()

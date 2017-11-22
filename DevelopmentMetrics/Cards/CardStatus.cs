@@ -7,7 +7,8 @@
             Todo,
             Doing,
             Done,
-            Unassigned
+            Unassigned,
+            All
         };
     }
 }

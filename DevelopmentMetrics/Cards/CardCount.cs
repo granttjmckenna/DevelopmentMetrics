@@ -20,7 +20,7 @@ namespace DevelopmentMetrics.Cards
 
         public List<CardCount> GetCardCountByDayFrom(DateTime dateTime)
         {
-            var maxCreatedDate = _cards.Max(c => c.CreateDate);
+            var maxCreatedDate = _cards.Max(c => c.CreateDate).AddDays(2);
 
             var days = Enumerable.Range(0, 1 + maxCreatedDate.Subtract(dateTime).Days)
                 .Select(o => dateTime.AddDays(o)).ToList();
