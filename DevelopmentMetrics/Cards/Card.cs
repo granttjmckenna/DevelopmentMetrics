@@ -55,10 +55,12 @@ namespace DevelopmentMetrics.Cards
                 case 2:
                     return CardStatus.Status.Doing;
                 case 3:
-                case 99: //archived
                     return CardStatus.Status.Done;
+                case 99:
+                    return CardStatus.Status.Unassigned;
                 default:
                     throw new Exception($"Lane type not recognised: {laneTypeId}");
+
             }
         }
 

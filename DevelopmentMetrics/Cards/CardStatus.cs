@@ -6,7 +6,8 @@
         {
             Todo,
             Doing,
-            Done
+            Done,
+            Unassigned
         };
     }
 }

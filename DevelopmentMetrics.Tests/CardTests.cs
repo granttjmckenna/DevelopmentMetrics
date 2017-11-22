@@ -32,6 +32,7 @@ namespace DevelopmentMetrics.Tests
                 new Card { Id = 8, Status = CardStatus.Status.Done,CreatedDate = new DateTime(2017,10,03) },
                 new Card { Id = 9, Status = CardStatus.Status.Doing,CreatedDate = new DateTime(2017,10,02) },
                 new Card { Id = 10, Status = CardStatus.Status.Doing,CreatedDate = new DateTime(2017,10,02) },
+                new Card { Id = 11, Status = CardStatus.Status.Unassigned,CreatedDate = new DateTime(2017,10,02) },
             };
 
             return cards;
@@ -46,6 +47,7 @@ namespace DevelopmentMetrics.Tests
             Assert.That(cardMetric[CardStatus.Status.Todo], Is.EqualTo(4));
             Assert.That(cardMetric[CardStatus.Status.Doing], Is.EqualTo(2));
             Assert.That(cardMetric[CardStatus.Status.Done], Is.EqualTo(4));
+            Assert.That(cardMetric[CardStatus.Status.Unassigned], Is.EqualTo(1));
         }
 
         [Test]
@@ -89,7 +91,7 @@ namespace DevelopmentMetrics.Tests
 
             var workInProcess = new CardMetric(_cards).CalculateWorkInProcessFor(dateTime);
 
-            Assert.That(workInProcess, Is.EqualTo(6));
+            Assert.That(workInProcess, Is.EqualTo(7));
         }
 
         [Test]
@@ -99,8 +101,8 @@ namespace DevelopmentMetrics.Tests
             var countByDays = new CardCount(_cards).GetCardCountByDayFrom(new DateTime(2017, 10, 01));
 
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 01)).Total, Is.EqualTo(4));
-            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 02)).Total, Is.EqualTo(8));
-            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 03)).Total, Is.EqualTo(10));
+            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 02)).Total, Is.EqualTo(9));
+            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 03)).Total, Is.EqualTo(11));
 
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 01)).DoneTotal, Is.EqualTo(3));
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 02)).DoneTotal, Is.EqualTo(3));
