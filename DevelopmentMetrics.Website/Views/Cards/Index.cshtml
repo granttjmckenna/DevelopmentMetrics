@@ -5,7 +5,14 @@
 
     var @metrics = @Model.GetCardCountByStatus();
 }
-
+<style>
+    .chartWrapper {
+        width: 100%;
+        height: 700px;
+        border: 1px solid #000000;
+        margin: 10px 0;
+    }
+</style>
 <script type="text/javascript" src="https://www.google.com/jsapi"> </script>
 
 <div class="row">
@@ -28,11 +35,9 @@
         </p>
     </div>
 </div>
+
 <div class="row">
-    &nbsp;
-</div>
-<div class="row">
-    <div id="CardChart" style="border: 1px solid #999;"></div>
+    <div id="CardChart" class="chartWrapper"></div>
 </div>
 
 <script type="text/javascript">
