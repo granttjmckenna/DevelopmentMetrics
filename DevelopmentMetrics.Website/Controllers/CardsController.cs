@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using DevelopmentMetrics.Cards;
 using DevelopmentMetrics.Repository;
 using DevelopmentMetrics.Website.Models;
@@ -22,8 +23,16 @@ namespace DevelopmentMetrics.Website.Controllers
 
             var model = new CardsViewModel(cards);
 
-
             return View(model);
+        }
+
+        //GET: CardMetrics
+        public JsonResult GetCardCountByDay()
+        {
+            var cards = new Card(_leanKitWebClient).GetCards();
+
+            return Json(new CardCount(cards).GetCardCountByDayFrom(DateTime.Now.AddDays(-42)),
+                JsonRequestBehavior.AllowGet);
         }
     }
 }
