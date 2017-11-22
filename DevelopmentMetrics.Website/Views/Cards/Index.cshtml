@@ -5,14 +5,7 @@
 
     var @metrics = @Model.GetCardCountByStatus();
 }
-<style>
-    .chartWrapper {
-        width: 100%;
-        height: 700px;
-        border: 1px solid #000000;
-        margin: 10px 0;
-    }
-</style>
+
 <script type="text/javascript" src="https://www.google.com/jsapi"> </script>
 
 <div class="row">
@@ -20,19 +13,19 @@
 </div>
 <div class="row">
     <div class="col-md-4">
-        <p>
+        <h3>
             Lead time (in days): @Model.CalculateLeadTime()
-        </p>
+        </h3>
     </div>
     <div class="col-md-4">
-        <p>
+        <h3>
             Todo: @metrics[CardStatus.Status.Todo]
-        </p>
+        </h3>
     </div>
     <div class="col-md-4">
-        <p>
+        <h3>
             In progress: @metrics[CardStatus.Status.Doing]
-        </p>
+        </h3>
     </div>
 </div>
 
@@ -42,9 +35,9 @@
 
 <script type="text/javascript">
     google.load("visualization", "1",
-    {
-        packages: ["corechart"]
-    });
+        {
+            packages: ["corechart"]
+        });
 
     google.setOnLoadCallback(drawChart);
 
@@ -59,22 +52,34 @@
                 alert(err.message);
             },
             beforeSend: function () {
-                //todo - show loading
+                showChartLoading();
             },
             success: function (data) {
                 renderChartData(data);
             },
             complete: function () {
-                //todo - hide loading
+                hideChartLoading();
             }
         });
 
         return false;
     };
 
-    function renderChartData(data) {
-        $("#CardChart").show();
+    function showChartLoading() {
+        var cardChart = $("#CardChart");
 
+        cardChart.addClass("loading");
+
+        cardChart.text('Chart loading');
+    }
+
+    function hideChartLoading() {
+        var cardChart = $("#CardChart");
+
+        cardChart.removeClass("loading").addClass("loaded");
+    }
+
+    function renderChartData(data) {
         var dataTable = new google.visualization.DataTable();
         dataTable.addColumn('date', 'day');
         dataTable.addColumn('number', 'Done');

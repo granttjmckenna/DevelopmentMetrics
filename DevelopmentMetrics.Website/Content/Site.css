@@ -22,3 +22,21 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.chartWrapper {
+    height: 700px;
+    border: 1px solid #999;
+    margin: 10px 0;
+}
+
+.loading {
+    text-align: center;
+    padding-top: 50px;
+    font-size: 2em;
+    font-weight: bold;
+    color: #999;
+}
+
+.loaded {
+    border: 1px solid #000;
+}
