@@ -26,13 +26,12 @@ namespace DevelopmentMetrics.Website.Controllers
             return View(model);
         }
 
-        //GET: CardMetrics
-        public JsonResult GetCardCountByDay()
+        [HttpPost]
+        public JsonResult GetCardCountByDay(int numberOfDays)
         {
             var cards = new Card(_leanKitWebClient).GetCards();
 
-            return Json(new CardCount(cards).GetCardCountByDayFrom(DateTime.Now.AddDays(-42)),
-                JsonRequestBehavior.AllowGet);
+            return Json(new CardCount(cards).GetCardCountByDayFrom(DateTime.Now.AddDays(numberOfDays * -1)));
         }
     }
 }

@@ -12,20 +12,36 @@
     <h2>Card metrics</h2>
 </div>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <h4>
             Lead time (in days): @Model.CalculateLeadTime()
         </h4>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <h4>
             Todo: @metrics[CardStatus.Status.Todo]
         </h4>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <h4>
             In process: @metrics[CardStatus.Status.Doing]
         </h4>
+    </div>
+    <div class="col-md-3">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">
+                Chart data
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(42);">6 weeks (default)</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(49);">7 weeks</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(56);">8 weeks</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(63);">9 weeks</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(70);">10 weeks</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(140);">20 weeks</a></li>
+            </ul>
+        </div>
     </div>
 </div>
 
@@ -51,12 +67,20 @@
 
     google.setOnLoadCallback(drawChart);
 
-    function drawChart() {
+    function drawChart(days) {
+        var chartDays = 42;
+
+        if (days && typeof days == "number") {
+            chartDays = days;
+        };
+
         $.ajax({
             url: '@Url.Action("GetCardCountByDay","Cards")',
             dataType: "json",
-            data: {},
-            type: "GET",
+            data: {
+                numberOfDays: chartDays
+            },
+            type: "POST",
             error: function (xhr, status, error) {
                 var err = eval("(" + xhr.responseText + ")");
                 alert(err.message);
