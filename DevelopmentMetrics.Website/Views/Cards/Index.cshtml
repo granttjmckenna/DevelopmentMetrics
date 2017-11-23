@@ -42,7 +42,15 @@
 </div>
 
 <div class="row">
-    <div id="CardChart" class="chartWrapper"></div>
+    <div class="col-lg-12">
+        <div id="CardChart" class="chartWrapper"></div>
+    </div>
+    @if (@metrics[CardStatus.Status.Unassigned] > 0)
+    {
+        <div class="col-md-12">
+            <div class="warning">There are unassigned cards included in the data which will make the reported figures less accurate</div>
+        </div>
+    }
 </div>
 
 <div class="row">
@@ -62,6 +70,4 @@
         });
 
     google.setOnLoadCallback(drawChart);
-
-    
 </script>
