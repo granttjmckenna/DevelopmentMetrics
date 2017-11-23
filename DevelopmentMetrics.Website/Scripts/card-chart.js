@@ -19,10 +19,8 @@ function drawChart(days) {
             numberOfDays: chartDays
         },
         type: "POST",
-        error: function (xhr, status, error) {
-            var err = eval("(" + xhr.responseText + ")");
-
-            showChartMessage(err.message);
+        error: function () {
+            showChartMessage("Error retrieving chart data");
         },
         beforeSend: function () {
             showChartLoading();
