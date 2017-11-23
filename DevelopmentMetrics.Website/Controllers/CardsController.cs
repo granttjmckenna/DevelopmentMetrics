@@ -30,9 +30,13 @@ namespace DevelopmentMetrics.Website.Controllers
         [HttpPost]
         public JsonResult GetCardCountByDay(int numberOfDays)
         {
+            const int defaultNumberOfDays = 42;
+
             if (numberOfDays == -1)
             {
                 CacheHelper.ClearObjectFromCache("cards");
+
+                numberOfDays = defaultNumberOfDays;
             }
 
             var cards = new Card(_leanKitWebClient).GetCards();
