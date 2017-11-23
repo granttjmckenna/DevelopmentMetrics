@@ -9,7 +9,7 @@ namespace DevelopmentMetrics.Helpers
         {
             var cache = MemoryCache.Default;
 
-            var cachedObject = (T) cache[itemName];
+            var cachedObject = (T)cache[itemName];
 
             if (cachedObject != null)
                 return cachedObject;
@@ -24,6 +24,13 @@ namespace DevelopmentMetrics.Helpers
             cache.Set(itemName, cachedObject, cacheItemPolicy);
 
             return cachedObject;
+        }
+
+        public static void ClearObjectFromCache(string itemName)
+        {
+            var cache = MemoryCache.Default;
+
+            cache.Remove(itemName);
         }
     }
 }

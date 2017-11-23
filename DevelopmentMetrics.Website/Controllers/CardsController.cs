@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using DevelopmentMetrics.Cards;
+using DevelopmentMetrics.Helpers;
 using DevelopmentMetrics.Repository;
 using DevelopmentMetrics.Website.Models;
 
@@ -29,6 +30,11 @@ namespace DevelopmentMetrics.Website.Controllers
         [HttpPost]
         public JsonResult GetCardCountByDay(int numberOfDays)
         {
+            if (numberOfDays == -1)
+            {
+                CacheHelper.ClearObjectFromCache("cards");
+            }
+
             var cards = new Card(_leanKitWebClient).GetCards();
 
             return Json(new CardCount(cards).GetCardCountByDayFrom(DateTime.Now.AddDays(numberOfDays * -1)));
