@@ -6,6 +6,8 @@
     var @metrics = @Model.GetCardCountByStatus();
 }
 
+<script type="text/javascript" src="https://www.google.com/jsapi"> </script>
+
 <div class="row">
     <h2>Card metrics</h2>
 </div>
@@ -55,19 +57,18 @@
 
 <div class="row">
     <h4>Cards in doing (@metrics[CardStatus.Status.Doing]):</h4>
-    @foreach (var card in Model.GetCardsInProcess())
-    {
-        <div class="col-lg-3">
-            @card.Title
-        </div>
-    }
+    <div class="nav">
+        <ul>
+            @foreach (var card in Model.GetCardsInProcess())
+            {
+                <li>
+                    @card.Title
+                </li>
+            }
+        </ul>
+    </div>
 </div>
 
 <script type="text/javascript">
-    google.load("visualization", "1",
-        {
-            packages: ["corechart"]
-        });
 
-    google.setOnLoadCallback(drawChart);
 </script>

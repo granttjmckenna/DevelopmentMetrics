@@ -1,4 +1,11 @@
-﻿function drawChart(days) {
+﻿google.load("visualization", "1",
+    {
+        packages: ["corechart"]
+    });
+
+google.setOnLoadCallback(drawChart);
+
+function drawChart(days) {
     var chartDays = 42;
 
     if (days && typeof days == "number") {
@@ -6,7 +13,7 @@
     };
 
     $.ajax({
-        url: '@Url.Action("GetCardCountByDay","Cards")',
+        url: "/Cards/GetCardCountByDay",
         dataType: "json",
         data: {
             numberOfDays: chartDays
