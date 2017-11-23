@@ -108,7 +108,7 @@ namespace DevelopmentMetrics.Tests
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 02)).DoneTotal, Is.EqualTo(3));
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 03)).DoneTotal, Is.EqualTo(4));
 
-            Assert.That(countByDays.All(c => c.Date != new DateTime(2017, 10, 04)));
+            Assert.That(countByDays.All(c => c.Date != new DateTime(2017, 10, 06)));
         }
     }
 }

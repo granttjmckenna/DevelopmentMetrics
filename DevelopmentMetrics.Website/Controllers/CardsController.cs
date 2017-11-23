@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using DevelopmentMetrics.Cards;
 using DevelopmentMetrics.Helpers;
@@ -10,6 +11,7 @@ namespace DevelopmentMetrics.Website.Controllers
     public class CardsController : Controller
     {
         private readonly ILeanKitWebClient _leanKitWebClient;
+        private List<Card> _cards;
 
         public CardsController(ILeanKitWebClient leanKitWebClient)
         {
@@ -20,9 +22,9 @@ namespace DevelopmentMetrics.Website.Controllers
         // GET: Cards
         public ActionResult Index()
         {
-            var cards = new Card(_leanKitWebClient).GetCards();
+            _cards = GetCards();
 
-            var model = new CardsViewModel(cards);
+            var model = new CardsViewModel(_cards);
 
             return View(model);
         }
@@ -39,9 +41,14 @@ namespace DevelopmentMetrics.Website.Controllers
                 numberOfDays = defaultNumberOfDays;
             }
 
-            var cards = new Card(_leanKitWebClient).GetCards();
+            _cards = GetCards();
 
-            return Json(new CardCount(cards).GetCardCountByDayFrom(DateTime.Now.AddDays(numberOfDays * -1)));
+            return Json(new CardCount(_cards).GetCardCountByDayFrom(DateTime.Now.AddDays(numberOfDays * -1)));
+        }
+
+        private List<Card> GetCards()
+        {
+            return new Card(_leanKitWebClient).GetCards();
         }
     }
 }
