@@ -14,6 +14,8 @@ namespace DevelopmentMetrics.Cards
         public int Id { get; set; }
         public string Title { get; set; }
 
+        public static string CacheKey = "cards";
+
         public Card() { }
 
         public Card(ILeanKitWebClient leanKitWebClient)
@@ -23,7 +25,7 @@ namespace DevelopmentMetrics.Cards
 
         public List<Card> GetCards()
         {
-            var cards = Helpers.CacheHelper.GetObjectFromCache<List<Card>>("cards", 60, GetCardsFromRepo);
+            var cards = Helpers.CacheHelper.GetObjectFromCache<List<Card>>(CacheKey, 60, GetCardsFromRepo);
 
             return cards;
         }

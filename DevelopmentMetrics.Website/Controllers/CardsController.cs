@@ -34,7 +34,7 @@ namespace DevelopmentMetrics.Website.Controllers
 
             if (numberOfDays == -1)
             {
-                CacheHelper.ClearObjectFromCache("cards");
+                CacheHelper.ClearObjectFromCache(Card.CacheKey);
 
                 numberOfDays = defaultNumberOfDays;
             }
