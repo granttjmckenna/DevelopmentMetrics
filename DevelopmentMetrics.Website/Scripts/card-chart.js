@@ -1,11 +1,4 @@
-﻿google.load("visualization", "1",
-    {
-        packages: ["corechart"]
-    });
-
-google.setOnLoadCallback(drawChart);
-
-function drawChart(days) {
+﻿function drawChart(days) {
     var chartDays = 42;
 
     if (days && typeof days == "number") {
