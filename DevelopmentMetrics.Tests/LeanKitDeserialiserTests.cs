@@ -29,6 +29,21 @@ namespace DevelopmentMetrics.Tests
             Assert.That(cards.All(c => c.CreateDate == new DateTime(2017, 11, 20)));
         }
 
+        [Test]
+        public void Return_cards_with_card_type_set()
+        {
+            var leanKitWebClient = Substitute.For<ILeanKitWebClient>();
+
+            leanKitWebClient.GetBoardData().Returns(GetJsonResponse());
+
+            leanKitWebClient.GetCardDataFor(Arg.Any<int>()).Returns(CardDetailResponse());
+
+            var cards = new Card(leanKitWebClient).GetCards();
+
+            Assert.That(cards.Any(c => c.TypeName.Equals("Defect")));
+
+        }
+
         private string GetJsonResponse()
         {
             const string filePath = @"C:\code\DevelopmentMetrics\DevelopmentMetrics.Tests\leankit json response.txt";

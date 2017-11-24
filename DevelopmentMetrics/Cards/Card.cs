@@ -13,6 +13,7 @@ namespace DevelopmentMetrics.Cards
         public DateTime CreateDate { get; set; }
         public int Id { get; set; }
         public string Title { get; set; }
+        public string TypeName { get; set; }
 
         public static string CacheKey = "cards";
 
@@ -43,7 +44,8 @@ namespace DevelopmentMetrics.Cards
                         Id = card.Id,
                         Title = card.Title,
                         Status = GetCardStatusFor(lane.Type),
-                        CreateDate = GetCardCreateDateFor(card.Id)
+                        CreateDate = GetCardCreateDateFor(card.Id),
+                        TypeName = "Defect"
                     })
                 .ToList();
         }
@@ -75,12 +77,19 @@ namespace DevelopmentMetrics.Cards
             return DateTime.Parse(replyData.ReplyData.First().CreateDate);
         }
     }
+
+    //public static class CardType
+    //{
+    //    public enum Name { Defect, New Feature }
+    //}
+
     internal class ReplyData
     {
         public int Id { get; set; }
         public string Title { get; set; }
         public List<Lane> Lanes { get; set; }
         public string CreateDate { get; set; }
+        public Type Type { get; set; }
     }
 
     internal class RootObject
@@ -94,5 +103,10 @@ namespace DevelopmentMetrics.Cards
         public string Title { get; set; }
         public int Type { get; set; }
         public List<Card> Cards { get; set; }
+    }
+
+    internal class Type
+    {
+        public string TypeName { get; set; }
     }
 }
