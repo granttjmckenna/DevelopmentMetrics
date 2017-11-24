@@ -45,7 +45,7 @@ namespace DevelopmentMetrics.Cards
                         Title = card.Title,
                         Status = GetCardStatusFor(lane.Type),
                         CreateDate = GetCardCreateDateFor(card.Id),
-                        TypeName = "Defect"
+                        TypeName = card.TypeName
                     })
                 .ToList();
         }
@@ -89,7 +89,7 @@ namespace DevelopmentMetrics.Cards
         public string Title { get; set; }
         public List<Lane> Lanes { get; set; }
         public string CreateDate { get; set; }
-        public Type Type { get; set; }
+
     }
 
     internal class RootObject
@@ -103,10 +103,5 @@ namespace DevelopmentMetrics.Cards
         public string Title { get; set; }
         public int Type { get; set; }
         public List<Card> Cards { get; set; }
-    }
-
-    internal class Type
-    {
-        public string TypeName { get; set; }
     }
 }

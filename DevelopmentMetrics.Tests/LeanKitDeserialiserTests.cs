@@ -40,7 +40,7 @@ namespace DevelopmentMetrics.Tests
 
             var cards = new Card(leanKitWebClient).GetCards();
 
-            Assert.That(cards.Any(c => c.TypeName.Equals("Defect")));
+            Assert.That(cards.Any(c => c.TypeName == "Defect"));
 
         }
 
