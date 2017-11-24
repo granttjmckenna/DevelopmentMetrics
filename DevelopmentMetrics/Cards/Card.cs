@@ -78,11 +78,6 @@ namespace DevelopmentMetrics.Cards
         }
     }
 
-    //public static class CardType
-    //{
-    //    public enum Name { Defect, New Feature }
-    //}
-
     internal class ReplyData
     {
         public int Id { get; set; }

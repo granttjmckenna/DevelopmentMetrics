@@ -41,7 +41,8 @@ namespace DevelopmentMetrics.Tests
             var cards = new Card(leanKitWebClient).GetCards();
 
             Assert.That(cards.Any(c => c.TypeName == "Defect"));
-
+            Assert.That(cards.Any(c => c.TypeName == "New Feature"));
+            Assert.That(cards.Any(c => c.TypeName == "Improvement"));
         }
 
         private string GetJsonResponse()
