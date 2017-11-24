@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using DevelopmentMetrics.Cards;
+using DevelopmentMetrics.Helpers;
 using DevelopmentMetrics.Models;
 using DevelopmentMetrics.Repository;
 using NSubstitute;
@@ -16,7 +17,7 @@ namespace DevelopmentMetrics.Tests
         public void Return_lanes_from_board_reply_data()
         {
             var leanKitWebClient = Substitute.For<ILeanKitWebClient>();
-
+            
             leanKitWebClient.GetBoardData().Returns(GetJsonResponse());
 
             leanKitWebClient.GetCardDataFor(Arg.Any<int>()).Returns(CardDetailResponse());

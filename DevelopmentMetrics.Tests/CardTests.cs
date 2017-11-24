@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using DevelopmentMetrics.Cards;
-using DevelopmentMetrics.Models;
+using DevelopmentMetrics.Helpers;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace DevelopmentMetrics.Tests
@@ -11,11 +12,14 @@ namespace DevelopmentMetrics.Tests
     public class CardTests
     {
         private List<Card> _cards;
+        private ITellTheTime _tellTheTime;
 
         [SetUp]
         public void Setup()
         {
             _cards = GetCards().ToList();
+            _tellTheTime = Substitute.For<ITellTheTime>();
+            _tellTheTime.Now().Returns(new DateTime(2017, 10, 05));
         }
 
         private static IEnumerable<Card> GetCards()
@@ -56,7 +60,7 @@ namespace DevelopmentMetrics.Tests
         {
             var calculationDate = new DateTime(2017, 10, 01);
 
-            var cardCount = new CardCount(_cards).GetCardCountByDayFrom(calculationDate);
+            var cardCount = new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(calculationDate);
 
             Assert.That(cardCount.First(c => c.Date == calculationDate).Total, Is.EqualTo(4));
         }
@@ -67,9 +71,26 @@ namespace DevelopmentMetrics.Tests
         {
             var calculationDate = new DateTime(2017, 10, 01);
 
-            var cardCount = new CardCount(_cards).GetCardCountByDayFrom(calculationDate);
+            var cardCount = new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(calculationDate);
 
             Assert.That(cardCount.First(c => c.Date == calculationDate).DoneTotal, Is.EqualTo(3));
+        }
+
+        [Test]
+        [Description("Card count tests")]
+        public void Return_collection_of_count_by_day_for_all_cards()
+        {
+            var countByDays = new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(new DateTime(2017, 10, 01));
+
+            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 01)).Total, Is.EqualTo(4));
+            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 02)).Total, Is.EqualTo(9));
+            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 03)).Total, Is.EqualTo(11));
+
+            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 01)).DoneTotal, Is.EqualTo(3));
+            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 02)).DoneTotal, Is.EqualTo(3));
+            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 03)).DoneTotal, Is.EqualTo(4));
+
+            Assert.That(countByDays.All(c => c.Date != new DateTime(2017, 10, 06)));
         }
 
         [Test]
@@ -92,23 +113,6 @@ namespace DevelopmentMetrics.Tests
             var workInProcess = new CardMetric(_cards).CalculateWorkInProcessFor(dateTime);
 
             Assert.That(workInProcess, Is.EqualTo(7));
-        }
-
-        [Test]
-        [Description("Card count tests")]
-        public void Return_collection_of_count_by_day_for_all_cards()
-        {
-            var countByDays = new CardCount(_cards).GetCardCountByDayFrom(new DateTime(2017, 10, 01));
-
-            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 01)).Total, Is.EqualTo(4));
-            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 02)).Total, Is.EqualTo(9));
-            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 03)).Total, Is.EqualTo(11));
-
-            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 01)).DoneTotal, Is.EqualTo(3));
-            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 02)).DoneTotal, Is.EqualTo(3));
-            Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 03)).DoneTotal, Is.EqualTo(4));
-
-            Assert.That(countByDays.All(c => c.Date != new DateTime(2017, 10, 06)));
         }
     }
 }

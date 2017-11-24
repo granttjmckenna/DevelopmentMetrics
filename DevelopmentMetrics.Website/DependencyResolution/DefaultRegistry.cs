@@ -15,6 +15,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DevelopmentMetrics.Helpers;
+
 namespace DevelopmentMetrics.Website.DependencyResolution {
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
@@ -36,6 +38,7 @@ namespace DevelopmentMetrics.Website.DependencyResolution {
             For<IBuildRepository>().Use<BuildRepository>();
             For<IWebClient>().Use<WebClient>();
             For<ILeanKitWebClient>().Use<LeanKitWebClient>();
+            For<ITellTheTime>().Use<TellTheTime>();
         }
 
         #endregion

@@ -1,26 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DevelopmentMetrics.Helpers;
 
 namespace DevelopmentMetrics.Cards
 {
     public class CardCount
     {
+        private readonly ITellTheTime _tellTheTime;
+
         private readonly IEnumerable<Card> _cards;
+
         public DateTime Date { get; set; }
         public int DoneTotal { get; set; }
         public int Total { get; set; }
 
         private CardCount() { }
 
-        public CardCount(IEnumerable<Card> cards)
+        public CardCount(ITellTheTime tellTheTime, IEnumerable<Card> cards)
         {
+            _tellTheTime = tellTheTime;
             _cards = cards;
         }
 
         public List<CardCount> GetCardCountByDayFrom(DateTime dateTime)
         {
-            var maxCreatedDate = _cards.Max(c => c.CreateDate).AddDays(2);
+            var maxCreatedDate = _tellTheTime.Now();
 
             var days = Enumerable.Range(0, 1 + maxCreatedDate.Subtract(dateTime).Days)
                 .Select(o => dateTime.AddDays(o)).ToList();

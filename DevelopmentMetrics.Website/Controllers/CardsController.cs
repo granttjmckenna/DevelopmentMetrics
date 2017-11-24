@@ -11,10 +11,12 @@ namespace DevelopmentMetrics.Website.Controllers
     public class CardsController : Controller
     {
         private readonly ILeanKitWebClient _leanKitWebClient;
+        private readonly ITellTheTime _tellTheTime;
         private List<Card> _cards;
 
-        public CardsController(ILeanKitWebClient leanKitWebClient)
+        public CardsController(ILeanKitWebClient leanKitWebClient, ITellTheTime tellTheTime)
         {
+            _tellTheTime = tellTheTime;
             _leanKitWebClient = leanKitWebClient;
         }
 
@@ -43,7 +45,7 @@ namespace DevelopmentMetrics.Website.Controllers
 
             _cards = GetCards();
 
-            return Json(new CardCount(_cards).GetCardCountByDayFrom(DateTime.Now.AddDays(numberOfDays * -1)));
+            return Json(new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(DateTime.Now.AddDays(numberOfDays * -1)));
         }
 
         private List<Card> GetCards()
