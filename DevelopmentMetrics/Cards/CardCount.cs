@@ -14,7 +14,7 @@ namespace DevelopmentMetrics.Cards
         public DateTime Date { get; set; }
         public int DoneTotal { get; set; }
         public int Total { get; set; }
-        public int DefectRate { get; set; }
+        public double DefectRate { get; set; }
 
         private CardCount() { }
 
@@ -34,12 +34,13 @@ namespace DevelopmentMetrics.Cards
             return (from day in days
                     let countByDay = GetCardCountsFor(AllPredicateFor(day))
                     let doneCountByDay = GetCardCountsFor(DonePredicateFor(day))
+                    let defectCountByDay = GetCardCountsFor(c => c.TypeName.Equals("Defect") && c.CreateDate <= day)
                     select new CardCount
                     {
                         Date = day,
                         DoneTotal = doneCountByDay,
                         Total = countByDay,
-                        DefectRate = 25
+                        DefectRate = Calculator.Percentage(defectCountByDay, countByDay)
                     })
                 .ToList();
         }

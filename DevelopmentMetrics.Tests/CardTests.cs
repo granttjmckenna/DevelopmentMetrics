@@ -26,17 +26,17 @@ namespace DevelopmentMetrics.Tests
         {
             var cards = new List<Card>
             {
-                new Card { Id = 1, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,01)},
-                new Card { Id = 2, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,02) },
-                new Card { Id = 3, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,02) },
-                new Card { Id = 4, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,03) },
-                new Card { Id = 5, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,01) },
-                new Card { Id = 6, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,01) },
-                new Card { Id = 7, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,01) },
-                new Card { Id = 8, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,03) },
-                new Card { Id = 9, Status = CardStatus.Status.Doing,CreateDate = new DateTime(2017,10,02) },
-                new Card { Id = 10, Status = CardStatus.Status.Doing,CreateDate = new DateTime(2017,10,02) },
-                new Card { Id = 11, Status = CardStatus.Status.Unassigned,CreateDate = new DateTime(2017,10,02) },
+                new Card { Id = 1, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,01), TypeName = "New Feature"},
+                new Card { Id = 2, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,02), TypeName = "New Feature" },
+                new Card { Id = 3, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,02), TypeName = "New Feature" },
+                new Card { Id = 4, Status = CardStatus.Status.Todo,CreateDate = new DateTime(2017,10,03), TypeName = "New Feature" },
+                new Card { Id = 5, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,01), TypeName = "Defect" },
+                new Card { Id = 6, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,01), TypeName = "New Feature" },
+                new Card { Id = 7, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,01), TypeName = "New Feature" },
+                new Card { Id = 8, Status = CardStatus.Status.Done,CreateDate = new DateTime(2017,10,03), TypeName = "New Feature" },
+                new Card { Id = 9, Status = CardStatus.Status.Doing,CreateDate = new DateTime(2017,10,02), TypeName = "New Feature" },
+                new Card { Id = 10, Status = CardStatus.Status.Doing,CreateDate = new DateTime(2017,10,02), TypeName = "New Feature" },
+                new Card { Id = 11, Status = CardStatus.Status.Unassigned,CreateDate = new DateTime(2017,10,02), TypeName = "New Feature" },
             };
 
             return cards;
@@ -73,7 +73,7 @@ namespace DevelopmentMetrics.Tests
 
             var cardCount = new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(calculationDate);
 
-            Assert.That(cardCount.First(c => c.Date == calculationDate).DefectRate, Is.EqualTo(25));
+            Assert.That(cardCount.First(c => c.Date == calculationDate).DefectRate, Is.EqualTo(25d));
         }
 
         [Test]
