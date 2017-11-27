@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="BuildMetricTests.cs" />
     <Compile Include="BuildRepositoryTests.cs" />
+    <Compile Include="CardMetricTests.cs" />
     <Compile Include="CardTests.cs" />
     <Compile Include="LeanKitDeserialiserTests.cs" />
     <Compile Include="DeserialiserTests.cs" />

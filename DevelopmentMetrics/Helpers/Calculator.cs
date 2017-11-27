@@ -8,7 +8,7 @@ namespace DevelopmentMetrics.Helpers
         {
             return (denominator == 0)
                 ? 0
-                : Math.Round((double)(100 * nominator) / denominator, 2);
+                : Math.Round((double)nominator / denominator, 2);
         }
     }
 }

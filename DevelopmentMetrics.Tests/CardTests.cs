@@ -65,16 +65,7 @@ namespace DevelopmentMetrics.Tests
             Assert.That(cardCount.First(c => c.Date == calculationDate).Total, Is.EqualTo(4));
         }
 
-        [Test]
-        [Description("Card metric test?")]
-        public void Return_defect_rate_for_given_day()
-        {
-            var calculationDate = new DateTime(2017, 10, 01);
-
-            var cardCount = new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(calculationDate);
-
-            Assert.That(cardCount.First(c => c.Date == calculationDate).DefectRate, Is.EqualTo(25d));
-        }
+        
 
         [Test]
         [Description("Card count metric test")]
