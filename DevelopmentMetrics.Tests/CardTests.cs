@@ -66,6 +66,17 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        [Description("Card metric test?")]
+        public void Return_defect_rate_for_given_day()
+        {
+            var calculationDate = new DateTime(2017, 10, 01);
+
+            var cardCount = new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(calculationDate);
+
+            Assert.That(cardCount.First(c => c.Date == calculationDate).DefectRate, Is.EqualTo(25));
+        }
+
+        [Test]
         [Description("Card count metric test")]
         public void Return_card_count_for_done_cards_in_the_process_for_a_given_day()
         {

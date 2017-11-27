@@ -14,6 +14,7 @@ namespace DevelopmentMetrics.Cards
         public DateTime Date { get; set; }
         public int DoneTotal { get; set; }
         public int Total { get; set; }
+        public int DefectRate { get; set; }
 
         private CardCount() { }
 
@@ -31,14 +32,15 @@ namespace DevelopmentMetrics.Cards
                 .Select(o => dateTime.AddDays(o)).ToList();
 
             return (from day in days
-                let countByDay = GetCardCountsFor(AllPredicateFor(day))
-                let doneCountByDay = GetCardCountsFor(DonePredicateFor(day))
-                select new CardCount
-                {
-                    Date = day,
-                    DoneTotal = doneCountByDay,
-                    Total = countByDay
-                })
+                    let countByDay = GetCardCountsFor(AllPredicateFor(day))
+                    let doneCountByDay = GetCardCountsFor(DonePredicateFor(day))
+                    select new CardCount
+                    {
+                        Date = day,
+                        DoneTotal = doneCountByDay,
+                        Total = countByDay,
+                        DefectRate = 25
+                    })
                 .ToList();
         }
 
