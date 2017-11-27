@@ -67,6 +67,7 @@ function renderChartData(data) {
 
     var options = {
         title: 'Cumulative flow diagram',
+        curveType: 'function',
         hAxis: {
             showTextEvery: 1,
             gridlines: {
