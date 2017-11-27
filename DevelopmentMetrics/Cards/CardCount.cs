@@ -45,6 +45,20 @@ namespace DevelopmentMetrics.Cards
                 .ToList();
         }
 
+        public Dictionary<CardStatus.Status, int> GetCountByStatus()
+        {
+            var result = new Dictionary<CardStatus.Status, int>
+            {
+                {CardStatus.Status.Todo, _cards.Count(c => c.Status.Equals(CardStatus.Status.Todo))},
+                {CardStatus.Status.Doing, _cards.Count(c => c.Status.Equals(CardStatus.Status.Doing))},
+                {CardStatus.Status.Done, _cards.Count(c => c.Status.Equals(CardStatus.Status.Done))},
+                {CardStatus.Status.Unassigned, _cards.Count(c => c.Status.Equals(CardStatus.Status.Unassigned))},
+                {CardStatus.Status.All, _cards.Count() }
+            };
+
+            return result;
+        }
+
         private static Func<Card, bool> AllPredicateFor(DateTime day)
         {
             return c => c.CreateDate <= day;

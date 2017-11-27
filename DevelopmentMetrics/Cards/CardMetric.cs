@@ -12,21 +12,7 @@ namespace DevelopmentMetrics.Cards
         {
             _cards = cards;
         }
-
-        public Dictionary<CardStatus.Status, int> GetCountByStatus()
-        {
-            var result = new Dictionary<CardStatus.Status, int>
-            {
-                {CardStatus.Status.Todo, _cards.Count(c => c.Status.Equals(CardStatus.Status.Todo))},
-                {CardStatus.Status.Doing, _cards.Count(c => c.Status.Equals(CardStatus.Status.Doing))},
-                {CardStatus.Status.Done, _cards.Count(c => c.Status.Equals(CardStatus.Status.Done))},
-                {CardStatus.Status.Unassigned, _cards.Count(c => c.Status.Equals(CardStatus.Status.Unassigned))},
-                {CardStatus.Status.All, _cards.Count() }
-            };
-
-            return result;
-        }
-
+        
         public int CalculateLeadTimeFor(DateTime calculationDate)
         {
             var cardPosition = _cards
@@ -38,11 +24,6 @@ namespace DevelopmentMetrics.Cards
             return (calculationDate - cardDate).Days;
         }
 
-        private static Func<Card, bool> DonePredicateFor(DateTime calculationDate)
-        {
-            return c => c.CreateDate <= calculationDate && c.Status.Equals(CardStatus.Status.Done);
-        }
-
         public int CalculateWorkInProcessFor(DateTime calculationDateTime)
         {
             var cardCount = _cards.Count(c => c.CreateDate <= calculationDateTime);
@@ -50,6 +31,11 @@ namespace DevelopmentMetrics.Cards
             var doneCardCount = _cards.Count(DonePredicateFor(calculationDateTime));
 
             return cardCount - doneCardCount;
+        }
+
+        private static Func<Card, bool> DonePredicateFor(DateTime calculationDate)
+        {
+            return c => c.CreateDate <= calculationDate && c.Status.Equals(CardStatus.Status.Done);
         }
     }
 }

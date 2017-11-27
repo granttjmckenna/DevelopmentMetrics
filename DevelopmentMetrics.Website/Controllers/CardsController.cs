@@ -26,7 +26,7 @@ namespace DevelopmentMetrics.Website.Controllers
         {
             _cards = GetCards();
 
-            var model = new CardsViewModel(_cards);
+            var model = new CardsViewModel(_tellTheTime, _cards);
 
             return View(model);
         }

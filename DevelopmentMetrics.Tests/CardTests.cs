@@ -43,15 +43,14 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
-        [Description("Card metric test")]
         public void Return_card_count_by_status()
         {
-            var cardMetric = new CardMetric(_cards).GetCountByStatus();
+            var countByStatus = new CardCount(_tellTheTime, _cards).GetCountByStatus();
 
-            Assert.That(cardMetric[CardStatus.Status.Todo], Is.EqualTo(4));
-            Assert.That(cardMetric[CardStatus.Status.Doing], Is.EqualTo(2));
-            Assert.That(cardMetric[CardStatus.Status.Done], Is.EqualTo(4));
-            Assert.That(cardMetric[CardStatus.Status.Unassigned], Is.EqualTo(1));
+            Assert.That(countByStatus[CardStatus.Status.Todo], Is.EqualTo(4));
+            Assert.That(countByStatus[CardStatus.Status.Doing], Is.EqualTo(2));
+            Assert.That(countByStatus[CardStatus.Status.Done], Is.EqualTo(4));
+            Assert.That(countByStatus[CardStatus.Status.Unassigned], Is.EqualTo(1));
         }
 
         [Test]
@@ -65,7 +64,7 @@ namespace DevelopmentMetrics.Tests
             Assert.That(cardCount.First(c => c.Date == calculationDate).Total, Is.EqualTo(4));
         }
 
-        
+
 
         [Test]
         [Description("Card count metric test")]
