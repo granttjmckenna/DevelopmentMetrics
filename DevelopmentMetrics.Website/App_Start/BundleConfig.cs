@@ -15,7 +15,6 @@ namespace DevelopmentMetrics.Website
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/google-charts").Include(
-                "~/Scripts/google-chart-api.js",
                 "~/Scripts/card-chart.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
