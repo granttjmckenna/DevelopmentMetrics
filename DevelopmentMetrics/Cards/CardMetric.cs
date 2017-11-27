@@ -24,15 +24,6 @@ namespace DevelopmentMetrics.Cards
             return (calculationDate - cardDate).Days;
         }
 
-        public int CalculateWorkInProcessFor(DateTime calculationDateTime)
-        {
-            var cardCount = _cards.Count(c => c.CreateDate <= calculationDateTime);
-
-            var doneCardCount = _cards.Count(DonePredicateFor(calculationDateTime));
-
-            return cardCount - doneCardCount;
-        }
-
         private static Func<Card, bool> DonePredicateFor(DateTime calculationDate)
         {
             return c => c.CreateDate <= calculationDate && c.Status.Equals(CardStatus.Status.Done);

@@ -63,7 +63,7 @@
     <Compile Include="BuildMetricTests.cs" />
     <Compile Include="BuildRepositoryTests.cs" />
     <Compile Include="CardMetricTests.cs" />
-    <Compile Include="CardTests.cs" />
+    <Compile Include="CardCountTests.cs" />
     <Compile Include="LeanKitDeserialiserTests.cs" />
     <Compile Include="DeserialiserTests.cs" />
     <Compile Include="FakeRepository.cs" />

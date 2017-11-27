@@ -59,6 +59,16 @@ namespace DevelopmentMetrics.Cards
             return result;
         }
 
+
+        public int GetCountOfCardsInWorkInProcessFor(DateTime calculationDateTime)
+        {
+            var cardCount = _cards.Count(c => c.CreateDate <= calculationDateTime);
+
+            var doneCardCount = _cards.Count(DonePredicateFor(calculationDateTime));
+
+            return cardCount - doneCardCount;
+        }
+
         private static Func<Card, bool> AllPredicateFor(DateTime day)
         {
             return c => c.CreateDate <= day;
