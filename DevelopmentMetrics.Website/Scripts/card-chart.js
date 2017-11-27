@@ -66,7 +66,6 @@ function renderChartData(data) {
         });
 
     var options = {
-        //title: 'Cumulative flow diagram',
         curveType: 'function',
         legend: {
             position: 'bottom'
