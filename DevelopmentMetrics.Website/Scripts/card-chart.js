@@ -55,10 +55,10 @@ function showChartLoaded() {
 
 function renderChartData(data) {
     var dataTable = new google.visualization.DataTable();
-    data.addColumn('date', 'Day');
-    data.addColumn('number', "Done");
-    data.addColumn('number', "Total");
-    data.addColumn('number', "Defects");
+    dataTable.addColumn('date', 'Day');
+    dataTable.addColumn('number', "Done");
+    dataTable.addColumn('number', "Total");
+    dataTable.addColumn('number', "Defect rate (%)");
 
     $.each(data,
         function (i, item) {
@@ -67,30 +67,42 @@ function renderChartData(data) {
 
     var options = {
         title: 'Cumulative flow diagram',
-        width: 900,
-        height: 500,
-        series: {
-            // Gives each series an axis name that matches the Y-axis below.
-            0: { axis: 'NumberOfItems' },
-            1: { axis: 'NumberOfItems' },
-            2: { axis: 'Defects' }
+        hAxis: {
+            showTextEvery: 1,
+            gridlines: {
+                color: 'transparent'
+            },
+            title: 'Date'
         },
-        colors: ['#34A853', '#FF6600', '#FF0000'],
-        axes: {
-            y: {
-                NumberOfItems: { label: 'Number Of Items' },
-                Defects: {
-                    label: 'Defects (%)',
-                    range: {
-                        min: 0,
-                        max: 100
-                    }
+        vAxes: {
+            0: {
+                viewWindowMode: 'explicit',
+                gridlines: {
+                    color: 'transparent'
+                },
+                title: 'Number of items'
+            },
+            1: {
+                gridlines: {
+                    color: 'transparent'
+                },
+                title: 'Defect rate',
+                format: "#%",
+                viewWindow: {
+                    max: 1,
+                    min: 0
                 }
             }
-        }
+        },
+        series: {
+            0: { targetAxisIndex: 0 },
+            1: { targetAxisIndex: 0 },
+            2: { targetAxisIndex: 1 }
+        },
+        colors: ['#34A853', '#FF6600', '#FF0000']
     };
 
-    var chart = new google.visualization.LineChart(getChartDiv());
+    var chart = new google.visualization.LineChart(document.getElementById("chart_div"));
     chart.draw(dataTable, options);
 
     return false;
