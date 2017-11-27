@@ -29,14 +29,18 @@
     return false;
 };
 
+function getChartDiv() {
+    return $("#chart_div");
+}
+
 function showChartMessage(msg) {
-    var cardChart = $("#CardChart");
+    var cardChart = getChartDiv();
 
     cardChart.text(msg);
 }
 
 function showChartLoading() {
-    var cardChart = $("#CardChart");
+    var cardChart = getChartDiv();
 
     cardChart.addClass("loading");
 
@@ -44,7 +48,7 @@ function showChartLoading() {
 }
 
 function showChartLoaded() {
-    var cardChart = $("#CardChart");
+    var cardChart = getChartDiv();
 
     cardChart.removeClass("loading").addClass("loaded");
 }
@@ -120,7 +124,7 @@ function renderChartData(data) {
             }
         }
     };
-    var chart = new google.visualization.LineChart(document.getElementById('CardChart'));
+    var chart = new google.visualization.LineChart(getChartDiv());
     chart.draw(dataTable, options);
 
     return false;
