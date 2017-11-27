@@ -95,9 +95,18 @@ function renderChartData(data) {
             }
         },
         series: {
-            0: { targetAxisIndex: 0 },
-            1: { targetAxisIndex: 0 },
-            2: { targetAxisIndex: 1 }
+            0: {
+                targetAxisIndex: 0,
+                lineWidth: 2
+            },
+            1: {
+                targetAxisIndex: 0,
+                lineWidth: 2
+            },
+            2: {
+                targetAxisIndex: 1,
+                lineWidth: 1
+            }
         },
         colors: ['#34A853', '#FF6600', '#FF0000']
     };
