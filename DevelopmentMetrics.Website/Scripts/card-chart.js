@@ -66,8 +66,11 @@ function renderChartData(data) {
         });
 
     var options = {
-        title: 'Cumulative flow diagram',
+        //title: 'Cumulative flow diagram',
         curveType: 'function',
+        legend: {
+            position: 'bottom'
+        },
         hAxis: {
             showTextEvery: 1,
             gridlines: {
