@@ -31,8 +31,8 @@ namespace DevelopmentMetrics.Website.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public JsonResult GetCardCountByDay(int numberOfDays)
+       [HttpPost]
+        public JsonResult GetCardChartDataFor(int numberOfDays)
         {
             if (IsClearCache(numberOfDays))
             {

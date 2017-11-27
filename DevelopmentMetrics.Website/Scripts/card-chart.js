@@ -6,7 +6,7 @@
     };
 
     $.ajax({
-        url: "/Cards/GetCardCountByDay",
+        url: "/Cards/GetCardChartDataFor",
         dataType: "json",
         data: {
             numberOfDays: chartDays
@@ -55,75 +55,41 @@ function showChartLoaded() {
 
 function renderChartData(data) {
     var dataTable = new google.visualization.DataTable();
-    dataTable.addColumn('date', 'day');
-    dataTable.addColumn('number', 'Done');
-    dataTable.addColumn('number', 'Total');
+    data.addColumn('date', 'Day');
+    data.addColumn('number', "Done");
+    data.addColumn('number', "Total");
+    data.addColumn('number', "Defects");
 
     $.each(data,
         function (i, item) {
-            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.DoneTotal, item.Total]]);
+            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.DoneTotal, item.Total, item.DefectRate]]);
         });
-
-    var minValue = dataTable.getFormattedValue(0, 2) - 30;
 
     var options = {
         title: 'Cumulative flow diagram',
-        titleTextStyle: {
-            italic: false,
-            color: '#00BBF1',
-            fontSize: '20'
+        width: 900,
+        height: 500,
+        series: {
+            // Gives each series an axis name that matches the Y-axis below.
+            0: { axis: 'NumberOfItems' },
+            1: { axis: 'NumberOfItems' },
+            2: { axis: 'Defects' }
         },
-        height: 600,
-        pointSize: 3,
-        curveType: 'function',
-        chartArea: {
-            top: 50
-        },
-        legend:
-        {
-            position: 'bottom',
-            textStyle:
-            {
-                color: '#666'
-            }
-        },
-        colors: ['#34A853', 'ff6600', '#FBBC05'],
-        hAxis:
-        {
-            title: 'Time (days)',
-            titleTextStyle:
-            {
-                italic: false,
-                color: '#00BBF1',
-                fontSize: '20'
-            },
-            textStyle:
-            {
-                color: '#666'
-            },
-            format: 'dd MMM'
-        },
-        vAxis:
-        {
-            baselineColor: '#f5f5f5',
-            title: 'Number of items',
-            titleTextStyle:
-            {
-                color: '#00BBF1',
-                italic: false,
-                fontSize: '20'
-            },
-            textStyle:
-            {
-                color: '#666'
-            },
-            viewWindow:
-            {
-                min: minValue,
-                format: 'long'
+        colors: ['#34A853', '#FF6600', '#FF0000'],
+        axes: {
+            y: {
+                NumberOfItems: { label: 'Number Of Items' },
+                Defects: {
+                    label: 'Defects (%)',
+                    range: {
+                        min: 0,
+                        max: 100
+                    }
+                }
             }
         }
     };
+
     var chart = new google.visualization.LineChart(getChartDiv());
     chart.draw(dataTable, options);
 
