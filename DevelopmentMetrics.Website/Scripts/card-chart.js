@@ -71,11 +71,15 @@ function renderChartData(data) {
             position: 'bottom'
         },
         hAxis: {
-            showTextEvery: 1,
             gridlines: {
                 color: 'transparent'
             },
-            title: 'Date'
+            title: 'Date',
+            format: 'dd MMM',
+            titleTextStyle: {
+                fontSize: 20,
+                italic: false
+            }
         },
         vAxes: {
             0: {
@@ -83,13 +87,21 @@ function renderChartData(data) {
                 gridlines: {
                     color: 'transparent'
                 },
-                title: 'Number of items'
+                title: 'Number of items',
+                titleTextStyle: {
+                    fontSize: 20,
+                    italic: false
+                }
             },
             1: {
                 gridlines: {
                     color: 'transparent'
                 },
                 title: 'Defect rate',
+                titleTextStyle: {
+                    fontSize: 20,
+                    italic: false
+                },
                 format: "#%",
                 viewWindow: {
                     max: 1,
