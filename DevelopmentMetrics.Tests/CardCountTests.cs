@@ -54,7 +54,7 @@ namespace DevelopmentMetrics.Tests
         {
             var dateTime = new DateTime(2017, 10, 03);
 
-            var workInProcess = new CardCount(_tellTheTime, _cards).GetCountOfCardsInWorkInProcessFor(dateTime);
+            var workInProcess = new CardCount(_tellTheTime, _cards).GetInWorkInProcessCountFor(dateTime);
 
             Assert.That(workInProcess, Is.EqualTo(7));
         }

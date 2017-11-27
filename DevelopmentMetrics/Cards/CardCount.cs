@@ -60,7 +60,7 @@ namespace DevelopmentMetrics.Cards
         }
 
 
-        public int GetCountOfCardsInWorkInProcessFor(DateTime calculationDateTime)
+        public int GetInWorkInProcessCountFor(DateTime calculationDateTime)
         {
             var cardCount = _cards.Count(c => c.CreateDate <= calculationDateTime);
 
