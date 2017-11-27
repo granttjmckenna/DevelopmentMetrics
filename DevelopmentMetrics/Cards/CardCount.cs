@@ -26,9 +26,7 @@ namespace DevelopmentMetrics.Cards
 
         public List<CardCount> GetCardCountByDayFrom(DateTime dateTime)
         {
-            var maxCreatedDate = _tellTheTime.Now();
-
-            var days = Enumerable.Range(0, 1 + maxCreatedDate.Subtract(dateTime).Days)
+            var days = Enumerable.Range(0, 1 + _tellTheTime.Now().Subtract(dateTime).Days)
                 .Select(o => dateTime.AddDays(o)).ToList();
 
             return (from day in days
@@ -59,14 +57,10 @@ namespace DevelopmentMetrics.Cards
             return result;
         }
 
-
         public int GetInWorkInProcessCountFor(DateTime calculationDateTime)
         {
-            var cardCount = _cards.Count(c => c.CreateDate <= calculationDateTime);
-
-            var doneCardCount = _cards.Count(DonePredicateFor(calculationDateTime));
-
-            return cardCount - doneCardCount;
+            return _cards.Count(c => c.CreateDate <= calculationDateTime)
+                - _cards.Count(DonePredicateFor(calculationDateTime));
         }
 
         private static Func<Card, bool> AllPredicateFor(DateTime day)
