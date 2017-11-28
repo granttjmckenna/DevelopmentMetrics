@@ -38,7 +38,7 @@ namespace DevelopmentMetrics.Cards
                         Date = day,
                         DoneTotal = doneCountByDay,
                         Total = countByDay,
-                        DefectRate = Calculator.Percentage(defectCountByDay, countByDay)
+                        DefectRate = Calculator.Percentage(defectCountByDay, doneCountByDay)
                     })
                 .ToList();
         }
@@ -75,7 +75,7 @@ namespace DevelopmentMetrics.Cards
 
         private static Func<Card, bool> AllDefectsNotDoneFor(DateTime day)
         {
-            return c => c.TypeName.Equals("Defect") && c.CreateDate <= day && !c.Status.Equals(CardStatus.Status.Done);
+            return c => c.TypeName.Equals("Defect") && c.CreateDate <= day && c.Status.Equals(CardStatus.Status.Done);
         }
 
         private int GetCardCountsFor(Func<Card, bool> func)
