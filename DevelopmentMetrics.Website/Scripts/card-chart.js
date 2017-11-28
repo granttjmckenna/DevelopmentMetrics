@@ -55,10 +55,10 @@ function showChartLoaded() {
 
 function renderChartData(data) {
     var dataTable = new google.visualization.DataTable();
-    dataTable.addColumn('date', 'Day');
-    dataTable.addColumn('number', "Done");
-    dataTable.addColumn('number', "Total");
-    dataTable.addColumn('number', "Defect rate (%)");
+    dataTable.addColumn("date", "Day");
+    dataTable.addColumn("number", "Done");
+    dataTable.addColumn("number", "Total");
+    dataTable.addColumn("number", "Defect rate (%)");
 
     $.each(data,
         function (i, item) {
@@ -66,16 +66,16 @@ function renderChartData(data) {
         });
 
     var options = {
-        curveType: 'function',
+        curveType: "function",
         legend: {
-            position: 'bottom'
+            position: "bottom"
         },
         hAxis: {
             gridlines: {
-                color: 'transparent'
+                color: "transparent"
             },
-            title: 'Date',
-            format: 'dd MMM',
+            title: "Date",
+            format: "dd MMM",
             titleTextStyle: {
                 fontSize: 20,
                 italic: false
@@ -83,11 +83,11 @@ function renderChartData(data) {
         },
         vAxes: {
             0: {
-                viewWindowMode: 'explicit',
+                viewWindowMode: "explicit",
                 gridlines: {
-                    color: 'transparent'
+                    color: "transparent"
                 },
-                title: 'Number of items',
+                title: "Number of items",
                 titleTextStyle: {
                     fontSize: 20,
                     italic: false
@@ -95,9 +95,9 @@ function renderChartData(data) {
             },
             1: {
                 gridlines: {
-                    color: 'transparent'
+                    color: "transparent"
                 },
-                title: 'Defect rate',
+                title: "Defect rate",
                 titleTextStyle: {
                     fontSize: 20,
                     italic: false
@@ -112,21 +112,31 @@ function renderChartData(data) {
         series: {
             0: {
                 targetAxisIndex: 0,
-                lineWidth: 2
+                lineWidth: 3
             },
             1: {
                 targetAxisIndex: 0,
-                lineWidth: 2
+                lineWidth: 3
             },
             2: {
                 targetAxisIndex: 1,
-                lineWidth: 1
+                lineWidth: 2
             }
         },
-        colors: ['#34A853', '#FF6600', '#FF0000']
+        colors: ["#34A853", "#FF6600", "#FF0000"]
     };
 
-    var chart = new google.visualization.LineChart(document.getElementById("chart_div"));
+    var chartDiv = document.getElementById("chart_div");
+
+    var chart = new google.visualization.LineChart(chartDiv);
+
+    // Wait for the chart to finish drawing before calling the getImageURI() method.
+    google.visualization.events.addListener(chart, "ready", function () {
+        chartDiv.innerHTML = "<img src='" + chart.getImageURI() + "'>";
+
+        document.getElementById("print_chart").outerHTML = "<a href='" + chart.getImageURI() + "'  target='_blank'>Printable version</a>";
+    });
+
     chart.draw(dataTable, options);
 
     return false;
@@ -135,6 +145,6 @@ function renderChartData(data) {
 function getDateIfDate(d) {
     var m = d.match(/\/Date\((\d+)\)\//);
     return m
-        ? (new Date(+m[1])).toString('dd/MM/yyyy')
+        ? (new Date(+m[1])).toString("dd/MM/yyyy")
         : d;
 };
