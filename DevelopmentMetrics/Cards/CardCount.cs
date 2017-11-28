@@ -32,7 +32,7 @@ namespace DevelopmentMetrics.Cards
             return (from day in days
                     let countByDay = GetCardCountsFor(AllPredicateFor(day))
                     let doneCountByDay = GetCardCountsFor(DonePredicateFor(day))
-                    let defectCountByDay = GetCardCountsFor(c => c.TypeName.Equals("Defect") && c.CreateDate <= day)
+                    let defectCountByDay = GetCardCountsFor(AllDefectsNotDoneFor(day))
                     select new CardCount
                     {
                         Date = day,
@@ -71,6 +71,11 @@ namespace DevelopmentMetrics.Cards
         private static Func<Card, bool> DonePredicateFor(DateTime dateTime)
         {
             return c => c.CreateDate <= dateTime && c.Status.Equals(CardStatus.Status.Done);
+        }
+
+        private static Func<Card, bool> AllDefectsNotDoneFor(DateTime day)
+        {
+            return c => c.TypeName.Equals("Defect") && c.CreateDate <= day && !c.Status.Equals(CardStatus.Status.Done);
         }
 
         private int GetCardCountsFor(Func<Card, bool> func)
