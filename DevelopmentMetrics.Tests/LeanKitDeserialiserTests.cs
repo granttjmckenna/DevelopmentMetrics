@@ -2,8 +2,6 @@
 using System.IO;
 using System.Linq;
 using DevelopmentMetrics.Cards;
-using DevelopmentMetrics.Helpers;
-using DevelopmentMetrics.Models;
 using DevelopmentMetrics.Repository;
 using NSubstitute;
 using NUnit.Framework;

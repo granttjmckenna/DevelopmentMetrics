@@ -25,7 +25,6 @@ namespace DevelopmentMetrics.Tests
             return Calculator.Percentage(nominator, denominator);
         }
         [Test]
-        [Description("Card metric test")]
         public void Return_lead_time_for_a_given_day()
         {
             var dateTime = new DateTime(2017, 10, 03);
