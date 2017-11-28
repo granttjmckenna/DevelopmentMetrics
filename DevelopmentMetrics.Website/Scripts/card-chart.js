@@ -59,7 +59,7 @@ function renderChartData(data) {
     dataTable.addColumn("date", "Day");
     dataTable.addColumn("number", "Done");
     dataTable.addColumn("number", "Total");
-    dataTable.addColumn("number", "Defect rate (%)");
+    dataTable.addColumn("number", "Rework (%)");
 
     $.each(data,
         function (i, item) {
@@ -98,7 +98,7 @@ function renderChartData(data) {
                 gridlines: {
                     color: "transparent"
                 },
-                title: "Defect rate",
+                title: "Rework",
                 titleTextStyle: {
                     fontSize: 20,
                     italic: false
