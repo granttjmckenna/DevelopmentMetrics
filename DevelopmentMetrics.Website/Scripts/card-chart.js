@@ -36,13 +36,13 @@ function getChartDiv() {
 function showChartMessage(msg) {
     var cardChart = getChartDiv();
 
-    cardChart.text(msg);
+    cardChart.innerHTML = msg;
 }
 
 function showChartLoading() {
     var cardChart = getChartDiv();
 
-    cardChart.addClass("loading");
+    cardChart.classList.add("loading");
 
     showChartMessage("Loading");
 }
@@ -50,7 +50,7 @@ function showChartLoading() {
 function showChartLoaded() {
     var cardChart = getChartDiv();
 
-    cardChart.removeClass("loading").addClass("loaded");
+    cardChart.classList.remove("loading").classList.add("loaded");
 }
 
 function renderChartData(data) {
@@ -132,8 +132,6 @@ function renderChartData(data) {
 
     // Wait for the chart to finish drawing before calling the getImageURI() method.
     google.visualization.events.addListener(chart, "ready", function () {
-        chartDiv.innerHTML = "<img src='" + chart.getImageURI() + "'>";
-
         document.getElementById("print_chart").outerHTML = "<a href='" + chart.getImageURI() + "'  target='_blank'>Printable version</a>";
     });
 

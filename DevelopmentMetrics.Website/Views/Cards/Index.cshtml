@@ -65,7 +65,7 @@
     <h4>Cards in doing (@metrics[CardStatus.Status.Doing]):</h4>
     @foreach (var card in Model.GetCardsInProcess())
     {
-        var @css = (@card.TypeName == "Defect") ? "alert-danger" : (@card.TypeName == "Improvement") ? "alert-info" : "alert-succes";
+        var @css = (@card.TypeName == "Defect") ? "alert-danger" : (@card.TypeName == "Improvement") ? "alert-info" : "alert-success";
         <div class="col-md-12">
             <div class="alert @css">
                 @card.Title
