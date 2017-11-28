@@ -30,7 +30,7 @@
 };
 
 function getChartDiv() {
-    return $("#chart_div");
+    return document.getElementById("chart_div");
 }
 
 function showChartMessage(msg) {
@@ -126,7 +126,7 @@ function renderChartData(data) {
         colors: ["#34A853", "#FF6600", "#FF0000"]
     };
 
-    var chartDiv = document.getElementById("chart_div");
+    var chartDiv = getChartDiv();
 
     var chart = new google.visualization.LineChart(chartDiv);
 
