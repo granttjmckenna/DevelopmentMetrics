@@ -66,9 +66,10 @@
     @foreach (var card in Model.GetCardsInProcess())
     {
         var @css = (@card.TypeName == "Defect") ? "alert-danger" : (@card.TypeName == "Improvement") ? "alert-info" : "alert-succes";
-
-        <div class="alert @css">
-            @card.Title
+        <div class="col-md-12">
+            <div class="alert @css">
+                @card.Title
+            </div>
         </div>
     }
 </div>
