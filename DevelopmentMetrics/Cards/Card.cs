@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DevelopmentMetrics.Helpers;
 using DevelopmentMetrics.Repository;
 using Newtonsoft.Json;
 
@@ -9,11 +10,14 @@ namespace DevelopmentMetrics.Cards
     public class Card
     {
         private readonly ILeanKitWebClient _leanKitLeanKitWebClient;
+        private readonly ITellTheTime _tellTheTime;
+
         public CardStatus.Status Status { get; set; }
         public DateTime CreateDate { get; set; }
         public int Id { get; set; }
         public string Title { get; set; }
         public string TypeName { get; set; }
+        public DateTime? DoneDate { get; set; }
 
         public static string CacheKey = "cards";
 
@@ -22,6 +26,12 @@ namespace DevelopmentMetrics.Cards
         public Card(ILeanKitWebClient leanKitWebClient)
         {
             _leanKitLeanKitWebClient = leanKitWebClient;
+        }
+
+        public Card(ILeanKitWebClient leanKitWebClient, ITellTheTime tellTheTime)
+        {
+            _leanKitLeanKitWebClient = leanKitWebClient;
+            _tellTheTime = tellTheTime;
         }
 
         public List<Card> GetCards()
@@ -39,12 +49,14 @@ namespace DevelopmentMetrics.Cards
 
             return (from lane in rootObject.ReplyData.First().Lanes
                     from card in lane.Cards
+                    let cardDates = GetCardCreateDateFor(card.Id)
                     select new Card
                     {
                         Id = card.Id,
                         Title = card.Title,
                         Status = GetCardStatusFor(lane.Type),
-                        CreateDate = GetCardCreateDateFor(card.Id),
+                        CreateDate = cardDates.CreateDate,
+                        DoneDate = cardDates.DoneDate,
                         TypeName = card.TypeName
                     })
                 .ToList();
@@ -68,14 +80,30 @@ namespace DevelopmentMetrics.Cards
             }
         }
 
-        private DateTime GetCardCreateDateFor(int cardId)
+        private CardDate GetCardCreateDateFor(int cardId)
         {
             var cardData = _leanKitLeanKitWebClient.GetCardDataFor(cardId);
 
-            var replyData = JsonConvert.DeserializeObject<RootObject>(cardData);
+            var cardDetails = JsonConvert.DeserializeObject<RootObject>(cardData).ReplyData.First();
 
-            return DateTime.Parse(replyData.ReplyData.First().CreateDate);
+            var cardDate = new CardDate
+            {
+                CreateDate = DateTime.Parse(cardDetails.CreateDate)
+            };
+
+            if (!string.IsNullOrWhiteSpace(cardDetails.DoneDate))
+            {
+                cardDate.DoneDate = _tellTheTime.ParseDateToUkFormat(cardDetails.DoneDate);
+            }
+
+            return cardDate;
         }
+    }
+
+    internal class CardDate
+    {
+        public DateTime CreateDate { get; set; }
+        public DateTime? DoneDate { get; set; }
     }
 
     internal class ReplyData
@@ -84,6 +112,8 @@ namespace DevelopmentMetrics.Cards
         public string Title { get; set; }
         public List<Lane> Lanes { get; set; }
         public string CreateDate { get; set; }
+        [JsonPropertyAttribute("ActualFinishDate")]
+        public string DoneDate { get; set; }
 
     }
 

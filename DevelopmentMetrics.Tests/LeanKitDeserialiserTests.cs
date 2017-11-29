@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using DevelopmentMetrics.Cards;
+using DevelopmentMetrics.Helpers;
 using DevelopmentMetrics.Repository;
 using NSubstitute;
 using NUnit.Framework;
@@ -42,6 +43,23 @@ namespace DevelopmentMetrics.Tests
             Assert.That(cards.Any(c => c.TypeName == "Defect"));
             Assert.That(cards.Any(c => c.TypeName == "New Feature"));
             Assert.That(cards.Any(c => c.TypeName == "Improvement"));
+        }
+
+        [Test]
+        public void Return_done_date_when_available()
+        {
+            var leanKitWebClient = Substitute.For<ILeanKitWebClient>();
+            var tellTheTime = Substitute.For<ITellTheTime>();
+
+            tellTheTime.ParseDateToUkFormat(Arg.Any<string>()).Returns(new DateTime(2017, 10, 01));
+
+            leanKitWebClient.GetBoardData().Returns(GetJsonResponse());
+
+            leanKitWebClient.GetCardDataFor(Arg.Any<int>()).Returns(CardDetailResponse());
+
+            var cards = new Card(leanKitWebClient, tellTheTime).GetCards();
+
+            Assert.That(cards.Any(c => c.DoneDate.HasValue));
         }
 
         private string GetJsonResponse()
