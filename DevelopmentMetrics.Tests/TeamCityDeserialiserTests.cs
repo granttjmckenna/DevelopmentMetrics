@@ -32,16 +32,22 @@ namespace DevelopmentMetrics.Tests
     public class Build
     {
         private readonly ITeamCityWebClient _teamCityWebClient;
-        public int Id { get; set; }
-        public string BuildTypeId { get; set; }
-        public string Number { get; set; }
-        public string Status { get; set; }
-        public string State { get; set; }
-        public string Href { get; set; }
-        public string WebUrl { get; set; }
 
         [JsonProperty(PropertyName = "Build")]
-        public List<Build> Builds { get; set; }
+        private List<Build> Builds { get; set; }
+        private Build() { }
+
+        public int Id { get; set; }
+
+        public string BuildTypeId { get; set; }
+
+        public string Number { get; set; }
+
+        public string Status { get; set; }
+
+        public string State { get; set; }
+
+        public string Href { get; set; }
 
         public Build(ITeamCityWebClient teamCityWebClient)
         {
@@ -51,7 +57,17 @@ namespace DevelopmentMetrics.Tests
         {
             var buildData = _teamCityWebClient.GetBuildDataFor("");
 
-            return JsonConvert.DeserializeObject<Build>(buildData).Builds;
+            return JsonConvert.DeserializeObject<Build>(buildData)
+                .Builds.Select(build => new Build
+                {
+                    Id = build.Id,
+                    BuildTypeId = build.BuildTypeId,
+                    Number = build.Number,
+                    Status = build.Status,
+                    State = build.State,
+                    Href = build.Href
+                })
+                .ToList();
         }
     }
 
