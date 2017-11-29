@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DevelopmentMetrics.Models;
 using Newtonsoft.Json;
 using NSubstitute;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace DevelopmentMetrics.Tests
 {
@@ -60,6 +58,7 @@ namespace DevelopmentMetrics.Tests
             var builds = new Build(_teamCityWebClient).GetBuilds();
 
             Assert.That(builds.Any());
+            Assert.That(builds.First().ProjectId, Is.Not.Null);
         }
 
         private string GetRootJsonResponse()
@@ -92,6 +91,8 @@ namespace DevelopmentMetrics.Tests
         [JsonProperty(PropertyName = "Build")]
         private List<Build> Builds { get; set; }
 
+        public string ProjectId { get; set; }
+    
         public int Id { get; set; }
 
         public string BuildTypeId { get; set; }
@@ -110,6 +111,7 @@ namespace DevelopmentMetrics.Tests
         {
             _teamCityWebClient = teamCityWebClient;
         }
+
         public List<Build> GetBuilds()
         {
             var buildData = _teamCityWebClient.GetBuildDataFor(GetBuildsHref());
@@ -117,6 +119,7 @@ namespace DevelopmentMetrics.Tests
             return JsonConvert.DeserializeObject<Build>(buildData)
                 .Builds.Select(build => new Build
                 {
+                    ProjectId = "blah",
                     Id = build.Id,
                     BuildTypeId = build.BuildTypeId,
                     Number = build.Number,
