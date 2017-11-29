@@ -25,11 +25,11 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_project_href_from_projects_data()
         {
-            _teamCityWebClient.GetProjectDataFor(Arg.Any<string>()).Returns(GetRootJsonResponse());
+            _teamCityWebClient.GetRootData().Returns(GetRootJsonResponse());
 
-            var buildTypesHref = new Build(_teamCityWebClient).GetProjectHref();
+            var projectList = new Build(_teamCityWebClient).GetProjectList();
 
-            Assert.That(buildTypesHref, Is.Not.Null);
+            Assert.That(projectList.Any());
         }
 
         [Test]
@@ -145,11 +145,33 @@ namespace DevelopmentMetrics.Tests
             return project.BuildTypes.BuildTypeList.First().Href; //TODO: this might need to be a collection of Hrefs
         }
 
-        public string GetProjectHref()
+        public List<ProjectDetail> GetProjectList()
         {
-            return null;
+            var rootData = _teamCityWebClient.GetRootData();
+
+            var projectDetails = JsonConvert.DeserializeObject<Root>(rootData);
+
+            return projectDetails.Projects.ProjectList;
         }
     }
+}
+
+public class ProjectDetail
+{
+    public string Id { get; set; }
+    public string Name { get; set; }
+    public string Href { get; set; }
+}
+
+internal class Root
+{
+    public Projects Projects { get; set; }
+}
+
+internal class Projects
+{
+    [JsonProperty(PropertyName = "Project")]
+    public List<ProjectDetail> ProjectList { get; set; }
 }
 
 internal class ProjectInternal
@@ -183,6 +205,7 @@ public interface ITeamCityWebClient
     string GetBuildDataFor(string uri);
     string GetBuildTypeDataFor(string uri);
     string GetProjectDataFor(string uri);
+    string GetRootData();
 }
 
 internal class TeamCityWebClient : ITeamCityWebClient
@@ -198,6 +221,11 @@ internal class TeamCityWebClient : ITeamCityWebClient
     }
 
     public string GetProjectDataFor(string uri)
+    {
+        return null;
+    }
+
+    public string GetRootData()
     {
         return null;
     }
