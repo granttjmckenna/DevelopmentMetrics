@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace DevelopmentMetrics.Helpers
 {
@@ -28,6 +29,13 @@ namespace DevelopmentMetrics.Helpers
         public DateTime UtcNow()
         {
             return DateTime.UtcNow;
+        }
+
+        public DateTime ParseDateToUkFormat(string input)
+        {
+            var result = DateTime.ParseExact(input, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+            return result;
         }
     }
 }
