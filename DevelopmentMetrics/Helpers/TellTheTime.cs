@@ -36,11 +36,13 @@ namespace DevelopmentMetrics.Helpers
         public DateTime ParseDateToUkFormat(string input)
         {
             DateTime result;
+            var dateFormats = new[] { "dd/MM/yyyy", "MM/dd/yyyy", "MM/dd/yyyy h:mm:ss tt" };
 
-            if (!DateTime.TryParseExact(input, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
+            if (!DateTime.TryParseExact(input, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None,
                 out result))
             {
-                result = DateTime.ParseExact(input, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                result = DateTime.ParseExact(input, dateFormats, CultureInfo.InvariantCulture,
+                    DateTimeStyles.NoCurrentDateDefault);
             }
 
             return result;
