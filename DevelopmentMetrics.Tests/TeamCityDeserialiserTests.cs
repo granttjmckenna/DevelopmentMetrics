@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DevelopmentMetrics.Cards;
 using Newtonsoft.Json;
 using NSubstitute;
 using NUnit.Framework;
@@ -10,16 +9,37 @@ namespace DevelopmentMetrics.Tests
     [TestFixture]
     public class TeamCityDeserialiserTests
     {
+        private ITeamCityWebClient _teamCityWebClient;
+
+        [SetUp]
+        public void Setup()
+        {
+            _teamCityWebClient = Substitute.For<ITeamCityWebClient>();
+        }
+
+        [Test]
+        public void Return_build_href_from_build_types_data()
+        {
+            _teamCityWebClient.GetBuildTypeDataFor(Arg.Any<string>()).Returns(GetBuildTypeJsonResponse());
+
+            var buildsHref = new Build(_teamCityWebClient).GetBuildsHref();
+
+            Assert.That(buildsHref, Is.Not.Null);
+        }
+
         [Test]
         public void Return_builds_from_build_data()
         {
-            var teamCityWebClient = Substitute.For<ITeamCityWebClient>();
+            _teamCityWebClient.GetBuildDataFor(Arg.Any<string>()).Returns(GetBuildJsonResponse());
 
-            teamCityWebClient.GetBuildDataFor(Arg.Any<string>()).Returns(GetBuildJsonResponse());
-
-            var builds = new Build(teamCityWebClient).GetBuilds();
+            var builds = new Build(_teamCityWebClient).GetBuilds();
 
             Assert.That(builds.Any());
+        }
+
+        private string GetBuildTypeJsonResponse()
+        {
+            return @"{""id"":""AddressService"",""name"":""Address-Service"",""parentProjectId"":""_Root"",""href"":""/guestAuth/app/rest/projects/id:AddressService"",""webUrl"":""http://teamcity.energyhelpline.local/project.html?projectId=AddressService"",""parentProject"":{""id"":""_Root"",""name"":""<Rootproject>"",""description"":""Containsallotherprojects"",""href"":""/guestAuth/app/rest/projects/id:_Root"",""webUrl"":""http://teamcity.energyhelpline.local/project.html?projectId=_Root""},""BuildTypes"":{""count"":1,""buildType"":[{""id"":""AddressService_BuildPublish"",""name"":""Build&Publish"",""projectName"":""Address-Service"",""projectId"":""AddressService"",""href"":""/guestAuth/app/rest/BuildTypesDto/id:AddressService_BuildPublish"",""webUrl"":""http://teamcity.energyhelpline.local/viewType.html?buildTypeId=AddressService_BuildPublish""}]},""templates"":{""count"":0,""buildType"":[]},""parameters"":{""count"":4,""href"":""/app/rest/projects/id:AddressService/parameters"",""property"":[{""name"":""fri_nuget_url"",""value"":""%nuget_publish_server%/nuget/default/""},{""name"":""nuget_api_key"",""value"":""ciuser:lamentabletoad""},{""name"":""nuget_org_url"",""value"":""https://www.nuget.org/api/v2/""},{""name"":""nuget_publish_server"",""value"":""http://nuget.energyhelpline.local""}]},""vcsRoots"":{""href"":""/guestAuth/app/rest/vcs-roots?locator=project:(id:AddressService)""},""projects"":{""count"":0}}";
         }
 
         private string GetBuildJsonResponse()
@@ -35,8 +55,7 @@ namespace DevelopmentMetrics.Tests
 
         [JsonProperty(PropertyName = "Build")]
         private List<Build> Builds { get; set; }
-        private Build() { }
-
+  
         public int Id { get; set; }
 
         public string BuildTypeId { get; set; }
@@ -48,6 +67,8 @@ namespace DevelopmentMetrics.Tests
         public string State { get; set; }
 
         public string Href { get; set; }
+
+        private Build() { }
 
         public Build(ITeamCityWebClient teamCityWebClient)
         {
@@ -69,16 +90,36 @@ namespace DevelopmentMetrics.Tests
                 })
                 .ToList();
         }
+
+        public string GetBuildsHref()
+        {
+            var buildTypeData = _teamCityWebClient.GetBuildTypeDataFor("");
+
+            var buildType = JsonConvert.DeserializeObject<BuildType>(buildTypeData);
+
+            return buildType.Href;
+        }
+    }
+
+    internal class BuildType
+    {
+        public string Href { get; set; }
     }
 
     public interface ITeamCityWebClient
     {
         string GetBuildDataFor(string uri);
+        string GetBuildTypeDataFor(string uri);
     }
 
     internal class TeamCityWebClient : ITeamCityWebClient
     {
         public string GetBuildDataFor(string uri)
+        {
+            return null;
+        }
+
+        public string GetBuildTypeDataFor(string uri)
         {
             return null;
         }
