@@ -10,6 +10,7 @@ namespace DevelopmentMetrics.Helpers
         DateTime Now();
         DateTime Today();
         DateTime UtcNow();
+        DateTime ParseDateToUkFormat(string input);
     }
 
     public class TellTheTime : ITellTheTime
