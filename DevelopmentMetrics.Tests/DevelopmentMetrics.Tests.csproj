@@ -68,6 +68,8 @@
     <Compile Include="DeserialiserTests.cs" />
     <Compile Include="FakeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TeamCityDeserialiserTests.cs" />
+    <Compile Include="TellTheTimeTests.cs" />
     <Compile Include="WebClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
