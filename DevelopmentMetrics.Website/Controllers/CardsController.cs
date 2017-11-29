@@ -34,28 +34,16 @@ namespace DevelopmentMetrics.Website.Controllers
         [HttpPost]
         public JsonResult GetCardChartDataFor(int numberOfDays)
         {
-            if (IsClearCache(numberOfDays))
-            {
-                CacheHelper.ClearObjectFromCache(Card.CacheKey);
-
-                const int defaultNumberOfDays = 42;
-
-                numberOfDays = defaultNumberOfDays;
-            }
-
             _cards = GetCards();
 
-            return Json(new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(DateTime.Now.AddDays(numberOfDays * -1)));
+            var cardCounts = new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(numberOfDays);
+
+            return Json(cardCounts);
         }
 
         private List<Card> GetCards()
         {
             return new Card(_leanKitWebClient, _tellTheTime).GetCards();
-        }
-
-        private bool IsClearCache(int numberOfDays)
-        {
-            return numberOfDays == -1;
         }
     }
 }

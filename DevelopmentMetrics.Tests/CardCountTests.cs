@@ -36,7 +36,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_collection_of_count_by_day_for_all_cards()
         {
-            var countByDays = new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(new DateTime(2017, 10, 01));
+            var countByDays = new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(4);
 
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 01)).Total, Is.EqualTo(4));
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 02)).Total, Is.EqualTo(9));

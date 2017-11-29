@@ -13,6 +13,7 @@ namespace DevelopmentMetrics.Cards
 
         public DateTime Date { get; set; }
         public int DoneTotal { get; set; }
+        public int ReworkTotal { get; set; }
         public int Total { get; set; }
         public double DefectRate { get; set; }
 
@@ -24,21 +25,33 @@ namespace DevelopmentMetrics.Cards
             _cards = cards;
         }
 
-        public List<CardCount> GetCardCountByDayFrom(DateTime dateTime)
+        public List<CardCount> GetCardCountByDayFrom(int numberOfDays)
         {
-            var days = Enumerable.Range(0, 1 + _tellTheTime.Now().Subtract(dateTime).Days)
-                .Select(o => dateTime.AddDays(o)).ToList();
+            if (IsClearCache(numberOfDays))
+            {
+                CacheHelper.ClearObjectFromCache(Card.CacheKey);
+
+                const int defaultNumberOfDays = 42;
+
+                numberOfDays = defaultNumberOfDays;
+            }
+
+            var fromDate = _tellTheTime.Now().AddDays(numberOfDays * -1);
+
+            var days = Enumerable.Range(0, 1 + _tellTheTime.Now().Subtract(fromDate).Days)
+                .Select(o => fromDate.AddDays(o)).ToList();
 
             return (from day in days
                     let countByDay = GetCardCountsFor(AllPredicateFor(day))
                     let doneCountByDay = GetCardCountsFor(DonePredicateFor(day))
-                    let defectCountByDay = GetCardCountsFor(AllDefectsNotDoneFor(day))
+                    let reworkCountByDay = GetCardCountsFor(AllDefectsNotDoneFor(day))
                     select new CardCount
                     {
                         Date = day,
                         DoneTotal = doneCountByDay,
+                        ReworkTotal = reworkCountByDay,
                         Total = countByDay,
-                        DefectRate = Calculator.Percentage(defectCountByDay, doneCountByDay)
+                        DefectRate = Calculator.Percentage(reworkCountByDay, countByDay)
                     })
                 .ToList();
         }
@@ -75,12 +88,18 @@ namespace DevelopmentMetrics.Cards
 
         private static Func<Card, bool> AllDefectsNotDoneFor(DateTime day)
         {
-            return c => c.TypeName.Equals("Defect") && c.CreateDate <= day && c.Status.Equals(CardStatus.Status.Done);
+            return c => c.TypeName.Equals("Defect") && c.CreateDate <= day &&
+                        (c.DoneDate.HasValue && c.DoneDate.Value < day);
         }
 
         private int GetCardCountsFor(Func<Card, bool> func)
         {
             return _cards.Count(func);
+        }
+
+        private bool IsClearCache(int numberOfDays)
+        {
+            return numberOfDays == -1;
         }
     }
 }
