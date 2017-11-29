@@ -16,15 +16,15 @@ namespace DevelopmentMetrics.Tests
         {
             _teamCityWebClient = Substitute.For<ITeamCityWebClient>();
 
-            _teamCityWebClient.GetBuildTypeDataFor(Arg.Any<string>()).Returns(GetBuildTypeJsonResponse());
+            _teamCityWebClient.GetRootData().Returns(GetRootJsonResponse());
             _teamCityWebClient.GetProjectDataFor(Arg.Any<string>()).Returns(GetProjectJsonResponse());
+            _teamCityWebClient.GetBuildTypeDataFor(Arg.Any<string>()).Returns(GetBuildTypeJsonResponse());
+            _teamCityWebClient.GetBuildDataFor(Arg.Any<string>()).Returns(GetBuildJsonResponse());
         }
 
         [Test]
         public void Return_project_href_from_projects_data()
         {
-            _teamCityWebClient.GetRootData().Returns(GetRootJsonResponse());
-
             var projectList = new Build(_teamCityWebClient).GetProjectList();
 
             Assert.That(projectList.Any());
@@ -33,7 +33,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_build_types_href_from_project_data()
         {
-            var buildTypesHref = new Build(_teamCityWebClient).GetBuildTypesHref();
+            var buildTypesHref = new Build(_teamCityWebClient).GetBuildTypesHref("");
 
             Assert.That(buildTypesHref, Is.Not.Null);
             Assert.That(buildTypesHref,
@@ -43,7 +43,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_build_href_from_build_types_data()
         {
-            var buildsHref = new Build(_teamCityWebClient).GetBuildsHref();
+            var buildsHref = new Build(_teamCityWebClient).GetBuildsHref("");
 
             Assert.That(buildsHref, Is.Not.Null);
             Assert.That(buildsHref,
@@ -53,12 +53,10 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_builds_from_build_data()
         {
-            _teamCityWebClient.GetBuildDataFor(Arg.Any<string>()).Returns(GetBuildJsonResponse());
-
             var builds = new Build(_teamCityWebClient).GetBuilds();
 
             Assert.That(builds.Any());
-            Assert.That(builds.First().ProjectId, Is.Not.Null);
+            Assert.That(builds.First().ProjectId, Is.EqualTo("AddressService"));
         }
 
         private string GetRootJsonResponse()
@@ -92,7 +90,7 @@ namespace DevelopmentMetrics.Tests
         private List<Build> Builds { get; set; }
 
         public string ProjectId { get; set; }
-    
+
         public int Id { get; set; }
 
         public string BuildTypeId { get; set; }
@@ -114,12 +112,15 @@ namespace DevelopmentMetrics.Tests
 
         public List<Build> GetBuilds()
         {
-            var buildData = _teamCityWebClient.GetBuildDataFor(GetBuildsHref());
-
-            return JsonConvert.DeserializeObject<Build>(buildData)
-                .Builds.Select(build => new Build
+            return (from projectDetail in GetProjectList()
+                let buildTypeHref = GetBuildTypesHref(projectDetail.Href)
+                let buildsHref = GetBuildsHref(buildTypeHref)
+                let buildData = _teamCityWebClient.GetBuildDataFor(buildsHref)
+                let buildDetails = JsonConvert.DeserializeObject<Build>(buildData)
+                from build in buildDetails.Builds
+                select new Build
                 {
-                    ProjectId = "blah",
+                    ProjectId = projectDetail.Id,
                     Id = build.Id,
                     BuildTypeId = build.BuildTypeId,
                     Number = build.Number,
@@ -130,18 +131,18 @@ namespace DevelopmentMetrics.Tests
                 .ToList();
         }
 
-        public string GetBuildsHref()
+        public string GetBuildsHref(string href)
         {
-            var buildTypeData = _teamCityWebClient.GetBuildTypeDataFor(GetBuildTypesHref());
+            var buildTypeData = _teamCityWebClient.GetBuildTypeDataFor(href);
 
             var buildType = JsonConvert.DeserializeObject<BuildType>(buildTypeData);
 
             return buildType.Builds.Href;
         }
 
-        public string GetBuildTypesHref()
+        public string GetBuildTypesHref(string href)
         {
-            var projectData = _teamCityWebClient.GetProjectDataFor("");
+            var projectData = _teamCityWebClient.GetProjectDataFor(href);
 
             var project = JsonConvert.DeserializeObject<ProjectInternal>(projectData);
 
