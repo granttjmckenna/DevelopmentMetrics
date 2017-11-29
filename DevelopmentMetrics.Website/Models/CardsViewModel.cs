@@ -27,9 +27,19 @@ namespace DevelopmentMetrics.Website.Models
             return new CardMetric(_cards).CalculateLeadTimeFor(DateTime.Now);
         }
 
-        public List<Card> GetCardsInProcess()
+        public List<Card> GetCardsInTodo()
         {
-            return _cards.Where(c => c.Status == CardStatus.Status.Doing).ToList();
+            return _cards.Where(Predicate(CardStatus.Status.Todo)).ToList();
+        }
+
+        public List<Card> GetCardsInDoing()
+        {
+            return _cards.Where(Predicate(CardStatus.Status.Doing)).ToList();
+        }
+
+        private static Func<Card, bool> Predicate(CardStatus.Status cardStatus)
+        {
+            return c => c.Status == cardStatus;
         }
     }
 }

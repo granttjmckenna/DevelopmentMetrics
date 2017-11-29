@@ -59,16 +59,30 @@
 </div>
 
 <div class="row">
-    <h4>Cards in doing (@metrics[CardStatus.Status.Doing]):</h4>
-    @foreach (var card in Model.GetCardsInProcess())
-    {
-        var @css = (@card.TypeName == "Defect") ? "alert-danger" : (@card.TypeName == "Improvement") ? "alert-info" : "alert-success";
-        <div class="col-md-12">
-            <div class="alert @css">
-                @card.Title
+    <div class="col-md-6">
+        <h4>Cards in todo (@metrics[CardStatus.Status.Todo]):</h4>
+        @foreach (var card in Model.GetCardsInTodo())
+        {
+            var @css = (@card.TypeName == "Defect") ? "alert-danger" : (@card.TypeName == "Improvement") ? "alert-info" : "alert-success";
+            <div class="col-md-12">
+                <div class="alert @css">
+                    @card.Title
+                </div>
             </div>
-        </div>
-    }
+        }
+    </div>
+    <div class="col-md-6">
+        <h4>Cards in doing (@metrics[CardStatus.Status.Doing]):</h4>
+        @foreach (var card in Model.GetCardsInDoing())
+        {
+            var @css = (@card.TypeName == "Defect") ? "alert-danger" : (@card.TypeName == "Improvement") ? "alert-info" : "alert-success";
+            <div class="col-md-12">
+                <div class="alert @css">
+                    @card.Title
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
 <script type="text/javascript">
