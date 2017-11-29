@@ -22,12 +22,6 @@ namespace DevelopmentMetrics.Cards
         public static string CacheKey = "cards";
 
         public Card() { }
-
-        public Card(ILeanKitWebClient leanKitWebClient)
-        {
-            _leanKitLeanKitWebClient = leanKitWebClient;
-        }
-
         public Card(ILeanKitWebClient leanKitWebClient, ITellTheTime tellTheTime)
         {
             _leanKitLeanKitWebClient = leanKitWebClient;
@@ -36,7 +30,7 @@ namespace DevelopmentMetrics.Cards
 
         public List<Card> GetCards()
         {
-            var cards = Helpers.CacheHelper.GetObjectFromCache<List<Card>>(CacheKey, 60, GetCardsFromRepo);
+            var cards = CacheHelper.GetObjectFromCache<List<Card>>(CacheKey, 60, GetCardsFromRepo);
 
             return cards;
         }

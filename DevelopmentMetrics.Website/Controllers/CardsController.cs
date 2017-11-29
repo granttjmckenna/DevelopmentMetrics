@@ -31,7 +31,7 @@ namespace DevelopmentMetrics.Website.Controllers
             return View(model);
         }
 
-       [HttpPost]
+        [HttpPost]
         public JsonResult GetCardChartDataFor(int numberOfDays)
         {
             if (IsClearCache(numberOfDays))
@@ -50,7 +50,7 @@ namespace DevelopmentMetrics.Website.Controllers
 
         private List<Card> GetCards()
         {
-            return new Card(_leanKitWebClient).GetCards();
+            return new Card(_leanKitWebClient, _tellTheTime).GetCards();
         }
 
         private bool IsClearCache(int numberOfDays)

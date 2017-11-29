@@ -16,12 +16,14 @@ namespace DevelopmentMetrics.Tests
         public void Return_lanes_from_board_reply_data()
         {
             var leanKitWebClient = Substitute.For<ILeanKitWebClient>();
-            
+
             leanKitWebClient.GetBoardData().Returns(GetJsonResponse());
 
             leanKitWebClient.GetCardDataFor(Arg.Any<int>()).Returns(CardDetailResponse());
 
-            var cards = new Card(leanKitWebClient).GetCards().ToList();
+            var tellTheTime = Substitute.For<ITellTheTime>();
+
+            var cards = new Card(leanKitWebClient, tellTheTime).GetCards().ToList();
 
             Assert.That(cards.Any(c => c.Status.Equals(CardStatus.Status.Todo)));
             Assert.That(cards.Any(c => c.Status.Equals(CardStatus.Status.Doing)));
@@ -38,7 +40,9 @@ namespace DevelopmentMetrics.Tests
 
             leanKitWebClient.GetCardDataFor(Arg.Any<int>()).Returns(CardDetailResponse());
 
-            var cards = new Card(leanKitWebClient).GetCards();
+            var tellTheTime = Substitute.For<ITellTheTime>();
+
+            var cards = new Card(leanKitWebClient, tellTheTime).GetCards();
 
             Assert.That(cards.Any(c => c.TypeName == "Defect"));
             Assert.That(cards.Any(c => c.TypeName == "New Feature"));
