@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Net;
 
 namespace DevelopmentMetrics.Helpers
 {
@@ -33,7 +34,13 @@ namespace DevelopmentMetrics.Helpers
 
         public DateTime ParseDateToUkFormat(string input)
         {
-            var result = DateTime.ParseExact(input, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            DateTime result;
+
+            if (!DateTime.TryParseExact(input, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
+                out result))
+            {
+                result = DateTime.ParseExact(input, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            }
 
             return result;
         }

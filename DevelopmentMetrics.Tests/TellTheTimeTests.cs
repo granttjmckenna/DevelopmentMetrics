@@ -17,5 +17,14 @@ namespace DevelopmentMetrics.Tests
             Assert.That(expected, Is.EqualTo(actual));
         }
 
+        [Test]
+        public void Return_UK_date_from_UK_date_and_time_string()
+        {
+            var expected = new DateTime(2017, 11, 21);
+
+            var actual = new TellTheTime().ParseDateToUkFormat("21/11/2017");
+
+            Assert.That(expected, Is.EqualTo(actual));
+        }
     }
 }
