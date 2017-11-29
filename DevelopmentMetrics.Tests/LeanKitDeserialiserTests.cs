@@ -12,18 +12,24 @@ namespace DevelopmentMetrics.Tests
     [TestFixture]
     public class LeanKitDeserialiserTests
     {
+        private ILeanKitWebClient _leanKitWebClient;
+        private ITellTheTime _tellTheTime;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _leanKitWebClient = Substitute.For<ILeanKitWebClient>();
+            _tellTheTime = Substitute.For<ITellTheTime>();
+
+            _leanKitWebClient.GetBoardData().Returns(GetJsonResponse());
+            _leanKitWebClient.GetCardDataFor(Arg.Any<int>()).Returns(CardDetailResponse());
+            
+            _tellTheTime.ParseDateToUkFormat(Arg.Any<string>()).Returns(new DateTime(2017, 10, 01));
+        }
         [Test]
         public void Return_lanes_from_board_reply_data()
         {
-            var leanKitWebClient = Substitute.For<ILeanKitWebClient>();
-
-            leanKitWebClient.GetBoardData().Returns(GetJsonResponse());
-
-            leanKitWebClient.GetCardDataFor(Arg.Any<int>()).Returns(CardDetailResponse());
-
-            var tellTheTime = Substitute.For<ITellTheTime>();
-
-            var cards = new Card(leanKitWebClient, tellTheTime).GetCards().ToList();
+            var cards = new Card(_leanKitWebClient, _tellTheTime).GetCards();
 
             Assert.That(cards.Any(c => c.Status.Equals(CardStatus.Status.Todo)));
             Assert.That(cards.Any(c => c.Status.Equals(CardStatus.Status.Doing)));
@@ -34,15 +40,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_cards_with_card_type_set()
         {
-            var leanKitWebClient = Substitute.For<ILeanKitWebClient>();
-
-            leanKitWebClient.GetBoardData().Returns(GetJsonResponse());
-
-            leanKitWebClient.GetCardDataFor(Arg.Any<int>()).Returns(CardDetailResponse());
-
-            var tellTheTime = Substitute.For<ITellTheTime>();
-
-            var cards = new Card(leanKitWebClient, tellTheTime).GetCards();
+            var cards = new Card(_leanKitWebClient, _tellTheTime).GetCards();
 
             Assert.That(cards.Any(c => c.TypeName == "Defect"));
             Assert.That(cards.Any(c => c.TypeName == "New Feature"));
@@ -52,16 +50,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_done_date_when_available()
         {
-            var leanKitWebClient = Substitute.For<ILeanKitWebClient>();
-            var tellTheTime = Substitute.For<ITellTheTime>();
-
-            tellTheTime.ParseDateToUkFormat(Arg.Any<string>()).Returns(new DateTime(2017, 10, 01));
-
-            leanKitWebClient.GetBoardData().Returns(GetJsonResponse());
-
-            leanKitWebClient.GetCardDataFor(Arg.Any<int>()).Returns(CardDetailResponse());
-
-            var cards = new Card(leanKitWebClient, tellTheTime).GetCards();
+            var cards = new Card(_leanKitWebClient, _tellTheTime).GetCards();
 
             Assert.That(cards.Any(c => c.DoneDate.HasValue));
         }
