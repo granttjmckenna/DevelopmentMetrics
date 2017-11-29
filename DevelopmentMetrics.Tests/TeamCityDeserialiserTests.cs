@@ -57,6 +57,7 @@ namespace DevelopmentMetrics.Tests
 
             Assert.That(builds.Any());
             Assert.That(builds.First().ProjectId, Is.EqualTo("AddressService"));
+            Assert.That(builds.First().Name, Is.EqualTo("Address-Service"));
         }
 
         private string GetRootJsonResponse()
@@ -90,6 +91,7 @@ namespace DevelopmentMetrics.Tests
         private List<Build> Builds { get; set; }
 
         public string ProjectId { get; set; }
+        public string Name { get; set; }
 
         public int Id { get; set; }
 
@@ -121,6 +123,7 @@ namespace DevelopmentMetrics.Tests
                 select new Build
                 {
                     ProjectId = projectDetail.Id,
+                    Name = projectDetail.Name,
                     Id = build.Id,
                     BuildTypeId = build.BuildTypeId,
                     Number = build.Number,
