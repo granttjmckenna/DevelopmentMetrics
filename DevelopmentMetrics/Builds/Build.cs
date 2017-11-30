@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Repository;
 using Newtonsoft.Json;
 
@@ -54,7 +53,7 @@ namespace DevelopmentMetrics.Builds
                         State = build.State,
                         Href = build.Href
                     })
-                .ToList<Build>();
+                .ToList();
         }
 
         private string GetBuildsHref(string href)
@@ -120,5 +119,12 @@ internal class BuildTypeItem
 
 internal class Builds
 {
+    public string Href { get; set; }
+}
+
+internal class ProjectDetail
+{
+    public string Id { get; set; }
+    public string Name { get; set; }
     public string Href { get; set; }
 }

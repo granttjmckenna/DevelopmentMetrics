@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builds\Build.cs" />
-    <Compile Include="Builds\ProjectDetail.cs" />
     <Compile Include="Helpers\CacheHelper.cs" />
     <Compile Include="Helpers\Calculator.cs" />
     <Compile Include="Helpers\Configuration.cs" />
