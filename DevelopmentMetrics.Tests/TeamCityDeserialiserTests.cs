@@ -21,35 +21,7 @@ namespace DevelopmentMetrics.Tests
             _teamCityWebClient.GetBuildTypeDataFor(Arg.Any<string>()).Returns(GetBuildTypeJsonResponse());
             _teamCityWebClient.GetBuildDataFor(Arg.Any<string>()).Returns(GetBuildJsonResponse());
         }
-
-        [Test]
-        public void Return_project_href_from_projects_data()
-        {
-            var projectList = new Build(_teamCityWebClient).GetProjectList();
-
-            Assert.That(projectList.Any());
-        }
-
-        [Test]
-        public void Return_build_types_href_from_project_data()
-        {
-            var buildTypesHref = new Build(_teamCityWebClient).GetBuildTypesHref("");
-
-            Assert.That(buildTypesHref, Is.Not.Null);
-            Assert.That(buildTypesHref,
-                Is.EqualTo("/guestAuth/app/rest/buildTypes/id:AddressService_BuildPublish"));
-        }
-
-        [Test]
-        public void Return_build_href_from_build_types_data()
-        {
-            var buildsHref = new Build(_teamCityWebClient).GetBuildsHref("");
-
-            Assert.That(buildsHref, Is.Not.Null);
-            Assert.That(buildsHref,
-                Is.EqualTo("/guestAuth/app/rest/buildTypes/id:AddressService_BuildPublish/builds/"));
-        }
-
+        
         [Test]
         public void Return_builds_from_build_data()
         {

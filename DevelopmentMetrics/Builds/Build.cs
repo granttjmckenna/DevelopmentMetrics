@@ -57,7 +57,7 @@ namespace DevelopmentMetrics.Builds
                 .ToList<Build>();
         }
 
-        public string GetBuildsHref(string href)
+        private string GetBuildsHref(string href)
         {
             var buildTypeData = _teamCityWebClient.GetBuildTypeDataFor(href);
 
@@ -66,7 +66,7 @@ namespace DevelopmentMetrics.Builds
             return buildType.Builds.Href;
         }
 
-        public string GetBuildTypesHref(string href)
+        private string GetBuildTypesHref(string href)
         {
             var projectData = _teamCityWebClient.GetProjectDataFor(href);
 
@@ -75,7 +75,7 @@ namespace DevelopmentMetrics.Builds
             return project.BuildTypes.BuildTypeList.First().Href; //TODO: this might need to be a collection of Hrefs
         }
 
-        public List<ProjectDetail> GetProjectList()
+        private List<ProjectDetail> GetProjectList()
         {
             var rootData = _teamCityWebClient.GetRootData();
 
