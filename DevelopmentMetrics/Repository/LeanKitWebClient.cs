@@ -39,33 +39,5 @@ namespace DevelopmentMetrics.Repository
         {
             return _webClient.Get(url);
         }
-
-        private string Get(string url)
-        {
-            var result = string.Empty;
-
-            var webRequest = (HttpWebRequest)WebRequest.Create(url);
-
-            webRequest.Accept = "application/json";
-            webRequest.ContentType = "application/json; charset=utf-8;";
-
-            webRequest.Headers[HttpRequestHeader.Authorization] =
-                "Basic Z3JhbnQubWNrZW5uYUBlbmVyZ3loZWxwbGluZS5jb206TWFudXRkMDE=";
-
-            using (var webResponse = webRequest.GetResponse())
-            {
-                using (var responseStream = webResponse.GetResponseStream())
-                {
-                    if (responseStream == null)
-                        return result;
-
-                    var streamReader = new StreamReader(responseStream);
-
-                    result = streamReader.ReadToEnd();
-                }
-            }
-
-            return result;
-        }
     }
 }

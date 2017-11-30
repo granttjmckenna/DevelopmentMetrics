@@ -20,6 +20,12 @@ namespace DevelopmentMetrics.Repository
             webRequest.Accept = "application/json";
             webRequest.ContentType = "application/json; charset=utf-8;";
 
+            if (IsLeanKitRequest(url))
+            {
+                webRequest.Headers[HttpRequestHeader.Authorization] =
+                    "Basic Z3JhbnQubWNrZW5uYUBlbmVyZ3loZWxwbGluZS5jb206TWFudXRkMDE=";
+            }
+
             using (var webResponse = webRequest.GetResponse())
             {
                 using (var responseStream = webResponse.GetResponseStream())
@@ -34,6 +40,11 @@ namespace DevelopmentMetrics.Repository
             }
 
             return result;
+        }
+
+        private bool IsLeanKitRequest(string url)
+        {
+            return url.StartsWith("https://ehl.leankit.com/");
         }
     }
 }
