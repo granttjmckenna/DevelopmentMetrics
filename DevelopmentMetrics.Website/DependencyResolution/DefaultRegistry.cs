@@ -36,6 +36,7 @@ namespace DevelopmentMetrics.Website.DependencyResolution {
 
             For<IBuildStability>().Use<BuildStability>();
             For<IBuildRepository>().Use<BuildRepository>();
+            For<ITeamCityWebClient>().Use<TeamCityWebClient>();
             For<IWebClient>().Use<WebClient>();
             For<ILeanKitWebClient>().Use<LeanKitWebClient>();
             For<ITellTheTime>().Use<TellTheTime>();
