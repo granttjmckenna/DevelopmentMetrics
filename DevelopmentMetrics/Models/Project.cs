@@ -93,7 +93,7 @@ namespace DevelopmentMetrics.Models
             //        let projectBuilds = JsonConvert.DeserializeObject<ProjectBuildTypes>(buildJson)
             //        where projectBuilds != null
             //        from buildType in projectBuilds.BuildTypes.BuildTypeList
-            //        let buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsFor(buildType.Href + "/builds")
+            //        let buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsDataFor(buildType.Href + "/builds")
             //        where buildDetail != null && buildDetail.Status.Equals("finished", StringComparison.InvariantCultureIgnoreCase)
             //        select new BuildMetric
             //        {

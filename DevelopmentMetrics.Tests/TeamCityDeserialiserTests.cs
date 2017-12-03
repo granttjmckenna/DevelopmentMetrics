@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Repository;
 using NSubstitute;
@@ -21,7 +22,7 @@ namespace DevelopmentMetrics.Tests
             _teamCityWebClient.GetBuildTypeDataFor(Arg.Any<string>()).Returns(GetBuildTypeJsonResponse());
             _teamCityWebClient.GetBuildDataFor(Arg.Any<string>()).Returns(GetBuildJsonResponse());
         }
-        
+
         [Test]
         public void Return_builds_from_build_data()
         {
@@ -30,6 +31,7 @@ namespace DevelopmentMetrics.Tests
             Assert.That(builds.Any());
             Assert.That(builds.First().ProjectId, Is.EqualTo("AddressService"));
             Assert.That(builds.First().Name, Is.EqualTo("Address-Service"));
+            Assert.That(builds.First().StartDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
         }
 
         private string GetRootJsonResponse()

@@ -9,6 +9,7 @@ namespace DevelopmentMetrics.Repository
         string GetBuildTypeDataFor(string uri);
         string GetProjectDataFor(string uri);
         string GetRootData();
+        string GetBuildDetailsDataFor(string buildHref);
     }
 
     public class TeamCityWebClient : ITeamCityWebClient
@@ -39,6 +40,11 @@ namespace DevelopmentMetrics.Repository
         {
             var uri = GetAbsoluteUrlWith("guestAuth/app/rest/projects/id:_root");
 
+            return ExecuteGetRequest(uri);
+        }
+
+        public string GetBuildDetailsDataFor(string uri)
+        {
             return ExecuteGetRequest(uri);
         }
 

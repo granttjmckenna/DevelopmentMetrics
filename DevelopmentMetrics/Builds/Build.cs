@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DevelopmentMetrics.Repository;
 using Newtonsoft.Json;
@@ -25,6 +26,12 @@ namespace DevelopmentMetrics.Builds
 
         public string State { get; set; }
 
+        public DateTime StartDateTime { get; set; }
+
+        //public DateTime FinishDateTime { get; set; }
+
+        //public DateTime QueueDateTime { get; set; }
+
         public string Href { get; set; }
 
         private Build() { }
@@ -34,14 +41,51 @@ namespace DevelopmentMetrics.Builds
             _teamCityWebClient = teamCityWebClient;
         }
 
+        //var buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsDataFor(build.Href);
+
         public List<Build> GetBuilds()
         {
+            var results = new List<Build>();
+
+            foreach (var projectDetail in GetProjectList())
+            {
+                var buildTypesHref = GetBuildTypesHref(projectDetail.Href);
+
+                var buildsHref = GetBuildsHref(buildTypesHref);
+
+                var builds = JsonConvert.DeserializeObject<Build>(_teamCityWebClient.GetBuildDataFor(buildsHref));
+
+                foreach (var build in builds.Builds)
+                {
+                    var buildDetails = _teamCityWebClient.GetBuildDetailsDataFor(build.Href);
+
+                    results.Add(new Build
+                    {
+                        ProjectId = projectDetail.Id,
+                        Name = projectDetail.Name,
+                        Id = build.Id,
+                        BuildTypeId = build.BuildTypeId,
+                        Number = build.Number,
+                        Status = build.Status,
+                        State = build.State,
+                        Href = build.Href,
+                    });
+                }
+            }
+
+
+            return results;
+
+
+
+
+
             return (from projectDetail in GetProjectList()
                     let buildTypeHref = GetBuildTypesHref(projectDetail.Href)
                     let buildsHref = GetBuildsHref(buildTypeHref)
                     let buildData = _teamCityWebClient.GetBuildDataFor(buildsHref)
-                    let buildDetails = JsonConvert.DeserializeObject<Build>(buildData)
-                    from build in buildDetails.Builds
+                    let builds = JsonConvert.DeserializeObject<Build>(buildData)
+                    from build in builds.Builds
                     select new Build
                     {
                         ProjectId = projectDetail.Id,
