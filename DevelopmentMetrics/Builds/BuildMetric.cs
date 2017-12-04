@@ -19,6 +19,7 @@ namespace DevelopmentMetrics.Builds
         {
             _builds = builds;
         }
+
         public List<BuildMetric> CalculateBuildFailingRateByMonthFrom(DateTime fromDate)
         {
             var results = new List<BuildMetric>();
@@ -52,6 +53,11 @@ namespace DevelopmentMetrics.Builds
             }
 
             return results;
+        }
+
+        public List<BuildMetric> CalculateBuildFailingRateByWeekFrom(DateTime fromDate)
+        {
+            return null;
         }
     }
 }

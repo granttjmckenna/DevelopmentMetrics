@@ -9,7 +9,7 @@ namespace DevelopmentMetrics.Builds
 {
     public class Build
     {
-        private Build() { }
+        public Build() { }
 
         private readonly ITeamCityWebClient _teamCityWebClient;
         private readonly ITellTheTime _tellTheTime;
@@ -57,26 +57,26 @@ namespace DevelopmentMetrics.Builds
         public List<Build> GetBuildsFromRepo()
         {
             return (from projectDetail in GetProjectList()
-                let buildTypesHref = GetBuildTypesHref(projectDetail.Href)
-                let buildsHref = GetBuildsHref(buildTypesHref)
-                let builds = GetBuilds(buildsHref)
-                from build in builds.Builds
-                let buildDetails = GetBuildDetails(build.Href)
-                select new Build
-                {
-                    ProjectId = projectDetail.Id,
-                    Name = projectDetail.Name,
-                    Id = build.Id,
-                    BuildTypeId = build.BuildTypeId,
-                    Number = build.Number,
-                    Status = build.Status,
-                    State = build.State,
-                    Href = build.Href,
-                    StartDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.StartDateTime),
-                    FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
-                    QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
-                    AgentName = buildDetails.Agent.Name
-                })
+                    let buildTypesHref = GetBuildTypesHref(projectDetail.Href)
+                    let buildsHref = GetBuildsHref(buildTypesHref)
+                    let builds = GetBuilds(buildsHref)
+                    from build in builds.Builds
+                    let buildDetails = GetBuildDetails(build.Href)
+                    select new Build
+                    {
+                        ProjectId = projectDetail.Id,
+                        Name = projectDetail.Name,
+                        Id = build.Id,
+                        BuildTypeId = build.BuildTypeId,
+                        Number = build.Number,
+                        Status = build.Status,
+                        State = build.State,
+                        Href = build.Href,
+                        StartDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.StartDateTime),
+                        FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
+                        QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
+                        AgentName = buildDetails.Agent.Name
+                    })
                 .ToList();
         }
 
