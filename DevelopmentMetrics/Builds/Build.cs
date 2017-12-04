@@ -32,7 +32,7 @@ namespace DevelopmentMetrics.Builds
 
         public DateTime FinishDateTime { get; set; }
 
-        //public DateTime QueueDateTime { get; set; }
+        public DateTime QueueDateTime { get; set; }
 
         public string Href { get; set; }
 
@@ -71,7 +71,8 @@ namespace DevelopmentMetrics.Builds
                         State = build.State,
                         Href = build.Href,
                         StartDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.StartDateTime),
-                        FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime)
+                        FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
+                        QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime)
                     });
                 }
             }
