@@ -54,7 +54,7 @@ namespace DevelopmentMetrics.Builds
 
                 var buildsHref = GetBuildsHref(buildTypesHref);
 
-                var builds = JsonConvert.DeserializeObject<Build>(_teamCityWebClient.GetBuildDataFor(buildsHref));
+                var builds = GetBuilds(buildsHref);
 
                 foreach (var build in builds.Builds)
                 {
@@ -102,6 +102,13 @@ namespace DevelopmentMetrics.Builds
                         Href = build.Href
                     })
                 .ToList();
+        }
+
+        private Build GetBuilds(string buildsHref)
+        {
+            var data = _teamCityWebClient.GetBuildDataFor(buildsHref);
+
+            return JsonConvert.DeserializeObject<Build>(data);
         }
 
         private string GetBuildsHref(string href)
