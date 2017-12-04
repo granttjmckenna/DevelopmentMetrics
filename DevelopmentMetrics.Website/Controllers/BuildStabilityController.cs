@@ -1,37 +1,37 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using DevelopmentMetrics.Models;
-using DevelopmentMetrics.Website.Models;
+using DevelopmentMetrics.Builds;
+using DevelopmentMetrics.Helpers;
+using DevelopmentMetrics.Repository;
 
 namespace DevelopmentMetrics.Website.Controllers
 {
     public class BuildStabilityController : Controller
     {
-        private readonly IBuildStability _buildStability;
+        private readonly ITellTheTime _tellTheTime;
+        private readonly ITeamCityWebClient _teamCityWebClient;
+        private List<Build> _builds;
 
-        public BuildStabilityController(IBuildStability buildStability)
+        public BuildStabilityController(ITeamCityWebClient teamCityWebClient, ITellTheTime tellTheTime)
         {
-            _buildStability = buildStability;
+            _teamCityWebClient = teamCityWebClient;
+            _tellTheTime = tellTheTime;
         }
 
         // GET: BuildStability
         public ActionResult Index()
         {
+            _builds = new Build(_teamCityWebClient, _tellTheTime).GetBuilds();
+
             return View();
         }
 
-        public ActionResult DrawChart()
+        [HttpPost]
+        public JsonResult GetBuildChartDataFor(int numberOfWeeks)
         {
-            var metrics = _buildStability.GetBuildStabilityMetrics();
+            var buildData = new BuildMetric(_builds, _tellTheTime).CalculateBuildFailingRateByWeekFor(numberOfWeeks);
 
-            var buildStabilityViewModel = new BuildStabilityViewModel
-            {
-                BuildFailureRate = new BuildCalculators().CalculateBuildFailingRateByMonthFrom(new DateTime(2017, 1, 1), metrics)
-            };
-
-            var model = new BuildStabilityChart(buildStabilityViewModel);
-
-            return View("BuildStabilityChart", model);
+            return Json(buildData);
         }
     }
 }
