@@ -10,7 +10,7 @@ namespace DevelopmentMetrics.Builds
     public class Build
     {
         private readonly ITeamCityWebClient _teamCityWebClient;
-        private ITellTheTime _tellTheTime;
+        private readonly ITellTheTime _tellTheTime;
 
         [JsonProperty(PropertyName = "Build")]
         private List<Build> Builds { get; set; }
@@ -27,6 +27,7 @@ namespace DevelopmentMetrics.Builds
         public string Status { get; set; }
 
         public string State { get; set; }
+        public string AgentName { get; set; }
 
         public DateTime StartDateTime { get; set; }
 
@@ -72,7 +73,8 @@ namespace DevelopmentMetrics.Builds
                         Href = build.Href,
                         StartDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.StartDateTime),
                         FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
-                        QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime)
+                        QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
+                        AgentName = buildDetails.Agent.Name
                     });
                 }
             }
@@ -196,7 +198,7 @@ internal class ProjectDetail
 internal class BuildDetail
 {
     //[JsonProperty(PropertyName = "Agent")]
-    //public Agent Agent { get; set; }
+    public Agent Agent { get; set; }
 
     [JsonProperty(PropertyName = "startDate")]
     public string StartDateTime { get; set; }
