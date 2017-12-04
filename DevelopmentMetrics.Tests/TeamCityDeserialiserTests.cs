@@ -38,6 +38,7 @@ namespace DevelopmentMetrics.Tests
             Assert.That(builds.First().ProjectId, Is.EqualTo("AddressService"));
             Assert.That(builds.First().Name, Is.EqualTo("Address-Service"));
             Assert.That(builds.First().StartDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
+            Assert.That(builds.First().FinishDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
         }
 
         private string GetRootJsonResponse()
