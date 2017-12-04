@@ -9,6 +9,8 @@ namespace DevelopmentMetrics.Builds
 {
     public class Build
     {
+        private Build() { }
+
         private readonly ITeamCityWebClient _teamCityWebClient;
         private readonly ITellTheTime _tellTheTime;
 
@@ -37,7 +39,7 @@ namespace DevelopmentMetrics.Builds
 
         public string Href { get; set; }
 
-        private Build() { }
+        public static string CacheKey = "builds";
 
         public Build(ITeamCityWebClient teamCityWebClient, ITellTheTime tellTheTime)
         {
@@ -46,6 +48,13 @@ namespace DevelopmentMetrics.Builds
         }
 
         public List<Build> GetBuilds()
+        {
+            var builds = CacheHelper.GetObjectFromCache<List<Build>>(CacheKey, 60, GetBuildsFromRepo);
+
+            return builds;
+        }
+
+        public List<Build> GetBuildsFromRepo()
         {
             return (from projectDetail in GetProjectList()
                 let buildTypesHref = GetBuildTypesHref(projectDetail.Href)
@@ -162,7 +171,6 @@ internal class ProjectDetail
 
 internal class BuildDetail
 {
-    //[JsonProperty(PropertyName = "Agent")]
     public Agent Agent { get; set; }
 
     [JsonProperty(PropertyName = "startDate")]
