@@ -11,6 +11,7 @@ namespace DevelopmentMetrics.Helpers
         DateTime Today();
         DateTime UtcNow();
         DateTime ParseDateToUkFormat(string input);
+        DateTime ParseBuildDetailDateTimes(string input);
     }
 
     public class TellTheTime : ITellTheTime
@@ -36,7 +37,7 @@ namespace DevelopmentMetrics.Helpers
         public DateTime ParseDateToUkFormat(string input)
         {
             DateTime result;
-            var dateFormats = new[] { "dd/MM/yyyy", "MM/dd/yyyy", "MM/dd/yyyy h:mm:ss tt", "MM/d/yyyy h:mm:ss tt", "M/dd/yyyy h:mm:ss tt", "M/d/yyyy h:mm:ss tt" };
+            var dateFormats = new[] { "dd/MM/yyyy", "MM/dd/yyyy", "MM/dd/yyyy h:mm:ss tt", "MM/d/yyyy h:mm:ss tt", "M/dd/yyyy h:mm:ss tt", "M/d/yyyy h:mm:ss tt", "yyyyMMddHHmmss" };
 
             if (!DateTime.TryParseExact(input, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None,
                 out result))
@@ -46,6 +47,15 @@ namespace DevelopmentMetrics.Helpers
             }
 
             return result;
+        }
+
+        public DateTime ParseBuildDetailDateTimes(string input)
+        {
+            var newDateTimeString = input
+                .Replace("T", "")
+                .Substring(0, input.IndexOf("+", StringComparison.InvariantCultureIgnoreCase) - 1);
+
+            return ParseDateToUkFormat(newDateTimeString);
         }
     }
 }

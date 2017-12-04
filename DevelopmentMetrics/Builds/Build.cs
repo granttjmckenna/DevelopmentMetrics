@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DevelopmentMetrics.Helpers;
 using DevelopmentMetrics.Repository;
 using Newtonsoft.Json;
 
@@ -9,6 +10,7 @@ namespace DevelopmentMetrics.Builds
     public class Build
     {
         private readonly ITeamCityWebClient _teamCityWebClient;
+        private ITellTheTime _tellTheTime;
 
         [JsonProperty(PropertyName = "Build")]
         private List<Build> Builds { get; set; }
@@ -36,12 +38,11 @@ namespace DevelopmentMetrics.Builds
 
         private Build() { }
 
-        public Build(ITeamCityWebClient teamCityWebClient)
+        public Build(ITeamCityWebClient teamCityWebClient, ITellTheTime tellTheTime)
         {
             _teamCityWebClient = teamCityWebClient;
+            _tellTheTime = tellTheTime;
         }
-
-        //var buildDetail = new BuildDetail(_buildRepository).GetBuildDetailsDataFor(build.Href);
 
         public List<Build> GetBuilds()
         {
@@ -57,7 +58,7 @@ namespace DevelopmentMetrics.Builds
 
                 foreach (var build in builds.Builds)
                 {
-                    var buildDetails = _teamCityWebClient.GetBuildDetailsDataFor(build.Href);
+                    var buildDetails = GetBuildDetails(build.Href);
 
                     results.Add(new Build
                     {
@@ -69,6 +70,7 @@ namespace DevelopmentMetrics.Builds
                         Status = build.Status,
                         State = build.State,
                         Href = build.Href,
+                        StartDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.StartDateTime)
                     });
                 }
             }
@@ -126,6 +128,15 @@ namespace DevelopmentMetrics.Builds
 
             return projectDetails.Projects.ProjectList;
         }
+
+        private BuildDetail GetBuildDetails(string href)
+        {
+            var data = _teamCityWebClient.GetBuildDetailsDataFor(href);
+
+            var buildDetails = JsonConvert.DeserializeObject<BuildDetail>(data);
+
+            return buildDetails;
+        }
     }
 }
 
@@ -171,4 +182,24 @@ internal class ProjectDetail
     public string Id { get; set; }
     public string Name { get; set; }
     public string Href { get; set; }
+}
+
+internal class BuildDetail
+{
+    //[JsonProperty(PropertyName = "Agent")]
+    //public Agent Agent { get; set; }
+
+    [JsonProperty(PropertyName = "startDate")]
+    public string StartDateTime { get; set; }
+
+    [JsonProperty(PropertyName = "finishDate")]
+    public string FinishDateTime { get; set; }
+
+    [JsonProperty(PropertyName = "queuedDate")]
+    public string QueuedDateTime { get; set; }
+}
+
+internal class Agent
+{
+    public string Name { get; set; }
 }
