@@ -30,13 +30,9 @@ namespace DevelopmentMetrics.Cards
             if (IsClearCache(numberOfDays))
             {
                 CacheHelper.ClearObjectFromCache(Card.CacheKey);
-
-                const int defaultNumberOfDays = 42;
-
-                numberOfDays = defaultNumberOfDays;
             }
 
-            var fromDate = _tellTheTime.Now().AddDays(numberOfDays * -1);
+            var fromDate = GetFromDate(numberOfDays);
 
             var days = Enumerable.Range(0, 1 + _tellTheTime.Now().Subtract(fromDate).Days)
                 .Select(o => fromDate.AddDays(o)).ToList();
@@ -54,6 +50,22 @@ namespace DevelopmentMetrics.Cards
                         DefectRate = Calculator.Percentage(reworkCountByDay, countByDay)
                     })
                 .ToList();
+        }
+
+        private DateTime GetFromDate(int numberOfDays)
+        {
+            if (numberOfDays == -1)
+            {
+                return _tellTheTime.Now().AddDays(-42);
+            }
+            else if (numberOfDays == 9999)
+            {
+                return _cards.Min(c => c.CreateDate);
+            }
+            else
+            {
+                return _tellTheTime.Now().AddDays(numberOfDays * -1);
+            }
         }
 
         public Dictionary<CardStatus.Status, int> GetCountByStatus()
