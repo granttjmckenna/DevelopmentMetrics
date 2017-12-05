@@ -20,7 +20,6 @@ using DevelopmentMetrics.Helpers;
 namespace DevelopmentMetrics.Website.DependencyResolution {
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
-    using DevelopmentMetrics.Models;
     using Repository;
     
     public class DefaultRegistry : Registry {
@@ -34,8 +33,6 @@ namespace DevelopmentMetrics.Website.DependencyResolution {
 					scan.With(new ControllerConvention());
                 });
 
-            For<IBuildStability>().Use<BuildStability>();
-            For<IBuildRepository>().Use<BuildRepository>();
             For<ITeamCityWebClient>().Use<TeamCityWebClient>();
             For<IWebClient>().Use<WebClient>();
             For<ILeanKitWebClient>().Use<LeanKitWebClient>();

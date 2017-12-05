@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DevelopmentMetrics.Models;
+using DevelopmentMetrics.Builds;
 using NUnit.Framework;
 
 namespace DevelopmentMetrics.Tests
@@ -9,260 +9,260 @@ namespace DevelopmentMetrics.Tests
     [TestFixture]
     public class BuildMetricTests
     {
-        [Test]
-        public void Should_calculate_failure_percentage()
-        {
-            var buildMetrics = GetBuildMetricsData(10);
+        //[Test]
+        //public void Should_calculate_failure_percentage()
+        //{
+        //    var buildMetrics = GetBuildMetricsData(10);
 
-            var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics);
+        //    var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics);
 
-            Assert.That(failingRate, Is.EqualTo(30));
-        }
+        //    Assert.That(failingRate, Is.EqualTo(30));
+        //}
 
-        [Test]
-        public void Should_calculate_failure_percentage_for_project()
-        {
-            var buildMetrics = GetBuildMetricsData(10);
+        //[Test]
+        //public void Should_calculate_failure_percentage_for_project()
+        //{
+        //    var buildMetrics = GetBuildMetricsData(10);
 
-            buildMetrics[1].ProjectId = "Exclude from calculation";
+        //    buildMetrics[1].ProjectId = "Exclude from calculation";
 
-            var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics,
-                b => b.ProjectId.Equals("Blah", StringComparison.CurrentCultureIgnoreCase));
+        //    var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics,
+        //        b => b.ProjectId.Equals("Blah", StringComparison.CurrentCultureIgnoreCase));
 
-            Assert.That(failingRate, Is.EqualTo(33.33));
-        }
+        //    Assert.That(failingRate, Is.EqualTo(33.33));
+        //}
 
-        [Test]
-        public void Should_calculate_failure_percentage_for_agent_name()
-        {
-            var buildMetrics = GetBuildMetricsData(10);
+        //[Test]
+        //public void Should_calculate_failure_percentage_for_agent_name()
+        //{
+        //    var buildMetrics = GetBuildMetricsData(10);
 
-            buildMetrics[1].AgentName = "Exclude from calculation";
+        //    buildMetrics[1].AgentName = "Exclude from calculation";
 
-            var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics,
-                b => b.AgentName.Equals("Blah", StringComparison.CurrentCultureIgnoreCase));
+        //    var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics,
+        //        b => b.AgentName.Equals("Blah", StringComparison.CurrentCultureIgnoreCase));
 
-            Assert.That(failingRate, Is.EqualTo(33.33));
-        }
+        //    Assert.That(failingRate, Is.EqualTo(33.33));
+        //}
 
-        [Test]
-        public void Should_calculate_failure_percentage_by_project()
-        {
-            var buildMetrics = GetBuildMetricsData(10);
+        //[Test]
+        //public void Should_calculate_failure_percentage_by_project()
+        //{
+        //    var buildMetrics = GetBuildMetricsData(10);
 
-            buildMetrics[1].ProjectId = "Different project id";
+        //    buildMetrics[1].ProjectId = "Different project id";
 
-            var projectBuildMetrics = new BuildCalculators().CalculateProjectBuildFailingRate(buildMetrics);
+        //    var projectBuildMetrics = new BuildCalculators().CalculateProjectBuildFailingRate(buildMetrics);
 
-            Assert.That(projectBuildMetrics.Keys.Count, Is.EqualTo(2));
-            Assert.That(projectBuildMetrics.First(c => c.Key.Equals("Blah")).Value, Is.EqualTo(33.33));
-            Assert.That(projectBuildMetrics.First(c => c.Key.Equals("Different project id")).Value, Is.EqualTo(0));
-        }
+        //    Assert.That(projectBuildMetrics.Keys.Count, Is.EqualTo(2));
+        //    Assert.That(projectBuildMetrics.First(c => c.Key.Equals("Blah")).Value, Is.EqualTo(33.33));
+        //    Assert.That(projectBuildMetrics.First(c => c.Key.Equals("Different project id")).Value, Is.EqualTo(0));
+        //}
 
-        [TestCase("2017-01-01", ExpectedResult = 12)]
-        [TestCase("2016-06-01", ExpectedResult = 5)]
-        [TestCase("2017-06-01", ExpectedResult = 7)]
-        public int Should_calculate_failure_percentage_by_month_for_one_year(string fromDate)
-        {
-            var buildMetrics = GetBuildMetricsData(360);
+        //[TestCase("2017-01-01", ExpectedResult = 12)]
+        //[TestCase("2016-06-01", ExpectedResult = 5)]
+        //[TestCase("2017-06-01", ExpectedResult = 7)]
+        //public int Should_calculate_failure_percentage_by_month_for_one_year(string fromDate)
+        //{
+        //    var buildMetrics = GetBuildMetricsData(360);
 
-            var monthlyBuildMetrics = new BuildCalculators()
-                .CalculateBuildFailingRateByMonthFrom(DateTime.Parse(fromDate), buildMetrics);
+        //    var monthlyBuildMetrics = new BuildCalculators()
+        //        .CalculateBuildFailingRateByMonthFrom(DateTime.Parse(fromDate), buildMetrics);
 
-            return monthlyBuildMetrics.Keys.Count;
-        }
+        //    return monthlyBuildMetrics.Keys.Count;
+        //}
 
-        [Test]
-        public void Should_calculate_failure_percentage_by_month_for_build_metrics_up_to_and_including_query_month()
-        {
-            var dummyBuildMetrics = GetBuildMetricsData(360);
+        //[Test]
+        //public void Should_calculate_failure_percentage_by_month_for_build_metrics_up_to_and_including_query_month()
+        //{
+        //    var dummyBuildMetrics = GetBuildMetricsData(360);
 
-            var buildMetrics = dummyBuildMetrics.Where(b => b.StartDateTime >= new DateTime(2017, 7, 1)).ToList();
+        //    var buildMetrics = dummyBuildMetrics.Where(b => b.StartDateTime >= new DateTime(2017, 7, 1)).ToList();
 
-            var monthlyBuildMetrics = new BuildCalculators().CalculateBuildFailingRateByMonth(buildMetrics);
+        //    var monthlyBuildMetrics = new BuildCalculators().CalculateBuildFailingRateByMonth(buildMetrics);
 
-            Assert.That(monthlyBuildMetrics.Keys.Count, Is.EqualTo(6));
-            Assert.That(monthlyBuildMetrics.Keys.First(), Is.EqualTo("Jul-2017"));
-        }
+        //    Assert.That(monthlyBuildMetrics.Keys.Count, Is.EqualTo(6));
+        //    Assert.That(monthlyBuildMetrics.Keys.First(), Is.EqualTo("Jul-2017"));
+        //}
 
-        [Test]
-        public void Should_return_first_failing_build_by_project()
-        {
-            var buildMetrics = GetBuildMetricsData(10);
+        //[Test]
+        //public void Should_return_first_failing_build_by_project()
+        //{
+        //    var buildMetrics = GetBuildMetricsData(10);
 
-            //add consecutive failing builds to dummy data with one for a separate project
-            buildMetrics[1].Status = Helpers.BuildStatus.Failure.ToString();
-            buildMetrics[2].Status = Helpers.BuildStatus.Failure.ToString();
-            buildMetrics[3].Status = Helpers.BuildStatus.Failure.ToString();
-            buildMetrics[3].ProjectId = "Different project id";
+        //    //add consecutive failing builds to dummy data with one for a separate project
+        //    buildMetrics[1].Status = Helpers.BuildStatus.Failure.ToString();
+        //    buildMetrics[2].Status = Helpers.BuildStatus.Failure.ToString();
+        //    buildMetrics[3].Status = Helpers.BuildStatus.Failure.ToString();
+        //    buildMetrics[3].ProjectId = "Different project id";
 
-            var failingBuilds = BuildCalculators.GetFirstFailingBuildsByProject(buildMetrics);
+        //    var failingBuilds = BuildCalculators.GetFirstFailingBuildsByProject(buildMetrics);
 
-            Assert.That(failingBuilds.Count, Is.EqualTo(4));
-        }
+        //    Assert.That(failingBuilds.Count, Is.EqualTo(4));
+        //}
 
-        [Test]
-        public void Should_return_failing_build_and_milliseconds_to_next_succeeding_build()
-        {
-            var buildMetrics = GetBuildMetricsData(10);
+        //[Test]
+        //public void Should_return_failing_build_and_milliseconds_to_next_succeeding_build()
+        //{
+        //    var buildMetrics = GetBuildMetricsData(10);
 
-            var results = GetFailingBuildResults(buildMetrics);
+        //    var results = GetFailingBuildResults(buildMetrics);
 
-            Assert.That(results.Count, Is.EqualTo(3));
-            Assert.That(results.All(b => b.MillisecondsUntilBuildSucceeded > 0));
-        }
+        //    Assert.That(results.Count, Is.EqualTo(3));
+        //    Assert.That(results.All(b => b.MillisecondsUntilBuildSucceeded > 0));
+        //}
 
-        [Test]
-        public void Should_return_average_in_milliseconds_between_failing_and_succeeding_builds_by_month()
-        {
-            var buildMetrics = GetBuildMetricsData(350);
+        //[Test]
+        //public void Should_return_average_in_milliseconds_between_failing_and_succeeding_builds_by_month()
+        //{
+        //    var buildMetrics = GetBuildMetricsData(350);
 
-            var results = GetAverageMillisecondsBetweenFailingAndSucceedingBuildsByMonthFrom(new DateTime(2017, 1, 1), buildMetrics);
+        //    var results = GetAverageMillisecondsBetweenFailingAndSucceedingBuildsByMonthFrom(new DateTime(2017, 1, 1), buildMetrics);
 
-            Assert.That(results.Keys.Count, Is.EqualTo(12));
-        }
+        //    Assert.That(results.Keys.Count, Is.EqualTo(12));
+        //}
 
-        [Test]
-        public void Should_return_average_in_hours_between_failing_and_succeeding_builds_by_month()
-        {
-            var buildMetrics = GetBuildMetricsData(350);
+        //[Test]
+        //public void Should_return_average_in_hours_between_failing_and_succeeding_builds_by_month()
+        //{
+        //    var buildMetrics = GetBuildMetricsData(350);
 
-            var results = GetAverageHoursBetweenFailingAndSucceedingBuildsByMonthFrom(new DateTime(2017, 1, 1),
-                buildMetrics);
+        //    var results = GetAverageHoursBetweenFailingAndSucceedingBuildsByMonthFrom(new DateTime(2017, 1, 1),
+        //        buildMetrics);
 
-            Assert.That(results.Keys.Count, Is.EqualTo(12));
-        }
+        //    Assert.That(results.Keys.Count, Is.EqualTo(12));
+        //}
 
-        private Dictionary<string, double> GetAverageHoursBetweenFailingAndSucceedingBuildsByMonthFrom(DateTime fromDate, List<BuildMetric> buildMetrics)
-        {
-            var failingBuildsInMilliseconds =
-                GetAverageMillisecondsBetweenFailingAndSucceedingBuildsByMonthFrom(fromDate, buildMetrics);
+        //private Dictionary<string, double> GetAverageHoursBetweenFailingAndSucceedingBuildsByMonthFrom(DateTime fromDate, List<BuildMetric> buildMetrics)
+        //{
+        //    var failingBuildsInMilliseconds =
+        //        GetAverageMillisecondsBetweenFailingAndSucceedingBuildsByMonthFrom(fromDate, buildMetrics);
 
-            var millisecondsPerHour = 3600000;
+        //    var millisecondsPerHour = 3600000;
 
-            return
-                failingBuildsInMilliseconds.ToDictionary<KeyValuePair<string, long>, string, double>(
-                    failingBuild => failingBuild.Key, failingBuild => failingBuild.Value / millisecondsPerHour);
-        }
+        //    return
+        //        failingBuildsInMilliseconds.ToDictionary<KeyValuePair<string, long>, string, double>(
+        //            failingBuild => failingBuild.Key, failingBuild => failingBuild.Value / millisecondsPerHour);
+        //}
 
 
-        private Dictionary<string, double> GetStandardDeviationBetweenFailingAndSucceedingBuildsByMonthFrom(
-            DateTime fromDate, List<BuildMetric> buildMetrics)
-        {
-            var results = new Dictionary<string, double>();
+        //private Dictionary<string, double> GetStandardDeviationBetweenFailingAndSucceedingBuildsByMonthFrom(
+        //    DateTime fromDate, List<BuildMetric> buildMetrics)
+        //{
+        //    var results = new Dictionary<string, double>();
 
-            var failingBuildMetrics = GetFailingBuildResults(buildMetrics);
+        //    var failingBuildMetrics = GetFailingBuildResults(buildMetrics);
 
-            for (var i = 0; i < 12; i++)
-            {
-                var whereDate = fromDate.AddMonths(i);
+        //    for (var i = 0; i < 12; i++)
+        //    {
+        //        var whereDate = fromDate.AddMonths(i);
 
-                var values = failingBuildMetrics.Where(
-                        b =>
-                            b.FailingBuild.StartDateTime.Month.Equals(whereDate.Month) &&
-                            b.FailingBuild.StartDateTime.Year.Equals(whereDate.Year))
-                    .Select(b => b.MillisecondsUntilBuildSucceeded)
-                    .ToList();
+        //        var values = failingBuildMetrics.Where(
+        //                b =>
+        //                    b.FailingBuild.StartDateTime.Month.Equals(whereDate.Month) &&
+        //                    b.FailingBuild.StartDateTime.Year.Equals(whereDate.Year))
+        //            .Select(b => b.MillisecondsUntilBuildSucceeded)
+        //            .ToList();
 
-                var standardDeviation = CalculateStandardDeviation(values);
+        //        var standardDeviation = CalculateStandardDeviation(values);
 
-                results.Add(whereDate.ToString("MMM-yyyy"), standardDeviation);
-            }
+        //        results.Add(whereDate.ToString("MMM-yyyy"), standardDeviation);
+        //    }
 
-            return results;
-        }
+        //    return results;
+        //}
 
-        private double CalculateStandardDeviation(List<double> values)
-        {
-            if (!values.Any())
-                return 0;
+        //private double CalculateStandardDeviation(List<double> values)
+        //{
+        //    if (!values.Any())
+        //        return 0;
 
-            var average = values.Average();
+        //    var average = values.Average();
 
-            var sumOf = values.Sum(d => Math.Pow(d - average, 2));
+        //    var sumOf = values.Sum(d => Math.Pow(d - average, 2));
 
-            return Math.Sqrt(sumOf / (values.Count - 1));
-        }
+        //    return Math.Sqrt(sumOf / (values.Count - 1));
+        //}
 
-        private Dictionary<string, long> GetAverageMillisecondsBetweenFailingAndSucceedingBuildsByMonthFrom(DateTime fromDate, List<BuildMetric> buildMetrics)
-        {
-            var results = new Dictionary<string, long>();
+        //private Dictionary<string, long> GetAverageMillisecondsBetweenFailingAndSucceedingBuildsByMonthFrom(DateTime fromDate, List<BuildMetric> buildMetrics)
+        //{
+        //    var results = new Dictionary<string, long>();
 
-            var failingBuildMetrics = GetFailingBuildResults(buildMetrics);
+        //    var failingBuildMetrics = GetFailingBuildResults(buildMetrics);
 
-            for (var i = 0; i < 12; i++)
-            {
-                var whereDate = fromDate.AddMonths(i);
+        //    for (var i = 0; i < 12; i++)
+        //    {
+        //        var whereDate = fromDate.AddMonths(i);
 
-                var average =
-                    failingBuildMetrics.Where(
-                            b =>
-                                b.FailingBuild.StartDateTime.Month.Equals(whereDate.Month) &&
-                                b.FailingBuild.StartDateTime.Year.Equals(whereDate.Year))
-                        .Average(b => b.MillisecondsUntilBuildSucceeded);
+        //        var average =
+        //            failingBuildMetrics.Where(
+        //                    b =>
+        //                        b.FailingBuild.StartDateTime.Month.Equals(whereDate.Month) &&
+        //                        b.FailingBuild.StartDateTime.Year.Equals(whereDate.Year))
+        //                .Average(b => b.MillisecondsUntilBuildSucceeded);
 
-                results.Add(whereDate.ToString("MMM-yyyy"), (long)average);
-            }
+        //        results.Add(whereDate.ToString("MMM-yyyy"), (long)average);
+        //    }
 
-            return results;
-        }
+        //    return results;
+        //}
 
-        private List<FailingBuildResults> GetFailingBuildResults(List<BuildMetric> buildMetrics)
-        {
-            return
-                BuildCalculators.GetFirstFailingBuildsByProject(buildMetrics)
-                    .Select(failingBuild => new FailingBuildResults
-                    {
-                        FailingBuild = failingBuild,
-                        MillisecondsUntilBuildSucceeded = GetMillisecondsUntilBuildSucceeded(buildMetrics, failingBuild)
-                    })
-                    .ToList();
-        }
+        //private List<FailingBuildResults> GetFailingBuildResults(List<BuildMetric> buildMetrics)
+        //{
+        //    return
+        //        BuildCalculators.GetFirstFailingBuildsByProject(buildMetrics)
+        //            .Select(failingBuild => new FailingBuildResults
+        //            {
+        //                FailingBuild = failingBuild,
+        //                MillisecondsUntilBuildSucceeded = GetMillisecondsUntilBuildSucceeded(buildMetrics, failingBuild)
+        //            })
+        //            .ToList();
+        //}
 
-        private double GetMillisecondsUntilBuildSucceeded(List<BuildMetric> buildMetrics, BuildMetric failingBuild)
-        {
-            var firstSucceedingBuild = buildMetrics
-                .FirstOrDefault(b => b.Status.Equals("Success", StringComparison.InvariantCultureIgnoreCase)
-                                     &&
-                                     b.ProjectId.Equals(failingBuild.ProjectId,
-                                         StringComparison.InvariantCultureIgnoreCase)
-                                     && b.BuildId > failingBuild.BuildId);
+        //private double GetMillisecondsUntilBuildSucceeded(List<BuildMetric> buildMetrics, BuildMetric failingBuild)
+        //{
+        //    var firstSucceedingBuild = buildMetrics
+        //        .FirstOrDefault(b => b.Status.Equals("Success", StringComparison.InvariantCultureIgnoreCase)
+        //                             &&
+        //                             b.ProjectId.Equals(failingBuild.ProjectId,
+        //                                 StringComparison.InvariantCultureIgnoreCase)
+        //                             && b.BuildId > failingBuild.BuildId);
 
-            return firstSucceedingBuild?.FinishDateTime.Subtract(failingBuild.FinishDateTime).TotalMilliseconds ?? DateTime.Now.Subtract(failingBuild.FinishDateTime).TotalMilliseconds;
-        }
+        //    return firstSucceedingBuild?.FinishDateTime.Subtract(failingBuild.FinishDateTime).TotalMilliseconds ?? DateTime.Now.Subtract(failingBuild.FinishDateTime).TotalMilliseconds;
+        //}
 
-        private List<BuildMetric> GetBuildMetricsData(int rows)
-        {
-            var dummyBuildMetrics = new List<BuildMetric>();
+        //private List<BuildMetric> GetBuildMetricsData(int rows)
+        //{
+        //    var dummyBuildMetrics = new List<BuildMetric>();
 
-            for (var i = 1; i <= rows; i++)
-            {
-                var baseDateTime = new DateTime(2017, 1, 1, 12, 0, 0);
+        //    for (var i = 1; i <= rows; i++)
+        //    {
+        //        var baseDateTime = new DateTime(2017, 1, 1, 12, 0, 0);
 
-                dummyBuildMetrics.Add(
-                    new BuildMetric
-                    {
-                        ProjectId = "Blah",
-                        ProjectName = "Blah",
-                        BuildTypeId = "Blah_blah",
-                        BuildId = i,
-                        AgentName = "Blah",
-                        StartDateTime = baseDateTime.AddDays(i).AddMinutes(1),
-                        FinishDateTime = baseDateTime.AddDays(i).AddMinutes(2),
-                        QueueDateTime = baseDateTime.AddDays(i),
-                        State = "Finished",
-                        Status = GetStatus(i)
-                    }
-                );
-            }
+        //        dummyBuildMetrics.Add(
+        //            new BuildMetric
+        //            {
+        //                ProjectId = "Blah",
+        //                ProjectName = "Blah",
+        //                BuildTypeId = "Blah_blah",
+        //                BuildId = i,
+        //                AgentName = "Blah",
+        //                StartDateTime = baseDateTime.AddDays(i).AddMinutes(1),
+        //                FinishDateTime = baseDateTime.AddDays(i).AddMinutes(2),
+        //                QueueDateTime = baseDateTime.AddDays(i),
+        //                State = "Finished",
+        //                Status = GetStatus(i)
+        //            }
+        //        );
+        //    }
 
-            return dummyBuildMetrics;
-        }
+        //    return dummyBuildMetrics;
+        //}
 
-        private string GetStatus(int i)
-        {
-            return ((i % 3) == 0) ? Helpers.BuildStatus.Failure.ToString() : Helpers.BuildStatus.Success.ToString();
-        }
+        //private string GetStatus(int i)
+        //{
+        //    return ((i % 3) == 0) ? Helpers.BuildStatus.Failure.ToString() : Helpers.BuildStatus.Success.ToString();
+        //}
     }
 
     internal class FailingBuildResults
