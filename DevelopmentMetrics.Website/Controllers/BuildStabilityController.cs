@@ -21,14 +21,14 @@ namespace DevelopmentMetrics.Website.Controllers
         // GET: BuildStability
         public ActionResult Index()
         {
-            _builds = new Build(_teamCityWebClient, _tellTheTime).GetBuilds();
-
             return View();
         }
 
         [HttpPost]
         public JsonResult GetBuildChartDataFor(int numberOfWeeks)
         {
+            _builds = new Build(_teamCityWebClient, _tellTheTime).GetBuilds();
+
             var buildData = new BuildMetric(_builds, _tellTheTime).CalculateBuildFailingRateByWeekFor(numberOfWeeks);
 
             return Json(buildData);
