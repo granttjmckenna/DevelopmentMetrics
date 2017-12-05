@@ -98,50 +98,6 @@ namespace DevelopmentMetrics.Builds
     }
 }
 
-internal class Root
-{
-    public Projects Projects { get; set; }
-}
-
-internal class Projects
-{
-    [JsonProperty(PropertyName = "Project")]
-    public List<ProjectDetail> ProjectList { get; set; }
-}
-
-internal class ProjectInternal
-{
-    public BuildTypes BuildTypes { get; set; }
-}
-
-internal class BuildTypes
-{
-    [JsonProperty(PropertyName = "BuildType")]
-    public List<BuildTypeItem> BuildTypeList { get; set; }
-}
-
-internal class BuildType
-{
-    public Builds Builds { get; set; }
-}
-
-internal class BuildTypeItem
-{
-    public string Href { get; set; }
-}
-
-internal class Builds
-{
-    public string Href { get; set; }
-}
-
-internal class ProjectDetail
-{
-    public string Id { get; set; }
-    public string Name { get; set; }
-    public string Href { get; set; }
-}
-
 internal class BuildDetail
 {
     public Agent Agent { get; set; }
