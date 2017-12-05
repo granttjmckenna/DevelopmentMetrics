@@ -3,14 +3,35 @@
     ViewBag.Title = "Build Stability";
 }
 
-<h2>Build Stability</h2>
-
 <script type="text/javascript" src="https://www.google.com/jsapi"> </script>
 
 <div class="row">
     <h2>Build metrics</h2>
 </div>
-
+<div class="row">
+    <div class="col-md-12">
+        <div style="float: right;">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">
+                    Chart data
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawBuildChart(6);">6 weeks (default)</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawBuildChart(7);">7 weeks</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawBuildChart(8);">8 weeks</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawBuildChart(9);">9 weeks</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawBuildChart(10);">10 weeks</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawBuildChart(15);">15 weeks</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawBuildChart(20);">20 weeks</a></li>
+                    @*<li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawBuildChart(-2);">All</a></li>
+                    <li class="divider"></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawBuildChart(-1);">Refresh data</a></li>*@
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-lg-12">
         <div id="chart_div" class="chartWrapper"></div>

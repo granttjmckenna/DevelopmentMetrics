@@ -1,10 +1,15 @@
-﻿function drawBuildChart() {
+﻿function drawBuildChart(weeks) {
+    var chartWeeks = 6;
+
+    if (weeks && typeof weeks == "number") {
+        chartWeeks = weeks;
+    };
 
     $.ajax({
         url: "/BuildStability/GetBuildChartDataFor",
         dataType: "json",
         data: {
-            numberOfWeeks: 6
+            numberOfWeeks: chartWeeks
         },
         type: "POST",
         error: function () {
