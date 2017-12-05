@@ -53,9 +53,14 @@ namespace DevelopmentMetrics.Repository
             return _webClient.Get(GetAbsoluteUrlWith(uri));
         }
 
-        private string GetAbsoluteUrlWith(string relativePart)
+        private string GetAbsoluteUrlWith(string href)
         {
-            var absoluteUrl = $"http://teamcity.energyhelpline.local/{relativePart}";
+            if (href.StartsWith("http://") || href.StartsWith("https://"))
+            {
+                return href;
+            }
+
+            var absoluteUrl = $"http://teamcity.energyhelpline.local/{href}";
 
             return GetUrlWithQueryStringCount(absoluteUrl);
         }
