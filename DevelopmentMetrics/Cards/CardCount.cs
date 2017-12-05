@@ -38,7 +38,7 @@ namespace DevelopmentMetrics.Cards
                         Date = day,
                         DoneTotal = doneCountByDay,
                         Total = countByDay,
-                        DefectRate = Calculator.Percentage(reworkCountByDay, countByDay)
+                        Rate = Calculator.Percentage(reworkCountByDay, countByDay)
                     })
                 .ToList();
         }
