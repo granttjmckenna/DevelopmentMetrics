@@ -20,13 +20,8 @@ namespace DevelopmentMetrics.Tests
             _teamCityWebClient = Substitute.For<ITeamCityWebClient>();
             _tellTheTime = Substitute.For<ITellTheTime>();
 
-            _teamCityWebClient.GetRootData().Returns(GetRootJsonResponse());
-            _teamCityWebClient.GetProjectDataFor(Arg.Any<string>()).Returns(GetProjectJsonResponse());
-            _teamCityWebClient.GetBuildTypeDataFor(Arg.Any<string>()).Returns(GetBuildTypeJsonResponse());
-            _teamCityWebClient.GetBuildDataFor(Arg.Any<string>()).Returns(GetBuildJsonResponse());
-            _teamCityWebClient.GetBuildDetailsDataFor(Arg.Any<string>()).Returns(GetBuildDetailsJsonResponse());
-
             _teamCityWebClient.GetBuildData().Returns(GetAllBuildJsonResponse());
+            _teamCityWebClient.GetBuildDetailsDataFor(Arg.Any<string>()).Returns(GetBuildDetailsJsonResponse());
 
             _tellTheTime.ParseBuildDetailDateTimes(Arg.Any<string>()).Returns(new DateTime(2017, 01, 01));
         }

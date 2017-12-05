@@ -5,12 +5,8 @@ namespace DevelopmentMetrics.Repository
 
     public interface ITeamCityWebClient
     {
-        string GetBuildDataFor(string uri);
-        string GetBuildTypeDataFor(string uri);
-        string GetProjectDataFor(string uri);
-        string GetRootData();
-        string GetBuildDetailsDataFor(string buildHref);
         string GetBuildData();
+        string GetBuildDetailsDataFor(string buildHref);
     }
 
     public class TeamCityWebClient : ITeamCityWebClient
@@ -22,37 +18,15 @@ namespace DevelopmentMetrics.Repository
             _webClient = webClient;
         }
 
-        public string GetBuildDataFor(string uri)
+        public string GetBuildData()
         {
-            return ExecuteGetRequest(uri);
-        }
-
-        public string GetBuildTypeDataFor(string uri)
-        {
-            return ExecuteGetRequest(uri);
-        }
-
-        public string GetProjectDataFor(string uri)
-        {
-            return ExecuteGetRequest(uri);
-        }
-
-        public string GetRootData()
-        {
-            var uri = GetAbsoluteUrlWith("guestAuth/app/rest/projects/id:_root");
+            var uri = GetAbsoluteUrlWith("guestAuth/app/rest/builds?count=10000");
 
             return ExecuteGetRequest(uri);
         }
 
         public string GetBuildDetailsDataFor(string uri)
         {
-            return ExecuteGetRequest(uri);
-        }
-
-        public string GetBuildData()
-        {
-            var uri = GetAbsoluteUrlWith("guestAuth/app/rest/builds?count=10000");
-
             return ExecuteGetRequest(uri);
         }
 

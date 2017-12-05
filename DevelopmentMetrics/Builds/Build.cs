@@ -78,31 +78,6 @@ namespace DevelopmentMetrics.Builds
             }
 
             return results;
-
-
-
-            return (from projectDetail in GetProjectList()
-                    let buildTypesHref = GetBuildTypesHref(projectDetail.Href)
-                    let buildsHref = GetBuildsHref(buildTypesHref)
-                    let builds = GetBuilds(buildsHref)
-                    from build in builds.Builds
-                    let buildDetails = GetBuildDetails(build.Href)
-                    select new Build
-                    {
-                        ProjectId = projectDetail.Id,
-                        Name = projectDetail.Name,
-                        Id = build.Id,
-                        BuildTypeId = build.BuildTypeId,
-                        Number = build.Number,
-                        Status = build.Status,
-                        State = build.State,
-                        Href = build.Href,
-                        StartDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.StartDateTime),
-                        FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
-                        QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
-                        AgentName = buildDetails.Agent.Name
-                    })
-                .ToList();
         }
 
         private List<Build> GetAllBuilds()
@@ -110,40 +85,6 @@ namespace DevelopmentMetrics.Builds
             var buildData = _teamCityWebClient.GetBuildData();
 
             return JsonConvert.DeserializeObject<Build>(buildData).Builds;
-        }
-
-        private Build GetBuilds(string buildsHref)
-        {
-            var data = _teamCityWebClient.GetBuildDataFor(buildsHref);
-
-            return JsonConvert.DeserializeObject<Build>(data);
-        }
-
-        private string GetBuildsHref(string href)
-        {
-            var buildTypeData = _teamCityWebClient.GetBuildTypeDataFor(href);
-
-            var buildType = JsonConvert.DeserializeObject<BuildType>(buildTypeData);
-
-            return buildType.Builds.Href;
-        }
-
-        private string GetBuildTypesHref(string href)
-        {
-            var projectData = _teamCityWebClient.GetProjectDataFor(href);
-
-            var project = JsonConvert.DeserializeObject<ProjectInternal>(projectData);
-
-            return project.BuildTypes.BuildTypeList.First().Href; //TODO: this might need to be a collection of Hrefs
-        }
-
-        private List<ProjectDetail> GetProjectList()
-        {
-            var rootData = _teamCityWebClient.GetRootData();
-
-            var projectDetails = JsonConvert.DeserializeObject<Root>(rootData);
-
-            return projectDetails.Projects.ProjectList;
         }
 
         private BuildDetail GetBuildDetails(string href)
