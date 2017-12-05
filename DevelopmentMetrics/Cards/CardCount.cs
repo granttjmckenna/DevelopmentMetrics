@@ -11,21 +11,13 @@ namespace DevelopmentMetrics.Cards
 
         private readonly IEnumerable<Card> _cards;
 
-        public DateTime Date { get; set; }
-        public int DoneTotal { get; set; }
-        public int ReworkTotal { get; set; }
-        public int Total { get; set; }
-        public double DefectRate { get; set; }
-
-        private CardCount() { }
-
         public CardCount(ITellTheTime tellTheTime, IEnumerable<Card> cards)
         {
             _tellTheTime = tellTheTime;
             _cards = cards;
         }
 
-        public List<CardCount> GetCardCountByDayFrom(int numberOfDays)
+        public List<Count> GetCardCountByDayFrom(int numberOfDays)
         {
             if (IsClearCache(numberOfDays))
             {
@@ -41,11 +33,10 @@ namespace DevelopmentMetrics.Cards
                     let countByDay = GetCardCountsFor(AllPredicateFor(day))
                     let doneCountByDay = GetCardCountsFor(DonePredicateFor(day))
                     let reworkCountByDay = GetCardCountsFor(AllDefectsNotDoneFor(day))
-                    select new CardCount
+                    select new Count
                     {
                         Date = day,
                         DoneTotal = doneCountByDay,
-                        ReworkTotal = reworkCountByDay,
                         Total = countByDay,
                         DefectRate = Calculator.Percentage(reworkCountByDay, countByDay)
                     })
