@@ -17,9 +17,6 @@ namespace DevelopmentMetrics.Builds
         [JsonProperty(PropertyName = "Build")]
         private List<Build> Builds { get; set; }
 
-        public string ProjectId { get; set; }
-        public string Name { get; set; }
-
         public int Id { get; set; }
 
         public string BuildTypeId { get; set; }

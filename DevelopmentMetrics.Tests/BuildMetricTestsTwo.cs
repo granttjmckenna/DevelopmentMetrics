@@ -57,8 +57,6 @@ namespace DevelopmentMetrics.Tests
                 dummyBuilds.Add(
                     new Build
                     {
-                        ProjectId = "Blah",
-                        Name = "Blah",
                         BuildTypeId = "Blah_blah",
                         Id = i,
                         AgentName = "Blah",
