@@ -43,22 +43,6 @@ namespace DevelopmentMetrics.Cards
                 .ToList();
         }
 
-        private DateTime GetFromDate(int numberOfDays)
-        {
-            if (numberOfDays == -1)
-            {
-                return _tellTheTime.Now().AddDays(-42);
-            }
-            else if (numberOfDays == 9999)
-            {
-                return _cards.Min(c => c.CreateDate);
-            }
-            else
-            {
-                return _tellTheTime.Now().AddDays(numberOfDays * -1);
-            }
-        }
-
         public Dictionary<CardStatus.Status, int> GetCountByStatus()
         {
             var result = new Dictionary<CardStatus.Status, int>
@@ -77,6 +61,19 @@ namespace DevelopmentMetrics.Cards
         {
             return _cards.Count(c => c.CreateDate <= calculationDateTime)
                 - _cards.Count(DonePredicateFor(calculationDateTime));
+        }
+
+        private DateTime GetFromDate(int numberOfDays)
+        {
+            switch (numberOfDays)
+            {
+                case -1:
+                    return _tellTheTime.Now().AddDays(-42);
+                case -2:
+                    return _cards.Min(c => c.CreateDate);
+                default:
+                    return _tellTheTime.Now().AddDays(numberOfDays * -1);
+            }
         }
 
         private static Func<Card, bool> AllPredicateFor(DateTime day)
