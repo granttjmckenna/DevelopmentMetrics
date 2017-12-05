@@ -29,31 +29,6 @@
     return false;
 };
 
-function getChartDiv() {
-    return document.getElementById("chart_div");
-}
-
-function showChartMessage(msg) {
-    var cardChart = getChartDiv();
-
-    cardChart.innerHTML = msg;
-}
-
-function showChartLoading() {
-    var cardChart = getChartDiv();
-
-    cardChart.classList.add("loading");
-
-    showChartMessage("Loading");
-}
-
-function showChartLoaded() {
-    var cardChart = getChartDiv();
-
-    cardChart.classList.remove("loading");
-    cardChart.classList.add("loaded");
-}
-
 function renderChartData(data) {
     var dataTable = new google.visualization.DataTable();
     dataTable.addColumn("date", "Day");
@@ -139,11 +114,4 @@ function renderChartData(data) {
     chart.draw(dataTable, options);
 
     return false;
-}
-
-function getDateIfDate(d) {
-    var m = d.match(/\/Date\((\d+)\)\//);
-    return m
-        ? (new Date(+m[1])).toString("dd/MM/yyyy")
-        : d;
 };
