@@ -102,16 +102,7 @@ function renderChartData(data) {
         colors: ["#34A853", "#FF6600", "#FF0000"]
     };
 
-    var chartDiv = getChartDiv();
-
-    var chart = new google.visualization.LineChart(chartDiv);
-
-    // Wait for the chart to finish drawing before calling the getImageURI() method.
-    google.visualization.events.addListener(chart, "ready", function () {
-        document.getElementById("print_chart").innerHTML = "<a href='" + chart.getImageURI() + "'><p><span class='glyphicon glyphicon-print'></span></p></a>";
-    });
-
-    chart.draw(dataTable, options);
+    drawChart(dataTable, options);
 
     return false;
 };

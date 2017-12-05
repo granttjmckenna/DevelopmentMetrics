@@ -68,11 +68,7 @@ function renderBuildChartData(data) {
         colors: ["#FF0000"]
     };
 
-    var chartDiv = getChartDiv();
-
-    var chart = new google.visualization.LineChart(chartDiv);
-    
-    chart.draw(dataTable, options);
+    drawChart(dataTable, options);
 
     return false;
 };

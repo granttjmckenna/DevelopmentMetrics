@@ -29,3 +29,11 @@ function getDateIfDate(d) {
         ? (new Date(+m[1])).toString("dd/MM/yyyy")
         : d;
 };
+
+function drawChart(dataTable, options) {
+    var chartDiv = getChartDiv();
+
+    var chart = new google.visualization.LineChart(chartDiv);
+
+    chart.draw(dataTable, options);
+};
