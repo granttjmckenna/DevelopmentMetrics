@@ -20,6 +20,11 @@ namespace DevelopmentMetrics.Builds
         {
             var results = new List<Metric>();
 
+            if (IsClearCache(numberOfWeeks))
+            {
+                CacheHelper.ClearObjectFromCache(Build.CacheKey);
+            }
+
             var fromDate = GetFromDate(numberOfWeeks);
 
             for (var x = 0; x < numberOfWeeks; x++)
@@ -49,9 +54,22 @@ namespace DevelopmentMetrics.Builds
             return results;
         }
 
+        private bool IsClearCache(int numberOfWeeks)
+        {
+            return numberOfWeeks == -1;
+        }
+
         private DateTime GetFromDate(int numberOfWeeks)
         {
-            return GetStartOfWeekFor(_tellTheTime.Today()).AddDays(numberOfWeeks * -7);
+            switch (numberOfWeeks)
+            {
+                case -1:
+                    return GetStartOfWeekFor(_tellTheTime.Today()).AddDays(6 * -7);
+                case -2:
+                    return GetStartOfWeekFor(_builds.Min(c => c.StartDateTime));
+                default:
+                    return GetStartOfWeekFor(_tellTheTime.Today()).AddDays(numberOfWeeks * -7);
+            }
         }
 
         private DateTime GetStartOfWeekFor(DateTime today)
