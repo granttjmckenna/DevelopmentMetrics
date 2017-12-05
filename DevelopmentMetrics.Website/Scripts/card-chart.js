@@ -1,4 +1,4 @@
-﻿function drawChart(days) {
+﻿function drawCardChart(days) {
     var chartDays = 42;
 
     if (days && typeof days == "number") {

@@ -29,16 +29,16 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(42);">6 weeks (default)</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(49);">7 weeks</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(56);">8 weeks</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(63);">9 weeks</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(70);">10 weeks</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(105);">15 weeks</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(140);">20 weeks</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(9999);">All</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawCardChart(42);">6 weeks (default)</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawCardChart(49);">7 weeks</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawCardChart(56);">8 weeks</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawCardChart(63);">9 weeks</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawCardChart(70);">10 weeks</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawCardChart(105);">15 weeks</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawCardChart(140);">20 weeks</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawCardChart(9999);">All</a></li>
                 <li class="divider"></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawChart(-1);">Refresh data</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: drawCardChart(-1);">Refresh data</a></li>
             </ul>
         </div>
     </div>
@@ -92,5 +92,5 @@
             packages: ["line", "corechart"]
         });
 
-    google.setOnLoadCallback(drawChart);
+    google.setOnLoadCallback(drawCardChart);
 </script>
