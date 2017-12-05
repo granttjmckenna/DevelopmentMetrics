@@ -62,12 +62,9 @@
   <ItemGroup>
     <Compile Include="BuildMetricTestsTwo.cs" />
     <Compile Include="BuildMetricTests.cs" />
-    <Compile Include="BuildRepositoryTests.cs" />
     <Compile Include="CardMetricTests.cs" />
     <Compile Include="CardCountTests.cs" />
     <Compile Include="LeanKitDeserialiserTests.cs" />
-    <Compile Include="DeserialiserTests.cs" />
-    <Compile Include="FakeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TeamCityDeserialiserTests.cs" />
     <Compile Include="TellTheTimeTests.cs" />
