@@ -31,7 +31,7 @@ function renderBuildChartData(data) {
 
     $.each(data,
         function (i, item) {
-            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.FailureRate]]);
+            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.Rate]]);
         });
 
     var options = {

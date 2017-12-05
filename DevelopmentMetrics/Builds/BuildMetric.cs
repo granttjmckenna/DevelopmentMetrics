@@ -7,14 +7,8 @@ namespace DevelopmentMetrics.Builds
 {
     public class BuildMetric
     {
-        private BuildMetric() { }
-
         private readonly List<Build> _builds;
         private readonly ITellTheTime _tellTheTime;
-
-        public DateTime Date { get; set; }
-
-        public double FailureRate { get; set; }
 
         public BuildMetric(List<Build> builds, ITellTheTime tellTheTime)
         {
@@ -22,9 +16,9 @@ namespace DevelopmentMetrics.Builds
             _builds = builds;
         }
 
-        public List<BuildMetric> CalculateBuildFailingRateByWeekFor( int numberOfWeeks)
+        public List<Metric> CalculateBuildFailingRateByWeekFor(int numberOfWeeks)
         {
-            var results = new List<BuildMetric>();
+            var results = new List<Metric>();
 
             var fromDate = GetFromDate(numberOfWeeks);
 
@@ -45,10 +39,10 @@ namespace DevelopmentMetrics.Builds
                 var failures = selectedBuilds.Count(b =>
                     b.Status.Equals("Failure", StringComparison.InvariantCultureIgnoreCase));
 
-                results.Add(new BuildMetric
+                results.Add(new Metric
                 {
                     Date = startDate,
-                    FailureRate = Calculator.Percentage(failures, total)
+                    Rate = Calculator.Percentage(failures, total)
                 });
             }
 
@@ -66,65 +60,5 @@ namespace DevelopmentMetrics.Builds
 
             return today.AddDays(offset);
         }
-
-        //public List<BuildMetric> CalculateBuildFailingRateByMonthFrom(DateTime fromDate)
-
-        //{
-
-        //    var results = new List<BuildMetric>();
-
-
-        //    for (var i = 0; i < 12; i++)
-
-        //    {
-
-        //        var queryDate = fromDate.AddMonths(i);
-
-
-        //        var monthBuildMetrics =
-
-        //            _builds
-
-        //                .Where(b => b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase)
-
-        //                            && b.StartDateTime.Month.Equals(queryDate.Month)
-
-        //                            && b.StartDateTime.Year.Equals(queryDate.Year))
-
-        //                .ToList();
-
-
-        //        if (!monthBuildMetrics.Any())
-
-        //            continue;
-
-
-        //        var total = monthBuildMetrics.Count();
-
-
-        //        var failing = monthBuildMetrics
-
-        //            .Count(b => b.Status.Equals(Helpers.BuildStatus.Failure.ToString(), StringComparison.CurrentCultureIgnoreCase));
-
-
-        //        var failingRate = Calculator.Percentage(failing, total);
-
-
-        //        results.Add(new BuildMetric
-
-        //        {
-
-        //            BuildMonth = queryDate.ToString("MMM-yyyy"),
-
-        //            FailureRate = failingRate
-
-        //        });
-
-        //    }
-
-
-        //    return results;
-
-        //}
     }
 }
