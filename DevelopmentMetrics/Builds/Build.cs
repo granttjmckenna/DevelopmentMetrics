@@ -56,6 +56,31 @@ namespace DevelopmentMetrics.Builds
 
         public List<Build> GetBuildsFromRepo()
         {
+            var results = new List<Build>();
+
+            foreach (var build in GetAllBuilds())
+            {
+                var buildDetails = GetBuildDetails(build.Href);
+
+                results.Add(new Build
+                {
+                    Id = build.Id,
+                    BuildTypeId = build.BuildTypeId,
+                    Number = build.Number,
+                    Status = build.Status,
+                    State = build.State,
+                    Href = build.Href,
+                    StartDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.StartDateTime),
+                    FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
+                    QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
+                    AgentName = buildDetails.Agent.Name
+                });
+            }
+
+            return results;
+
+
+
             return (from projectDetail in GetProjectList()
                     let buildTypesHref = GetBuildTypesHref(projectDetail.Href)
                     let buildsHref = GetBuildsHref(buildTypesHref)
@@ -78,6 +103,13 @@ namespace DevelopmentMetrics.Builds
                         AgentName = buildDetails.Agent.Name
                     })
                 .ToList();
+        }
+
+        private List<Build> GetAllBuilds()
+        {
+            var buildData = _teamCityWebClient.GetBuildData();
+
+            return JsonConvert.DeserializeObject<Build>(buildData).Builds;
         }
 
         private Build GetBuilds(string buildsHref)
