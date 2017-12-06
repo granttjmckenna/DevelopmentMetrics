@@ -41,6 +41,17 @@ namespace DevelopmentMetrics.Builds
                 var failures = selectedBuilds.Count(b =>
                     b.Status.Equals("Failure", StringComparison.InvariantCultureIgnoreCase));
 
+                /*
+                if calculatemillisecondsbetweenbuilds returns a list of doubles
+                then the list of doubles could be passed to the method
+                GetAverageRecoveryTimeFor, which will convert the list into a
+                single figure for RecoveryTime, and it could also be passed into
+                the method for calculating standard deviation - giving two values
+                from one list
+
+                START with the test!
+                */
+
                 results.Add(new Metric
                 {
                     Date = startDate,
