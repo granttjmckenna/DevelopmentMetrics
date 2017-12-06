@@ -54,6 +54,16 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        public void Return_zero_milliseconds_between_failing_and_next_succeeding_build_when_list_is_empty()
+        {
+            var builds = new List<Build>();
+
+            var millisecondsBetweenBuilds = CalculateMillisecondsBetweenBuilds(GetAlternatingBuilds(builds));
+
+            Assert.That(millisecondsBetweenBuilds, Is.EqualTo(0));
+        }
+
+        [Test]
         public void Return_list_of_failing_and_succeeding_builds()
         {
             var builds = GetBuilds();
