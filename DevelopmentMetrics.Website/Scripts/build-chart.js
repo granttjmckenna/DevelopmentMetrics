@@ -128,7 +128,25 @@ function getBuildChartTitle() {
     var weeks = getChartValue("numberOfWeeks");
     var buildAgent = getChartValue("buildAgent");
 
-    return "Build stability - weeks: " + weeks + " & build agent: " + getChartTitleAgentName(buildAgent);
+    return "Build stability - weeks: " + getChartTitleWeeks(weeks) + " & build agent: " + getChartTitleAgentName(buildAgent);
+};
+
+function getChartTitleAgentName(agentName) {
+    if (agentName === "All") {
+        return agentName;
+    };
+    return "TC-A" + agentName.replace("lon-devtca", "");
+}
+
+function getChartTitleWeeks(weeks) {
+    switch (weeks) {
+        case -1:
+            return "6";
+        case -2:
+            return "All";
+        default:
+            return weeks;
+    }
 };
 
 function setChartValues(weeks, buildAgent) {
@@ -145,11 +163,4 @@ function getChartValue(id) {
     var input = getElementById(id);
 
     return input.value;
-};
-
-function getChartTitleAgentName(agentName) {
-    if (agentName === "All") {
-        return agentName;
-    };
-    return "TC-A" + agentName.replace("lon-devtca", "");
-};
+};;
