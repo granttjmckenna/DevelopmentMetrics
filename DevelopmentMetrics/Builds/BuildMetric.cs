@@ -22,7 +22,9 @@ namespace DevelopmentMetrics.Builds
 
             var fromDate = GetFromDate(numberOfWeeks);
 
-            for (var x = 0; x < numberOfWeeks; x++)
+            var weeks = GetNumberOfWeeksFrom(fromDate);
+
+            for (var x = 0; x < weeks; x++)
             {
                 var startDate = fromDate.AddDays(x * 7);
                 var endDate = startDate.AddDays(7);
@@ -47,6 +49,11 @@ namespace DevelopmentMetrics.Builds
             }
 
             return results;
+        }
+
+        private int GetNumberOfWeeksFrom(DateTime fromDate)
+        {
+            return (int)(_tellTheTime.Now() - fromDate).TotalDays / 7;
         }
 
         private DateTime GetFromDate(int numberOfWeeks)
