@@ -18,11 +18,11 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('TC-agent 1');">TC-Agent 1</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('TC-agent 2');">TC-Agent 2</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('TC-agent 3');">TC-Agent 3</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('TC-agent 4');">TC-Agent 4</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('TC-agent 5');">TC-Agent 5</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('lon-devtcagent1');">TC-Agent 1</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('lon-devtcagent2');">TC-Agent 2</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('lon-devtcagent3');">TC-Agent 3</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('lon-devtcagent4');">TC-Agent 4</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('lon-devtcagent5');">TC-Agent 5</a></li>
                     <li class="divider"></li>
                     <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('All');">All</a></li>
                 </ul>
@@ -57,6 +57,9 @@
         <div id="chart_div" class="chartWrapper"></div>
     </div>
 </div>
+
+<input type="text" id="numberOfWeeks" value="6"/>
+<input type="text" id="buildAgent" value="All"/>
 
 <script type="text/javascript">
     google.load("visualization", "1",
