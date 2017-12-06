@@ -2,16 +2,10 @@
 
 namespace DevelopmentMetrics
 {
-    public interface IMetric
-    {
-        DateTime Date { get; set; }
-        double Rate { get; set; }
-    }
-
-    public class Metric : IMetric
+    public class Metric
     {
         public DateTime Date { get; set; }
-
-        public double Rate { get; set; }
+        public double FailureRate { get; set; }
+        public int RecoveryTime { get; set; }
     }
 }

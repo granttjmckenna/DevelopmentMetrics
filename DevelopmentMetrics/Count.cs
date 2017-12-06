@@ -2,7 +2,7 @@
 
 namespace DevelopmentMetrics
 {
-    public class Count : IMetric
+    public class Count
     {
         public DateTime Date { get; set; }
         public int DoneTotal { get; set; }

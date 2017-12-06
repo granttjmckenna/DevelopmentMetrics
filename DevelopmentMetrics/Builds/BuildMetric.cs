@@ -44,11 +44,70 @@ namespace DevelopmentMetrics.Builds
                 results.Add(new Metric
                 {
                     Date = startDate,
-                    Rate = Calculator.Percentage(failures, total)
+                    FailureRate = Calculator.Percentage(failures, total),
+                    RecoveryTime = GetAverageRecoveryTimeFor(selectedBuilds)
                 });
             }
 
             return results;
+        }
+
+        private int GetAverageRecoveryTimeFor(List<Build> selectedBuilds)
+        {
+            return (int)(Math.Round(TimeSpan.FromMilliseconds(GetTotalMillisecondsFor(selectedBuilds)).TotalHours, 0));
+        }
+
+        public double GetTotalMillisecondsFor(List<Build> builds)
+        {
+            var distinctBuildTypes = builds.Select(b => b.BuildTypeId).Distinct().ToList();
+
+            var milliseconds = distinctBuildTypes.Sum(
+                buildType => CalculateMillisecondsBetweenBuilds(
+                    GetAlternatingBuilds(
+                        builds.Where(b => b.BuildTypeId.Equals(buildType, StringComparison.InvariantCultureIgnoreCase))
+                            .ToList())));
+
+            return milliseconds;
+        }
+
+        private List<Build> GetAlternatingBuilds(List<Build> builds)
+        {
+            var results = new List<Build>();
+
+            var isPreviousBuildSuccess = true;
+
+            foreach (var build in builds)
+            {
+                if (build.Status.Equals("Failure", StringComparison.InvariantCultureIgnoreCase) && isPreviousBuildSuccess)
+                {
+                    results.Add(build);
+                    isPreviousBuildSuccess = false;
+                }
+                else if (build.Status.Equals("Success", StringComparison.InvariantCultureIgnoreCase) && !isPreviousBuildSuccess)
+                {
+                    results.Add(build);
+                    isPreviousBuildSuccess = true;
+                }
+            }
+
+            return results;
+        }
+
+        private double CalculateMillisecondsBetweenBuilds(List<Build> builds)
+        {
+            var runningTotal = 0d;
+
+            for (var x = 0; x < builds.Count - 1; x += 2)
+            {
+                runningTotal += (builds[x + 1].FinishDateTime - builds[x].StartDateTime).TotalMilliseconds;
+            }
+
+            if (builds.Count % 2 != 0)
+            {
+                runningTotal += (_tellTheTime.Now() - builds.Last().FinishDateTime).TotalMilliseconds;
+            }
+
+            return runningTotal;
         }
 
         private int GetNumberOfWeeksFrom(DateTime fromDate)
