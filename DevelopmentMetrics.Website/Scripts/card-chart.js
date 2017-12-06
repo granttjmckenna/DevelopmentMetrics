@@ -42,7 +42,7 @@ function renderChartData(data, chartDays) {
         });
 
     var options = {
-        title: getBuildChartTitle(chartDays),
+        title: getCardChartTitle(chartDays),
         titleTextStyle: {
             fontSize: 20,
             italic: false
@@ -112,6 +112,6 @@ function renderChartData(data, chartDays) {
     return false;
 };
 
-function getBuildChartTitle(days) {
+function getCardChartTitle(days) {
     return "Cumulative flow diagram - days: " + days;
 };

@@ -95,7 +95,7 @@ function renderBuildChartData(data) {
                 gridlines: {
                     color: "transparent"
                 },
-                title: "Recovery time",
+                title: "Recovery time (hours)",
                 titleTextStyle: {
                     fontSize: 20,
                     italic: false
