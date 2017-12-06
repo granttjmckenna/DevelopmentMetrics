@@ -54,7 +54,14 @@ namespace DevelopmentMetrics.Builds
 
         private int GetAverageRecoveryTimeFor(List<Build> selectedBuilds)
         {
-            return (int)(Math.Round(TimeSpan.FromMilliseconds(GetTotalMillisecondsFor(selectedBuilds)).TotalHours, 0));
+            if (!selectedBuilds.Any())
+                return 0;
+
+            var totalMilliseconds = GetTotalMillisecondsFor(selectedBuilds);
+
+            var averageMilliseconds = totalMilliseconds / (double)selectedBuilds.Count;
+
+            return (int)(Math.Round(TimeSpan.FromMilliseconds(averageMilliseconds).TotalHours, 0));
         }
 
         public double GetTotalMillisecondsFor(List<Build> builds)
