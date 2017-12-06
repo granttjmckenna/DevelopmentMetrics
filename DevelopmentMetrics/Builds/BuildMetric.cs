@@ -20,11 +20,6 @@ namespace DevelopmentMetrics.Builds
         {
             var results = new List<Metric>();
 
-            if (IsClearCache(numberOfWeeks))
-            {
-                CacheHelper.ClearObjectFromCache(Build.CacheKey);
-            }
-
             var fromDate = GetFromDate(numberOfWeeks);
 
             for (var x = 0; x < numberOfWeeks; x++)
@@ -52,11 +47,6 @@ namespace DevelopmentMetrics.Builds
             }
 
             return results;
-        }
-
-        private bool IsClearCache(int numberOfWeeks)
-        {
-            return numberOfWeeks == -1;
         }
 
         private DateTime GetFromDate(int numberOfWeeks)

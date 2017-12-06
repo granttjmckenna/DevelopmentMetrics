@@ -27,11 +27,21 @@ namespace DevelopmentMetrics.Website.Controllers
         [HttpPost]
         public JsonResult GetBuildChartDataFor(int numberOfWeeks)
         {
+            if (IsClearCache(numberOfWeeks))
+            {
+                CacheHelper.ClearObjectFromCache(Build.CacheKey);
+            }
+
             _builds = new Build(_teamCityWebClient, _tellTheTime).GetBuilds();
 
             var buildData = new BuildMetric(_builds, _tellTheTime).CalculateBuildFailingRateByWeekFor(numberOfWeeks);
 
             return Json(buildData);
+        }
+
+        private bool IsClearCache(int numberOfWeeks)
+        {
+            return numberOfWeeks == -1;
         }
     }
 }
