@@ -46,8 +46,8 @@ function drawBuildChart(weeks, buildAgent) {
 function renderBuildChartData(data) {
     var dataTable = new google.visualization.DataTable();
     dataTable.addColumn("date", "Day");
-    dataTable.addColumn("number", "FailureRate");
-    dataTable.addColumn("number", "RecoveryTime");
+    dataTable.addColumn("number", "Failure rate");
+    dataTable.addColumn("number", "Recovery time");
 
     $.each(data,
         function (i, item) {
