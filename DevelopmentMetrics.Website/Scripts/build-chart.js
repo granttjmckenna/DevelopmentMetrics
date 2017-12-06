@@ -16,7 +16,7 @@ function drawBuildChart(weeks, buildAgent) {
         filterByBuildAgent = buildAgent;
     };
 
-    //TODO set chart values
+    setChartValues(chartWeeks, filterByBuildAgent);
 
     $.ajax({
         url: "/BuildStability/GetBuildChartDataFor",
