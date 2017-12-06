@@ -5,8 +5,8 @@
 };
 
 function drawBuildChart(weeks, buildAgent) {
-    var chartWeeks = 6;
-    var filterByBuildAgent = "All";
+    var chartWeeks = getChartValue("numberOfWeeks");
+    var filterByBuildAgent = getChartValue("buildAgent");
 
     if (weeks && typeof weeks == "number") {
         chartWeeks = weeks;
@@ -107,15 +107,15 @@ function getBuildChartTitle() {
 function setChartValues(weeks, buildAgent) {
     var input = getElementById("numberOfWeeks");
 
-    input.val = weeks;
+    input.value = weeks;
 
     input = getElementById("buildAgent");
 
-    input.val = buildAgent;
+    input.value = buildAgent;
 };
 
 function getChartValue(id) {
     var input = getElementById(id);
 
-    return input.val;
+    return input.value;
 };
