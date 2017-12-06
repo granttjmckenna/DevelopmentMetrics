@@ -52,6 +52,11 @@ function renderBuildChartData(data) {
         });
 
     var options = {
+        title: "Build stability - weeks: 6 & build agent: All",
+        titleTextStyle: {
+            fontSize: 20,
+            italic: false
+        },
         curveType: "function",
         legend: {
             position: "bottom"
