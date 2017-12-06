@@ -9,81 +9,9 @@ namespace DevelopmentMetrics.Tests
     [TestFixture]
     public class BuildMetricTests
     {
-        //[Test]
-        //public void Should_calculate_failure_percentage()
-        //{
-        //    var buildMetrics = GetBuildMetricsData(10);
 
-        //    var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics);
 
-        //    Assert.That(failingRate, Is.EqualTo(30));
-        //}
 
-        //[Test]
-        //public void Should_calculate_failure_percentage_for_project()
-        //{
-        //    var buildMetrics = GetBuildMetricsData(10);
-
-        //    buildMetrics[1].ProjectId = "Exclude from calculation";
-
-        //    var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics,
-        //        b => b.ProjectId.Equals("Blah", StringComparison.CurrentCultureIgnoreCase));
-
-        //    Assert.That(failingRate, Is.EqualTo(33.33));
-        //}
-
-        //[Test]
-        //public void Should_calculate_failure_percentage_for_agent_name()
-        //{
-        //    var buildMetrics = GetBuildMetricsData(10);
-
-        //    buildMetrics[1].AgentName = "Exclude from calculation";
-
-        //    var failingRate = BuildCalculators.CalculateBuildFailureRate(buildMetrics,
-        //        b => b.AgentName.Equals("Blah", StringComparison.CurrentCultureIgnoreCase));
-
-        //    Assert.That(failingRate, Is.EqualTo(33.33));
-        //}
-
-        //[Test]
-        //public void Should_calculate_failure_percentage_by_project()
-        //{
-        //    var buildMetrics = GetBuildMetricsData(10);
-
-        //    buildMetrics[1].ProjectId = "Different project id";
-
-        //    var projectBuildMetrics = new BuildCalculators().CalculateProjectBuildFailingRate(buildMetrics);
-
-        //    Assert.That(projectBuildMetrics.Keys.Count, Is.EqualTo(2));
-        //    Assert.That(projectBuildMetrics.First(c => c.Key.Equals("Blah")).Value, Is.EqualTo(33.33));
-        //    Assert.That(projectBuildMetrics.First(c => c.Key.Equals("Different project id")).Value, Is.EqualTo(0));
-        //}
-
-        //[TestCase("2017-01-01", ExpectedResult = 12)]
-        //[TestCase("2016-06-01", ExpectedResult = 5)]
-        //[TestCase("2017-06-01", ExpectedResult = 7)]
-        //public int Should_calculate_failure_percentage_by_month_for_one_year(string fromDate)
-        //{
-        //    var buildMetrics = GetBuildMetricsData(360);
-
-        //    var monthlyBuildMetrics = new BuildCalculators()
-        //        .CalculateBuildFailingRateByMonthFrom(DateTime.Parse(fromDate), buildMetrics);
-
-        //    return monthlyBuildMetrics.Keys.Count;
-        //}
-
-        //[Test]
-        //public void Should_calculate_failure_percentage_by_month_for_build_metrics_up_to_and_including_query_month()
-        //{
-        //    var dummyBuildMetrics = GetBuildMetricsData(360);
-
-        //    var buildMetrics = dummyBuildMetrics.Where(b => b.StartDateTime >= new DateTime(2017, 7, 1)).ToList();
-
-        //    var monthlyBuildMetrics = new BuildCalculators().CalculateBuildFailingRateByMonth(buildMetrics);
-
-        //    Assert.That(monthlyBuildMetrics.Keys.Count, Is.EqualTo(6));
-        //    Assert.That(monthlyBuildMetrics.Keys.First(), Is.EqualTo("Jul-2017"));
-        //}
 
         //[Test]
         //public void Should_return_first_failing_build_by_project()

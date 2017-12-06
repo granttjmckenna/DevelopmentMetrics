@@ -5,6 +5,7 @@ using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Helpers;
 using NSubstitute;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace DevelopmentMetrics.Tests
 {
@@ -19,6 +20,7 @@ namespace DevelopmentMetrics.Tests
             _tellTheTime = Substitute.For<ITellTheTime>();
 
             _tellTheTime.Today().Returns(new DateTime(2017, 12, 04));
+            _tellTheTime.Now().Returns(new DateTime(2017, 12, 04));
         }
         [Test]
         public void Should_calculate_failure_percentage_by_week()
@@ -39,6 +41,51 @@ namespace DevelopmentMetrics.Tests
             var startOfWeek = GetStartOfWeekFor(today);
 
             Assert.That(startOfWeek, Is.EqualTo(new DateTime(2017, 12, 03)));
+        }
+
+        [Test]
+        public void Return_milliseconds_between_failing_and_next_succeeding_build()
+        {
+            var builds = new List<Build>
+            {
+                new Build
+                {
+                    StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
+                    Status = "Failure"
+                },
+                new Build
+                {
+                    StartDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
+                    Status = "Success"
+                }
+            };
+            
+            var millisecondsBetweenBuilds = CalculateMillisecondsBetweenBuilds(builds);
+
+            Assert.That(millisecondsBetweenBuilds, Is.EqualTo(60000));
+        }
+
+        private int CalculateMillisecondsBetweenBuilds(List<Build> builds)
+        {
+            Build failingBuild = null;
+            Build succeedingBuild = null;
+
+            foreach (var build in builds)
+            {
+                if (build.Status.Equals("Failure", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    failingBuild = build;
+                }
+                else
+                {
+                    succeedingBuild = build;
+                    break;
+                }
+            }
+
+            return (int) (succeedingBuild.FinishDateTime- failingBuild.StartDateTime).TotalMilliseconds;
         }
 
         private DateTime GetStartOfWeekFor(DateTime today)
