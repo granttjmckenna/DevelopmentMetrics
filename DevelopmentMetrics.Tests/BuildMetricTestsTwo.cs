@@ -64,6 +64,20 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        public void Return_milliseconds_between_failing_and_next_succeeding_build_when_list_ends_with_failing_build()
+        {
+            var builds = GetBuilds();
+
+            var alternatingBuilds = GetAlternatingBuilds(builds);
+
+            alternatingBuilds = alternatingBuilds.Take(3).ToList(); //remove last successful build
+
+            var millisecondsBetweenBuilds = CalculateMillisecondsBetweenBuilds(alternatingBuilds);
+
+            Assert.That(millisecondsBetweenBuilds, Is.GreaterThan(300000));
+        }
+
+        [Test]
         public void Return_list_of_failing_and_succeeding_builds()
         {
             var builds = GetBuilds();
@@ -97,13 +111,18 @@ namespace DevelopmentMetrics.Tests
         }
 
 
-        private int CalculateMillisecondsBetweenBuilds(List<Build> builds)
+        private double CalculateMillisecondsBetweenBuilds(List<Build> builds)
         {
-            var runningTotal = 0;
+            var runningTotal = 0d;
 
             for (var x = 0; x < builds.Count - 1; x += 2)
             {
-                runningTotal += (int) (builds[x + 1].FinishDateTime - builds[x].StartDateTime).TotalMilliseconds;
+                runningTotal += (builds[x + 1].FinishDateTime - builds[x].StartDateTime).TotalMilliseconds;
+            }
+
+            if (builds.Count % 2 != 0)
+            {
+                runningTotal += (_tellTheTime.Now() - builds.Last().FinishDateTime).TotalMilliseconds;
             }
 
             return runningTotal;
