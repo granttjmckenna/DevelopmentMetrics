@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Helpers;
@@ -25,7 +27,7 @@ namespace DevelopmentMetrics.Website.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetBuildChartDataFor(int numberOfWeeks)
+        public JsonResult GetBuildChartDataFor(int numberOfWeeks, string buildAgent)
         {
             if (IsClearCache(numberOfWeeks))
             {
@@ -34,7 +36,13 @@ namespace DevelopmentMetrics.Website.Controllers
 
             _builds = new Build(_teamCityWebClient, _tellTheTime).GetBuilds();
 
-            var buildData = new BuildMetric(_builds, _tellTheTime).CalculateBuildFailingRateByWeekFor(numberOfWeeks);
+            var filteredBuilds = _builds
+                .Where(b =>
+                    b.AgentName.Equals(buildAgent, StringComparison.InvariantCultureIgnoreCase) ||
+                    buildAgent.Equals("All", StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+
+            var buildData = new BuildMetric(filteredBuilds, _tellTheTime).CalculateBuildFailingRateByWeekFor(numberOfWeeks);
 
             return Json(buildData);
         }
