@@ -47,10 +47,11 @@ function renderBuildChartData(data) {
     var dataTable = new google.visualization.DataTable();
     dataTable.addColumn("date", "Day");
     dataTable.addColumn("number", "FailureRate");
+    dataTable.addColumn("number", "RecoveryTime");
 
     $.each(data,
         function (i, item) {
-            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.Rate]]);
+            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.FailureRate, item.RecoveryTime]]);
         });
 
     var options = {
@@ -74,22 +75,48 @@ function renderBuildChartData(data) {
                 italic: false
             }
         },
-        vAxis: {
-            gridlines: {
-                color: "transparent"
+        vAxes: {
+            0: {
+                gridlines: {
+                    color: "transparent"
+                },
+                title: "Failure rate",
+                titleTextStyle: {
+                    fontSize: 20,
+                    italic: false
+                },
+                format: "#%",
+                viewWindow: {
+                    max: 1,
+                    min: 0
+                }
             },
-            title: "Failure rate",
-            titleTextStyle: {
-                fontSize: 20,
-                italic: false
-            },
-            format: "#%",
-            viewWindow: {
-                max: 1,
-                min: 0
+            1: {
+                gridlines: {
+                    color: "transparent"
+                },
+                title: "Recovery time",
+                titleTextStyle: {
+                    fontSize: 20,
+                    italic: false
+                },
+                format: "short",
+                viewWindow: {
+                    min: 0
+                }
             }
         },
-        colors: ["#FF0000"]
+        series: {
+            0: {
+                targetAxisIndex: 0,
+                lineWidth: 3
+            },
+            1: {
+                targetAxisIndex: 1,
+                lineWidth: 3
+            }
+        },
+        colors: ["#FF0000", "#FF6600"]
     };
 
     drawChart(dataTable, options);
