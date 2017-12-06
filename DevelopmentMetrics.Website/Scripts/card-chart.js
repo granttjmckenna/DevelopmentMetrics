@@ -113,18 +113,16 @@ function renderChartData(data, chartDays) {
 };
 
 function getCardChartTitle(days) {
-    return "Cumulative flow diagram - days: " + getChartTitleDays(days);
+    return "Cumulative flow diagram - weeks: " + getChartTitleDays(days);
 };
 
 function getChartTitleDays(days) {
     switch (days) {
         case -1:
-            return "42";
-            break;
+            return "6";
         case -2:
             return "All";
-            break;
         default:
-            return days;
+            return days / 7;
     }
 };
