@@ -101,7 +101,7 @@ function getBuildChartTitle() {
     var weeks = getChartValue("numberOfWeeks");
     var buildAgent = getChartValue("buildAgent");
 
-    return "Build stability - weeks: " + weeks + " & build agent: " + buildAgent;
+    return "Build stability - weeks: " + weeks + " & build agent: " + getChartTitleAgentName(buildAgent);
 };
 
 function setChartValues(weeks, buildAgent) {
@@ -118,4 +118,11 @@ function getChartValue(id) {
     var input = getElementById(id);
 
     return input.value;
+};
+
+function getChartTitleAgentName(agentName) {
+    if (agentName === "All") {
+        return agentName;
+    };
+    return "TC-A" + agentName.replace("lon-devtca", "");
 };
