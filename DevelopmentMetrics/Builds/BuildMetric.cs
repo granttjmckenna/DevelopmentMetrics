@@ -88,7 +88,7 @@ namespace DevelopmentMetrics.Builds
             return milliseconds;
         }
 
-        private List<Build> GetAlternatingBuilds(List<Build> builds)
+        public List<Build> GetAlternatingBuilds(List<Build> builds)
         {
             var results = new List<Build>();
 
@@ -111,7 +111,24 @@ namespace DevelopmentMetrics.Builds
             return results;
         }
 
-        private double CalculateMillisecondsBetweenBuilds(List<Build> builds)
+        public List<double> CalculateMillisecondsBetweenBuildsTwo()
+        {
+            var doubles = new List<double>();
+
+            for (var x = 0; x < _builds.Count - 1; x += 2)
+            {
+                doubles.Add((_builds[x + 1].FinishDateTime - _builds[x].StartDateTime).TotalMilliseconds);
+            }
+
+            if (_builds.Count % 2 != 0)
+            {
+                doubles.Add((_tellTheTime.Now() - _builds.Last().FinishDateTime).TotalMilliseconds);
+            }
+
+            return doubles;
+        }
+
+        public double CalculateMillisecondsBetweenBuilds(List<Build> builds)
         {
             var runningTotal = 0d;
 

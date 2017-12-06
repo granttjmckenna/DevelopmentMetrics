@@ -55,6 +55,45 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        public void Return_milliseconds_between_failing_and_next_succeeding_build()
+        {
+            var builds = GetBuilds();
+
+            var alternatingBuilds = new BuildMetric(builds, _tellTheTime).GetAlternatingBuilds(builds);
+
+            var doubles = new BuildMetric(alternatingBuilds, _tellTheTime).CalculateMillisecondsBetweenBuildsTwo();
+
+            Assert.That(doubles.Sum(), Is.EqualTo(300000));
+        }
+
+        [Test]
+        public void Return_zero_milliseconds_between_failing_and_next_succeeding_build_when_list_is_empty()
+        {
+            var builds = new List<Build>();
+
+            var alternatingBuilds = new BuildMetric(builds, _tellTheTime).GetAlternatingBuilds(builds);
+
+            var millisecondsBetweenBuilds = new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(alternatingBuilds);
+
+            Assert.That(millisecondsBetweenBuilds, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void Return_milliseconds_between_failing_and_next_succeeding_build_when_list_ends_with_failing_build()
+        {
+            var builds = GetBuilds();
+
+            var alternatingBuilds = new BuildMetric(builds, _tellTheTime).GetAlternatingBuilds(builds);
+
+            alternatingBuilds = alternatingBuilds.Take(3).ToList(); //remove last successful build
+
+            var millisecondsBetweenBuilds = new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(alternatingBuilds);
+
+            Assert.That(millisecondsBetweenBuilds, Is.GreaterThan(300000));
+        }
+
+
+        [Test]
         public void Return_for_standard_deviation_when_list_is_empty()
         {
             var values = new List<double>();
@@ -67,7 +106,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_standard_deviation_when_list_is_not_empty()
         {
-            var values = new List<double> {1d, 2d, 3d, 2d, 1d};
+            var values = new List<double> { 1d, 2d, 3d, 2d, 1d };
 
             var standardDeviation = CalculateStandardDeviation(values);
 
