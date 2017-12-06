@@ -54,6 +54,28 @@ namespace DevelopmentMetrics.Tests
             Assert.That(milliseconds, Is.EqualTo(600000));
         }
 
+        [Test]
+        public void Return_for_standard_deviation_when_list_is_empty()
+        {
+            var values = new List<double>();
+
+            var standardDeviation = CalculateStandardDeviation(values);
+
+            Assert.That(standardDeviation, Is.EqualTo(0));
+        }
+
+        private double CalculateStandardDeviation(List<double> values)
+        {
+            if (!values.Any())
+                return 0;
+
+            var average = values.Average();
+
+            var sumOf = values.Sum(d => Math.Pow(d - average, 2));
+
+            return Math.Sqrt(sumOf / (values.Count - 1));
+        }
+
         private static List<Build> GetBuilds(string buildTypeId = "blah blah")
         {
             return new List<Build>
