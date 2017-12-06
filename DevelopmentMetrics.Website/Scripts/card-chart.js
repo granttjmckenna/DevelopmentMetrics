@@ -19,7 +19,7 @@
             showChartLoading();
         },
         success: function (data) {
-            renderChartData(data);
+            renderChartData(data, chartDays);
         },
         complete: function () {
             showChartLoaded();
@@ -29,7 +29,7 @@
     return false;
 };
 
-function renderChartData(data) {
+function renderChartData(data, chartDays) {
     var dataTable = new google.visualization.DataTable();
     dataTable.addColumn("date", "Day");
     dataTable.addColumn("number", "Done");
@@ -42,6 +42,11 @@ function renderChartData(data) {
         });
 
     var options = {
+        title: getBuildChartTitle(chartDays),
+        titleTextStyle: {
+            fontSize: 20,
+            italic: false
+        },
         curveType: "function",
         legend: {
             position: "bottom"
@@ -105,4 +110,8 @@ function renderChartData(data) {
     drawChart(dataTable, options);
 
     return false;
+};
+
+function getBuildChartTitle(days) {
+    return "Cumulative flow diagram - days: " + days;
 };
