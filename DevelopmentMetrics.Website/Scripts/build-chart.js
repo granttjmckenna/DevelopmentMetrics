@@ -16,6 +16,8 @@ function drawBuildChart(weeks, buildAgent) {
         filterByBuildAgent = buildAgent;
     };
 
+    //TODO set chart values
+
     $.ajax({
         url: "/BuildStability/GetBuildChartDataFor",
         dataType: "json",
@@ -52,7 +54,7 @@ function renderBuildChartData(data) {
         });
 
     var options = {
-        title: "Build stability - weeks: 6 & build agent: All",
+        title: getBuildChartTitle(),
         titleTextStyle: {
             fontSize: 20,
             italic: false
@@ -93,6 +95,13 @@ function renderBuildChartData(data) {
     drawChart(dataTable, options);
 
     return false;
+};
+
+function getBuildChartTitle() {
+    var weeks = getChartValue("numberOfWeeks");
+    var buildAgent = getChartValue("buildAgent");
+
+    return "Build stability - weeks: " + weeks + " & build agent: " + buildAgent;
 };
 
 function setChartValues(weeks, buildAgent) {
