@@ -56,36 +56,42 @@ namespace DevelopmentMetrics.Tests
                 },
                 new Build
                 {
+                    StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
+                    Status = "Failure"
+                },
+                new Build
+                {
                     StartDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
-                    FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 3, 0),
                     Status = "Success"
                 }
             };
-            
+
             var millisecondsBetweenBuilds = CalculateMillisecondsBetweenBuilds(builds);
 
-            Assert.That(millisecondsBetweenBuilds, Is.EqualTo(60000));
+            Assert.That(millisecondsBetweenBuilds, Is.EqualTo(180000));
         }
 
         private int CalculateMillisecondsBetweenBuilds(List<Build> builds)
         {
-            Build failingBuild = null;
-            Build succeedingBuild = null;
+            var failingBuildTime = _tellTheTime.Now();
+            var succeedingBuildTime = failingBuildTime;
 
             foreach (var build in builds)
             {
                 if (build.Status.Equals("Failure", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    failingBuild = build;
+                    failingBuildTime = new DateTime(Math.Min(failingBuildTime.Ticks, build.StartDateTime.Ticks));
                 }
                 else
                 {
-                    succeedingBuild = build;
+                    succeedingBuildTime = build.FinishDateTime;
                     break;
                 }
             }
 
-            return (int) (succeedingBuild.FinishDateTime- failingBuild.StartDateTime).TotalMilliseconds;
+            return (int)(succeedingBuildTime - failingBuildTime).TotalMilliseconds;
         }
 
         private DateTime GetStartOfWeekFor(DateTime today)
