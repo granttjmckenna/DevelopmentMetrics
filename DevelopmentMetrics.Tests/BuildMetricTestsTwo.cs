@@ -64,6 +64,17 @@ namespace DevelopmentMetrics.Tests
             Assert.That(standardDeviation, Is.EqualTo(0));
         }
 
+        [Test]
+        public void Return_standard_deviation_when_list_is_not_empty()
+        {
+            var values = new List<double> {1d, 2d, 3d, 2d, 1d};
+
+            var standardDeviation = CalculateStandardDeviation(values);
+
+            Assert.That(standardDeviation, Is.GreaterThan(0.83d));
+            Assert.That(standardDeviation, Is.LessThan(0.84d));
+        }
+
         private double CalculateStandardDeviation(List<double> values)
         {
             if (!values.Any())
