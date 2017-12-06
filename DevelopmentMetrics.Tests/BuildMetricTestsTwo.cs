@@ -46,7 +46,62 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_milliseconds_between_failing_and_next_succeeding_build()
         {
-            var builds = new List<Build>
+            var builds = GetBuilds();
+
+            var millisecondsBetweenBuilds = CalculateMillisecondsBetweenBuilds(GetAlternatingBuilds(builds));
+
+            Assert.That(millisecondsBetweenBuilds, Is.EqualTo(300000));
+        }
+
+        [Test]
+        public void Return_list_of_failing_and_succeeding_builds()
+        {
+            var builds = GetBuilds();
+
+            var filteredBuilds = GetAlternatingBuilds(builds);
+
+            Assert.That(filteredBuilds.Count, Is.EqualTo(4));
+        }
+
+        private List<Build> GetAlternatingBuilds(List<Build> builds)
+        {
+            var results = new List<Build>();
+
+            var isPreviousBuildSuccess = true;
+
+            foreach (var build in builds)
+            {
+                if (build.Status.Equals("Failure", StringComparison.InvariantCultureIgnoreCase) && isPreviousBuildSuccess)
+                {
+                    results.Add(build);
+                    isPreviousBuildSuccess = false;
+                }
+                else if (build.Status.Equals("Success", StringComparison.InvariantCultureIgnoreCase) && !isPreviousBuildSuccess)
+                {
+                    results.Add(build);
+                    isPreviousBuildSuccess = true;
+                }
+            }
+
+            return results;
+        }
+
+
+        private int CalculateMillisecondsBetweenBuilds(List<Build> builds)
+        {
+            var runningTotal = 0;
+
+            for (var x = 0; x < builds.Count - 1; x += 2)
+            {
+                runningTotal += (int) (builds[x + 1].FinishDateTime - builds[x].StartDateTime).TotalMilliseconds;
+            }
+
+            return runningTotal;
+        }
+
+        private static List<Build> GetBuilds()
+        {
+            return new List<Build>
             {
                 new Build
                 {
@@ -62,42 +117,29 @@ namespace DevelopmentMetrics.Tests
                 },
                 new Build
                 {
-                    StartDateTime = new DateTime(2017, 11, 1, 12, 2, 0),
-                    FinishDateTime = new DateTime(2017, 11, 1, 12, 2, 30),
+                    StartDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 3, 0),
+                    Status = "Success"
+                },
+                new Build
+                {
+                    StartDateTime = new DateTime(2017, 11, 2, 12, 0, 30),
+                    FinishDateTime = new DateTime(2017, 11, 2, 12, 3, 0),
+                    Status = "Success"
+                },
+                new Build
+                {
+                    StartDateTime = new DateTime(2017, 11, 2, 12, 3, 30),
+                    FinishDateTime = new DateTime(2017, 11, 2, 12, 4, 0),
                     Status = "Failure"
                 },
                 new Build
                 {
-                    StartDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
-                    FinishDateTime = new DateTime(2017, 11, 1, 12, 3, 0),
+                    StartDateTime = new DateTime(2017, 11, 2, 12, 3, 30),
+                    FinishDateTime = new DateTime(2017, 11, 2, 12, 5, 30),
                     Status = "Success"
                 }
             };
-
-            var millisecondsBetweenBuilds = CalculateMillisecondsBetweenBuilds(builds);
-
-            Assert.That(millisecondsBetweenBuilds, Is.EqualTo(180000));
-        }
-
-        private int CalculateMillisecondsBetweenBuilds(List<Build> builds)
-        {
-            var failingBuildTime = _tellTheTime.Now();
-            var succeedingBuildTime = failingBuildTime;
-
-            foreach (var build in builds)
-            {
-                if (build.Status.Equals("Failure", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    failingBuildTime = new DateTime(Math.Min(failingBuildTime.Ticks, build.StartDateTime.Ticks));
-                }
-                else
-                {
-                    succeedingBuildTime = build.FinishDateTime;
-                    break;
-                }
-            }
-
-            return (int)(succeedingBuildTime - failingBuildTime).TotalMilliseconds;
         }
 
         private DateTime GetStartOfWeekFor(DateTime today)
