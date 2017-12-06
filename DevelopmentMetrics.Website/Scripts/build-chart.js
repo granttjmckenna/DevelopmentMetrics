@@ -116,7 +116,7 @@ function renderBuildChartData(data) {
                 lineWidth: 3
             }
         },
-        colors: ["#FF0000", "#FF6600"]
+        colors: ["#FF0000", "#34A853"]
     };
 
     drawChart(dataTable, options);
