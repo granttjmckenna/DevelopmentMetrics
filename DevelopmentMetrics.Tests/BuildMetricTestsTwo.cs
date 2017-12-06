@@ -73,9 +73,9 @@ namespace DevelopmentMetrics.Tests
 
             var alternatingBuilds = new BuildMetric(builds, _tellTheTime).GetAlternatingBuilds(builds);
 
-            var millisecondsBetweenBuilds = new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(alternatingBuilds);
+            var doubles = new BuildMetric(alternatingBuilds, _tellTheTime).CalculateMillisecondsBetweenBuildsTwo();
 
-            Assert.That(millisecondsBetweenBuilds, Is.EqualTo(0));
+            Assert.That(doubles.Sum(), Is.EqualTo(0));
         }
 
         [Test]
@@ -87,9 +87,9 @@ namespace DevelopmentMetrics.Tests
 
             alternatingBuilds = alternatingBuilds.Take(3).ToList(); //remove last successful build
 
-            var millisecondsBetweenBuilds = new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(alternatingBuilds);
+            var doubles = new BuildMetric(alternatingBuilds, _tellTheTime).CalculateMillisecondsBetweenBuildsTwo();
 
-            Assert.That(millisecondsBetweenBuilds, Is.GreaterThan(300000));
+            Assert.That(doubles.Sum(), Is.GreaterThan(300000));
         }
 
 
