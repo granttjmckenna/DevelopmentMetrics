@@ -62,6 +62,12 @@ namespace DevelopmentMetrics.Tests
                 },
                 new Build
                 {
+                    StartDateTime = new DateTime(2017, 11, 1, 12, 2, 0),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 2, 30),
+                    Status = "Failure"
+                },
+                new Build
+                {
                     StartDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 3, 0),
                     Status = "Success"
