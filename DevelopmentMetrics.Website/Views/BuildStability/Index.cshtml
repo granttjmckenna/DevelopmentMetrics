@@ -9,7 +9,27 @@
     <h2>Build metrics</h2>
 </div>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8"></div>
+    <div class="col-md-2">
+        <div style="float: right;">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">
+                    Filter data
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('TC-agent 1');">TC-Agent 1</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('TC-agent 2');">TC-Agent 2</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('TC-agent 3');">TC-Agent 3</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('TC-agent 4');">TC-Agent 4</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('TC-agent 5');">TC-Agent 5</a></li>
+                    <li class="divider"></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('All');">All</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
         <div style="float: right;">
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">
