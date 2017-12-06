@@ -1,15 +1,27 @@
-﻿function drawBuildChart(weeks) {
+﻿function filterBuildChart(buildAgent) {
+    var weeks = getChartValue("numberOfWeeks");
+
+    drawBuildChart(weeks, buildAgent);
+};
+
+function drawBuildChart(weeks, buildAgent) {
     var chartWeeks = 6;
+    var filterByBuildAgent = "All";
 
     if (weeks && typeof weeks == "number") {
         chartWeeks = weeks;
+    };
+
+    if (buildAgent && typeof buildAgent == "string") {
+        filterByBuildAgent = buildAgent;
     };
 
     $.ajax({
         url: "/BuildStability/GetBuildChartDataFor",
         dataType: "json",
         data: {
-            numberOfWeeks: chartWeeks
+            numberOfWeeks: chartWeeks,
+            buildAgent: filterByBuildAgent
         },
         type: "POST",
         error: function () {
@@ -76,4 +88,20 @@ function renderBuildChartData(data) {
     drawChart(dataTable, options);
 
     return false;
+};
+
+function setChartValues(weeks, buildAgent) {
+    var input = getElementById("numberOfWeeks");
+
+    input.val = weeks;
+
+    input = getElementById("buildAgent");
+
+    input.val = buildAgent;
+};
+
+function getChartValue(id) {
+    var input = getElementById(id);
+
+    return input.val;
 };

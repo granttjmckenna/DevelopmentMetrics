@@ -1,5 +1,9 @@
-﻿function getChartDiv() {
-    return document.getElementById("chart_div");
+﻿function getElementById(id) {
+    return document.getElementById(id);
+};
+
+function getChartDiv() {
+    return getElementById("chart_div");
 };
 
 function showChartMessage(msg) {
