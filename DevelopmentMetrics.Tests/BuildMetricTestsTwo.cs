@@ -87,6 +87,30 @@ namespace DevelopmentMetrics.Tests
             Assert.That(filteredBuilds.Count, Is.EqualTo(4));
         }
 
+        [Test]
+        public void Return_cumulative_milliseconds_when_two_build_types_exist()
+        {
+            var builds = GetBuilds("build type 1");
+
+            builds.AddRange(GetBuilds("build type 2"));
+
+            var milliseconds = GetTotalMillisecondsFor(builds);
+
+            Assert.That(milliseconds, Is.EqualTo(600000));
+        }
+
+        private double GetTotalMillisecondsFor(List<Build> builds)
+        {
+            var distinctBuildTypes = builds.Select(b => b.BuildTypeId).Distinct().ToList();
+
+            var milliseconds = distinctBuildTypes.Sum(
+                buildType => CalculateMillisecondsBetweenBuilds(
+                    GetAlternatingBuilds(
+                        builds.Where(b => b.BuildTypeId.Equals(buildType, StringComparison.InvariantCultureIgnoreCase))
+                            .ToList())));
+            return milliseconds;
+        }
+
         private List<Build> GetAlternatingBuilds(List<Build> builds)
         {
             var results = new List<Build>();
@@ -128,42 +152,48 @@ namespace DevelopmentMetrics.Tests
             return runningTotal;
         }
 
-        private static List<Build> GetBuilds()
+        private static List<Build> GetBuilds(string buildTypeId = "blah blah")
         {
             return new List<Build>
             {
                 new Build
                 {
+                    BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
                     Status = "Failure"
                 },
                 new Build
                 {
+                    BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
                     Status = "Failure"
                 },
                 new Build
                 {
+                    BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 3, 0),
                     Status = "Success"
                 },
                 new Build
                 {
+                    BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 2, 12, 0, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 3, 0),
                     Status = "Success"
                 },
                 new Build
                 {
+                    BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 2, 12, 3, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 4, 0),
                     Status = "Failure"
                 },
                 new Build
                 {
+                    BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 2, 12, 3, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 5, 30),
                     Status = "Success"
