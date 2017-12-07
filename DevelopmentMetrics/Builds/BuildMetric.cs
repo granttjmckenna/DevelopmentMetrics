@@ -41,54 +41,40 @@ namespace DevelopmentMetrics.Builds
                 var failures = selectedBuilds.Count(b =>
                     b.Status.Equals("Failure", StringComparison.InvariantCultureIgnoreCase));
 
-                /*
-                if calculatemillisecondsbetweenbuilds returns a list of doubles
-                then the list of doubles could be passed to the method
-                GetAverageRecoveryTimeFor, which will convert the list into a
-                single figure for RecoveryTime, and it could also be passed into
-                the method for calculating standard deviation - giving two values
-                from one list
-
-                START with the test!
-                */
+                var doubles = CalculateMillisecondsBetweenBuilds(GetAlternatingBuilds(selectedBuilds));
 
                 results.Add(new Metric
                 {
                     Date = startDate,
                     FailureRate = Calculator.Percentage(failures, total),
-                    RecoveryTime = GetAverageRecoveryTimeFor(selectedBuilds)
+                    RecoveryTime = CalculateAverageRecoveryTimeInHoursFor(doubles),
+                    RecoveryTimeStdDev = CalculateStandardDeviation(doubles)
                 });
             }
 
             return results;
         }
-
-        private int GetAverageRecoveryTimeFor(List<Build> selectedBuilds)
+        
+        public List<double> CalculateMillisecondsBetweenBuilds(List<Build> builds)
         {
-            if (!selectedBuilds.Any())
-                return 0;
+            var doubles = new List<double>();
 
-            var totalMilliseconds = GetTotalMillisecondsFor(selectedBuilds);
+            foreach (var buildType in builds.Select(b => b.BuildTypeId).Distinct())
+            {
+                var selectedBuilds = builds
+                    .Where(b => b.BuildTypeId.Equals(buildType))
+                    .OrderBy(b => b.StartDateTime)
+                    .ToList();
 
-            var averageMilliseconds = totalMilliseconds / (double)selectedBuilds.Count;
+                var alternatingBuilds = new BuildMetric(builds, _tellTheTime).GetAlternatingBuilds(selectedBuilds);
 
-            return (int)(Math.Round(TimeSpan.FromMilliseconds(averageMilliseconds).TotalHours, 0));
+                doubles.AddRange(CalculateMillisecondsBetweenAlternatingBuilds(alternatingBuilds));
+            }
+
+            return doubles;
         }
 
-        public double GetTotalMillisecondsFor(List<Build> builds)
-        {
-            var distinctBuildTypes = builds.Select(b => b.BuildTypeId).Distinct().ToList();
-
-            var milliseconds = distinctBuildTypes.Sum(
-                buildType => CalculateMillisecondsBetweenBuilds(
-                    GetAlternatingBuilds(
-                        builds.Where(b => b.BuildTypeId.Equals(buildType, StringComparison.InvariantCultureIgnoreCase))
-                            .ToList())));
-
-            return milliseconds;
-        }
-
-        public List<Build> GetAlternatingBuilds(List<Build> builds)
+        private List<Build> GetAlternatingBuilds(List<Build> builds)
         {
             var results = new List<Build>();
 
@@ -111,38 +97,41 @@ namespace DevelopmentMetrics.Builds
             return results;
         }
 
-        public List<double> CalculateMillisecondsBetweenBuildsTwo()
+        private List<double> CalculateMillisecondsBetweenAlternatingBuilds(List<Build> builds)
         {
             var doubles = new List<double>();
 
-            for (var x = 0; x < _builds.Count - 1; x += 2)
+            for (var x = 0; x < builds.Count - 1; x += 2)
             {
-                doubles.Add((_builds[x + 1].FinishDateTime - _builds[x].StartDateTime).TotalMilliseconds);
+                doubles.Add((builds[x + 1].FinishDateTime - builds[x].StartDateTime).TotalMilliseconds);
             }
 
-            if (_builds.Count % 2 != 0)
+            if (builds.Count % 2 != 0)
             {
-                doubles.Add((_tellTheTime.Now() - _builds.Last().FinishDateTime).TotalMilliseconds);
+                doubles.Add((_tellTheTime.Now() - builds.Last().FinishDateTime).TotalMilliseconds);
             }
 
             return doubles;
         }
 
-        public double CalculateMillisecondsBetweenBuilds(List<Build> builds)
+        private int CalculateAverageRecoveryTimeInHoursFor(List<double> doubles)
         {
-            var runningTotal = 0d;
+            if (!doubles.Any())
+                return 0;
 
-            for (var x = 0; x < builds.Count - 1; x += 2)
-            {
-                runningTotal += (builds[x + 1].FinishDateTime - builds[x].StartDateTime).TotalMilliseconds;
-            }
+            return (int)(Math.Round(TimeSpan.FromMilliseconds(doubles.Average()).TotalHours, 0));
+        }
 
-            if (builds.Count % 2 != 0)
-            {
-                runningTotal += (_tellTheTime.Now() - builds.Last().FinishDateTime).TotalMilliseconds;
-            }
+        private double CalculateStandardDeviation(List<double> values)
+        {
+            if (!values.Any())
+                return 0;
 
-            return runningTotal;
+            var average = values.Average();
+
+            var sumOf = values.Sum(d => Math.Pow(d - average, 2));
+
+            return Math.Sqrt(sumOf / (values.Count - 1));
         }
 
         private int GetNumberOfWeeksFrom(DateTime fromDate)
