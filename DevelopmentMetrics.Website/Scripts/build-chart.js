@@ -48,10 +48,11 @@ function renderBuildChartData(data) {
     dataTable.addColumn("date", "Day");
     dataTable.addColumn("number", "Failure rate");
     dataTable.addColumn("number", "Recovery time");
+    dataTable.addColumn("number", "Recovery time (std dev)");
 
     $.each(data,
         function (i, item) {
-            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.FailureRate, item.RecoveryTime]]);
+            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.FailureRate, item.RecoveryTime, item.RecoveryTimeStdDev]]);
         });
 
     var options = {
@@ -114,9 +115,13 @@ function renderBuildChartData(data) {
             1: {
                 targetAxisIndex: 1,
                 lineWidth: 3
+            },
+            2: {
+                targetAxisIndex: 1,
+                lineWidth: 3
             }
         },
-        colors: ["#FF0000", "#34A853"]
+        colors: ["#FF0000", "#34A853", "#FF6600"]
     };
 
     drawChart(dataTable, options);

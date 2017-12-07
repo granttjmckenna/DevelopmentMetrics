@@ -48,7 +48,7 @@ namespace DevelopmentMetrics.Builds
                     Date = startDate,
                     FailureRate = Calculator.Percentage(failures, total),
                     RecoveryTime = CalculateAverageRecoveryTimeInHoursFor(doubles),
-                    RecoveryTimeStdDev = Calculator.CalculateStandardDeviation(doubles)
+                    RecoveryTimeStdDev = ConvertMillisecondsToHours(Calculator.CalculateStandardDeviation(doubles))
                 });
             }
 
@@ -119,7 +119,12 @@ namespace DevelopmentMetrics.Builds
             if (!doubles.Any())
                 return 0;
 
-            return (int)(Math.Round(TimeSpan.FromMilliseconds(doubles.Average()).TotalHours, 0));
+            return ConvertMillisecondsToHours(doubles.Average());
+        }
+
+        private int ConvertMillisecondsToHours(double milliseconds)
+        {
+            return (int)(Math.Round(TimeSpan.FromMilliseconds(milliseconds).TotalHours, 0));
         }
 
         private int GetNumberOfWeeksFrom(DateTime fromDate)
