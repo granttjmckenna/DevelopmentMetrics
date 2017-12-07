@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DevelopmentMetrics.Helpers
 {
@@ -9,6 +11,19 @@ namespace DevelopmentMetrics.Helpers
             return (denominator == 0)
                 ? 0
                 : Math.Round((double)numerator / denominator, 2);
+        }
+
+
+        public static double CalculateStandardDeviation(List<double> values)
+        {
+            if (!values.Any())
+                return 0;
+
+            var average = values.Average();
+
+            var sumOf = values.Sum(d => Math.Pow(d - average, 2));
+
+            return Math.Sqrt(sumOf / (values.Count - 1));
         }
     }
 }
