@@ -16,7 +16,7 @@ namespace DevelopmentMetrics.Helpers
 
         public static double CalculateStandardDeviation(List<double> values)
         {
-            if (!values.Any())
+            if (!values.Any() || values.Count == 1)
                 return 0;
 
             var average = values.Average();
