@@ -59,10 +59,10 @@ namespace DevelopmentMetrics.Builds
         {
             var doubles = new List<double>();
 
-            foreach (var buildType in builds.Select(b => b.BuildTypeId).Distinct())
+            foreach (var buildTypeId in GetDistinctBuildTypeIdsFrom(builds))
             {
                 var selectedBuilds = builds
-                    .Where(b => b.BuildTypeId.Equals(buildType))
+                    .Where(b => b.BuildTypeId.Equals(buildTypeId))
                     .OrderBy(b => b.StartDateTime)
                     .ToList();
 
