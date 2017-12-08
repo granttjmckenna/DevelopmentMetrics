@@ -26,7 +26,7 @@ namespace DevelopmentMetrics.Website.Controllers
         {
             _builds = GetBuilds();
 
-            var buildTypeIds = new BuildMetric( _tellTheTime).GetDistinctBuildTypeIdsFrom(_builds);
+            var buildTypeIds = new BuildMetric(_tellTheTime).GetDistinctBuildTypeIdsFrom(_builds);
 
             var model = new BuildStabilityViewModel(buildTypeIds);
 
@@ -34,24 +34,33 @@ namespace DevelopmentMetrics.Website.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetBuildChartDataFor(int numberOfWeeks, string buildAgent)
+        public JsonResult GetBuildChartDataFor(int numberOfWeeks, string buildAgent, string buildTypeId)
         {
             if (IsClearCache(numberOfWeeks))
             {
                 CacheHelper.ClearObjectFromCache(Build.CacheKey);
             }
 
-            _builds = GetBuilds();
-
-            var filteredBuilds = _builds
-                .Where(b =>
-                    b.AgentName.Equals(buildAgent, StringComparison.InvariantCultureIgnoreCase) ||
-                    buildAgent.Equals("All", StringComparison.InvariantCultureIgnoreCase))
-                .ToList();
+            var filteredBuilds = GetFilteredBuilds(buildAgent, buildTypeId);
 
             var buildData = new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(filteredBuilds, numberOfWeeks);
 
             return Json(buildData);
+        }
+
+        private List<Build> GetFilteredBuilds(string buildAgent, string buildTypeId)
+        {
+            _builds = GetBuilds();
+
+            var filteredBuilds = _builds
+                .Where(b => (
+                                b.AgentName.Equals(buildAgent, StringComparison.InvariantCultureIgnoreCase) ||
+                                buildAgent.Equals("All", StringComparison.InvariantCultureIgnoreCase))
+                            && b.BuildTypeId.StartsWith(buildTypeId, StringComparison.InvariantCultureIgnoreCase) ||
+                            buildTypeId.Equals("All", StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+
+            return filteredBuilds;
         }
 
         private List<Build> GetBuilds()

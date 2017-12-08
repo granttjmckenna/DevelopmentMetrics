@@ -1,29 +1,45 @@
-﻿function filterBuildChart(buildAgent) {
-    var weeks = getChartValue("numberOfWeeks");
+﻿function filterBuildChartByWeeks(weeks) {
+    var input = getElementById("numberOfWeeks");
 
-    drawBuildChart(weeks, buildAgent);
+    input.value = weeks;
+
+    filterBuildChart();
 };
 
-function drawBuildChart(weeks, buildAgent) {
+function filterBuildChartByBuildAgent(buildAgent) {
+    var input = getElementById("buildAgent");
+
+    input.value = buildAgent;
+
+    filterBuildChart();
+};
+
+function filterBuildChartByBuildTypeId(buildTypeId) {
+    var input = getElementById("buildTypeId");
+
+    input.value = buildTypeId;
+
+    filterBuildChart();
+};
+
+function filterBuildChart() {
     var chartWeeks = getChartValue("numberOfWeeks");
     var filterByBuildAgent = getChartValue("buildAgent");
+    var filterByBuildTypeId = getChartValue("buildTypeId");
 
-    if (weeks && typeof weeks == "number") {
-        chartWeeks = weeks;
-    };
+    drawBuildChart(chartWeeks, filterByBuildAgent, filterByBuildTypeId);
+};
 
-    if (buildAgent && typeof buildAgent == "string") {
-        filterByBuildAgent = buildAgent;
-    };
-
-    setChartValues(chartWeeks, filterByBuildAgent);
+function drawBuildChart(weeks, buildAgent, buildTypeId) {
+    setChartValues(weeks, buildAgent, buildTypeId);
 
     $.ajax({
         url: "/BuildStability/GetBuildChartDataFor",
         dataType: "json",
         data: {
-            numberOfWeeks: chartWeeks,
-            buildAgent: filterByBuildAgent
+            numberOfWeeks: weeks,
+            buildAgent: buildAgent,
+            buildTypeId: buildTypeId
         },
         type: "POST",
         error: function () {
@@ -132,8 +148,9 @@ function renderBuildChartData(data) {
 function getBuildChartTitle() {
     var weeks = getChartValue("numberOfWeeks");
     var buildAgent = getChartValue("buildAgent");
+    var buildTypeId = getChartValue("buildTypeId");
 
-    return "Build stability - weeks: " + getChartTitleWeeks(weeks) + " & build agent: " + getChartTitleAgentName(buildAgent);
+    return "Build stability - weeks: " + getChartTitleWeeks(weeks) + " & build agent: " + getChartTitleAgentName(buildAgent) + " & build type: " + getChartTitleBuildTypeId(buildTypeId);
 };
 
 function getChartTitleAgentName(agentName) {
@@ -154,7 +171,16 @@ function getChartTitleWeeks(weeks) {
     }
 };
 
-function setChartValues(weeks, buildAgent) {
+function getChartTitleBuildTypeId(buildTypeId) {
+    switch (buildTypeId) {
+    case -1:
+        return "All";
+    default:
+        return buildTypeId;
+    }
+};
+
+function setChartValues(weeks, buildAgent, buildTypeId) {
     var input = getElementById("numberOfWeeks");
 
     input.value = weeks;
@@ -162,6 +188,10 @@ function setChartValues(weeks, buildAgent) {
     input = getElementById("buildAgent");
 
     input.value = buildAgent;
+
+    input = getElementById("buildTypeId");
+
+    input.value = buildTypeId;
 };
 
 function getChartValue(id) {
