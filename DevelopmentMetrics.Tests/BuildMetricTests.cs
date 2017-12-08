@@ -21,6 +21,7 @@ namespace DevelopmentMetrics.Tests
             _tellTheTime.Today().Returns(new DateTime(2017, 12, 04));
             _tellTheTime.Now().Returns(new DateTime(2017, 12, 04));
         }
+
         [Test]
         public void Should_calculate_failure_percentage_by_week()
         {
@@ -135,6 +136,110 @@ namespace DevelopmentMetrics.Tests
             Assert.That(buildTypeIds.Last(), Is.EqualTo("build type 2"));
         }
 
+        [Test]
+        public void Return_the_difference_in_milliseconds_between_failing_and_succeeding_builds()
+        {
+            var builds = GetPriceWatchBuilds();
+
+            var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
+
+            Assert.That(doubles[0], Is.EqualTo(2100000d));
+            Assert.That(doubles[1], Is.EqualTo(2400000d));
+            Assert.That(doubles[2], Is.EqualTo(2760000d));
+        }
+
+        [Test]
+        public void Return_average_recovery_time_in_hours()
+        {
+            var doubles = new List<double> {2100000d, 2400000d, 2760000d};
+
+            var average = new BuildMetric(_tellTheTime).CalculateAverageRecoveryTimeInHoursFor(doubles);
+
+            Assert.That(average, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Return_standard_deviation_of_recovery_time_in_hours()
+        {
+            var doubles = new List<double> { 2100000d, 2400000d, 2760000d };
+
+            var standardDeviationInHours =
+                new BuildMetric(_tellTheTime).ConvertMillisecondsToHours(
+                    Calculator.CalculateStandardDeviation(doubles));
+
+            Assert.That(standardDeviationInHours, Is.EqualTo(0));
+        }
+
+        private List<Build> GetPriceWatchBuilds()
+        {
+            return new List<Build>
+            {
+                new Build
+                {
+                    BuildTypeId = "price-watch-build",
+                    StartDateTime = new DateTime(2017, 11, 14, 11, 43, 0),
+                    FinishDateTime = new DateTime(2017, 11, 14, 11, 45, 0),
+                    Status = "Failure"
+                },
+                new Build
+                {
+                    BuildTypeId = "price-watch-build",
+                    StartDateTime = new DateTime(2017, 11, 14, 12, 01, 0),
+                    FinishDateTime = new DateTime(2017, 11, 14, 12, 03, 0),
+                    Status = "Failure"
+                },
+                new Build
+                {
+                    BuildTypeId = "price-watch-build",
+                    StartDateTime = new DateTime(2017, 11, 14, 12, 18, 0),
+                    FinishDateTime = new DateTime(2017, 11, 14, 12, 18, 0),
+                    Status = "Success"
+                },
+                new Build
+                {
+                    BuildTypeId = "price-watch-deploy-to-test",
+                    StartDateTime = new DateTime(2017, 11, 14, 11, 45, 0),
+                    FinishDateTime = new DateTime(2017, 11, 14, 11, 45, 0),
+                    Status = "Failure"
+                },
+                new Build
+                {
+                    BuildTypeId = "price-watch-deploy-to-test",
+                    StartDateTime = new DateTime(2017, 11, 14, 12, 03, 0),
+                    FinishDateTime = new DateTime(2017, 11, 14, 12, 03, 0),
+                    Status = "Failure"
+                },
+                new Build
+                {
+                    BuildTypeId = "price-watch-deploy-to-test",
+                    StartDateTime = new DateTime(2017, 11, 14, 12, 25, 0),
+                    FinishDateTime = new DateTime(2017, 11, 14, 12, 25, 0),
+                    Status = "Success"
+                },
+                new Build
+                {
+                    BuildTypeId = "price-watch-promote-to-staging",
+                    StartDateTime = new DateTime(2017, 11, 14, 11, 45, 0),
+                    FinishDateTime = new DateTime(2017, 11, 14, 11, 45, 0),
+                    Status = "Failure"
+                },
+                new Build
+                {
+                    BuildTypeId = "price-watch-promote-to-staging",
+                    StartDateTime = new DateTime(2017, 11, 14, 12, 03, 0),
+                    FinishDateTime = new DateTime(2017, 11, 14, 12, 03, 0),
+                    Status = "Failure"
+                },
+                new Build
+                {
+                    BuildTypeId = "price-watch-promote-to-staging",
+                    StartDateTime = new DateTime(2017, 11, 14, 12, 31, 0),
+                    FinishDateTime = new DateTime(2017, 11, 14, 12, 31, 0),
+                    Status = "Success"
+                }
+            };
+        }
+
         private static List<Build> GetBuilds(string buildTypeId = "blah blah")
         {
             return new List<Build>
@@ -146,6 +251,7 @@ namespace DevelopmentMetrics.Tests
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
                     Status = "Failure"
                 },
+
                 new Build
                 {
                     BuildTypeId = buildTypeId,
@@ -153,6 +259,7 @@ namespace DevelopmentMetrics.Tests
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
                     Status = "Failure"
                 },
+
                 new Build
                 {
                     BuildTypeId = buildTypeId,
@@ -160,6 +267,7 @@ namespace DevelopmentMetrics.Tests
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 3, 0),
                     Status = "Success"
                 },
+
                 new Build
                 {
                     BuildTypeId = buildTypeId,
@@ -167,6 +275,7 @@ namespace DevelopmentMetrics.Tests
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 3, 0),
                     Status = "Success"
                 },
+
                 new Build
                 {
                     BuildTypeId = buildTypeId,
@@ -174,6 +283,7 @@ namespace DevelopmentMetrics.Tests
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 4, 0),
                     Status = "Failure"
                 },
+
                 new Build
                 {
                     BuildTypeId = buildTypeId,

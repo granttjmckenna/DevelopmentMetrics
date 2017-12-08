@@ -115,7 +115,7 @@ namespace DevelopmentMetrics.Builds
             return doubles;
         }
 
-        private int CalculateAverageRecoveryTimeInHoursFor(List<double> doubles)
+        public int CalculateAverageRecoveryTimeInHoursFor(List<double> doubles)
         {
             if (!doubles.Any())
                 return 0;
@@ -123,7 +123,7 @@ namespace DevelopmentMetrics.Builds
             return ConvertMillisecondsToHours(doubles.Average());
         }
 
-        private int ConvertMillisecondsToHours(double milliseconds)
+        public int ConvertMillisecondsToHours(double milliseconds)
         {
             return (int)(Math.Round(TimeSpan.FromMilliseconds(milliseconds).TotalHours, 0));
         }

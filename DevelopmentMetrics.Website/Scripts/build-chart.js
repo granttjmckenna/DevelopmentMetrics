@@ -1,23 +1,17 @@
 ﻿function filterBuildChartByWeeks(weeks) {
-    var input = getElementById("numberOfWeeks");
-
-    input.value = weeks;
+    setChartValue("numberOfWeeks", weeks);
 
     filterBuildChart();
 };
 
 function filterBuildChartByBuildAgent(buildAgent) {
-    var input = getElementById("buildAgent");
-
-    input.value = buildAgent;
+    setChartValue("buildAgent", buildAgent);
 
     filterBuildChart();
 };
 
 function filterBuildChartByBuildTypeId(buildTypeId) {
-    var input = getElementById("buildTypeId");
-
-    input.value = buildTypeId;
+    setChartValue("buildTypeId", buildTypeId);
 
     filterBuildChart();
 };
@@ -31,7 +25,6 @@ function filterBuildChart() {
 };
 
 function drawBuildChart(weeks, buildAgent, buildTypeId) {
-    setChartValues(weeks, buildAgent, buildTypeId);
 
     $.ajax({
         url: "/BuildStability/GetBuildChartDataFor",
@@ -180,18 +173,10 @@ function getChartTitleBuildTypeId(buildTypeId) {
     }
 };
 
-function setChartValues(weeks, buildAgent, buildTypeId) {
-    var input = getElementById("numberOfWeeks");
+function setChartValue(id, value) {
+    var input = getElementById(id);
 
-    input.value = weeks;
-
-    input = getElementById("buildAgent");
-
-    input.value = buildAgent;
-
-    input = getElementById("buildTypeId");
-
-    input.value = buildTypeId;
+    input.value = value;
 };
 
 function getChartValue(id) {
