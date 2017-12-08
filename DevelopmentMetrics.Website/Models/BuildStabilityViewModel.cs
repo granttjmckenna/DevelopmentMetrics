@@ -4,6 +4,6 @@ namespace DevelopmentMetrics.Website.Models
 {
     public class BuildStabilityViewModel
     {
-        public Dictionary<string, double> BuildFailureRate { get; set; }
+        public List<string> BuildTypeIds { get; set; }
     }
 }

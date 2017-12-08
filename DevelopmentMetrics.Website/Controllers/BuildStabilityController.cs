@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Helpers;
 using DevelopmentMetrics.Repository;
+using DevelopmentMetrics.Website.Models;
 
 namespace DevelopmentMetrics.Website.Controllers
 {
@@ -23,7 +24,14 @@ namespace DevelopmentMetrics.Website.Controllers
         // GET: BuildStability
         public ActionResult Index()
         {
-            return View();
+            _builds = GetBuilds();
+
+            var model = new BuildStabilityViewModel()
+            {
+                BuildTypeIds = new BuildMetric(_builds, _tellTheTime).GetDistinctBuildTypeIdsFrom(_builds)
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -34,7 +42,7 @@ namespace DevelopmentMetrics.Website.Controllers
                 CacheHelper.ClearObjectFromCache(Build.CacheKey);
             }
 
-            _builds = new Build(_teamCityWebClient, _tellTheTime).GetBuilds();
+            _builds = GetBuilds();
 
             var filteredBuilds = _builds
                 .Where(b =>
@@ -45,6 +53,11 @@ namespace DevelopmentMetrics.Website.Controllers
             var buildData = new BuildMetric(filteredBuilds, _tellTheTime).CalculateBuildFailingRateByWeekFor(numberOfWeeks);
 
             return Json(buildData);
+        }
+
+        private List<Build> GetBuilds()
+        {
+            return new Build(_teamCityWebClient, _tellTheTime).GetBuilds();
         }
 
         private bool IsClearCache(int numberOfWeeks)

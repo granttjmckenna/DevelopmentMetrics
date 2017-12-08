@@ -1,4 +1,4 @@
-﻿
+﻿@model DevelopmentMetrics.Website.Models.BuildStabilityViewModel
 @{
     ViewBag.Title = "Build Stability";
 }
@@ -9,7 +9,27 @@
     <h2>Build stability</h2>
 </div>
 <div class="row">
-    <div class="col-md-8"></div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div style="float: right;">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">
+                    Build type ids
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                    @foreach (var buildTypeId in @Model.BuildTypeIds)
+                    {
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('@buildTypeId');">@buildTypeId</a>
+                        </li>
+                    }
+                    <li class="divider"></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('All');">All (default)</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="col-md-2">
         <div style="float: right;">
             <div class="dropdown">
@@ -58,8 +78,9 @@
     </div>
 </div>
 
-<input type="hidden" id="numberOfWeeks" value="6"/>
-<input type="hidden" id="buildAgent" value="All"/>
+<input type="hidden" id="numberOfWeeks" value="6" />
+<input type="hidden" id="buildAgent" value="All" />
+<input type="text" id="buildTypeId" value="All" />
 
 <script type="text/javascript">
     google.load("visualization", "1",
@@ -69,4 +90,3 @@
 
     google.setOnLoadCallback(drawBuildChart);
 </script>
-

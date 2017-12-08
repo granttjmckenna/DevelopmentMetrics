@@ -70,7 +70,8 @@ namespace DevelopmentMetrics.Builds
 
                 var collection = CalculateMillisecondsBetweenAlternatingBuilds(alternatingBuilds);
 
-                doubles.Add(collection.Average());
+                if (collection.Any())
+                    doubles.Add(collection.Average());
             }
 
             return doubles;
