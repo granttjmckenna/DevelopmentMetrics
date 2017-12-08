@@ -18,7 +18,7 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                    @foreach (var buildTypeId in @Model.BuildTypeIds)
+                    @foreach (var buildTypeId in @Model.GetBuildTypeIdList())
                     {
                         <li role="presentation">
                             <a role="menuitem" tabindex="-1" href="javascript: filterBuildChart('@buildTypeId');">@buildTypeId</a>
