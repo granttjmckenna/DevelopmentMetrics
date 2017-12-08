@@ -39,7 +39,7 @@ namespace DevelopmentMetrics.Builds
                 var total = selectedBuilds.Count;
 
                 var failures = selectedBuilds.Count(b =>
-                    b.Status.Equals("Failure", StringComparison.InvariantCultureIgnoreCase));
+                    b.Status.Equals(BuildStatus.Failure.ToString(), StringComparison.InvariantCultureIgnoreCase));
 
                 var doubles = CalculateMillisecondsBetweenBuilds(GetAlternatingBuilds(selectedBuilds));
 
@@ -84,7 +84,7 @@ namespace DevelopmentMetrics.Builds
 
             foreach (var build in builds)
             {
-                if (build.Status.Equals("Failure", StringComparison.InvariantCultureIgnoreCase) && isPreviousBuildSuccess)
+                if (build.Status.Equals(BuildStatus.Failure.ToString(), StringComparison.InvariantCultureIgnoreCase) && isPreviousBuildSuccess)
                 {
                     results.Add(build);
                     isPreviousBuildSuccess = false;
