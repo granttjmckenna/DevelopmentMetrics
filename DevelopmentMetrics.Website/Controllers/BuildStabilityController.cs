@@ -26,7 +26,7 @@ namespace DevelopmentMetrics.Website.Controllers
         {
             _builds = GetBuilds();
 
-            var buildTypeIds = new BuildMetric(_builds, _tellTheTime).GetDistinctBuildTypeIdsFrom(_builds);
+            var buildTypeIds = new BuildMetric( _tellTheTime).GetDistinctBuildTypeIdsFrom(_builds);
 
             var model = new BuildStabilityViewModel(buildTypeIds);
 
@@ -49,7 +49,7 @@ namespace DevelopmentMetrics.Website.Controllers
                     buildAgent.Equals("All", StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
 
-            var buildData = new BuildMetric(filteredBuilds, _tellTheTime).CalculateBuildFailingRateByWeekFor(numberOfWeeks);
+            var buildData = new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(filteredBuilds, numberOfWeeks);
 
             return Json(buildData);
         }

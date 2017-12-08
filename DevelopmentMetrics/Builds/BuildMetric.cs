@@ -7,20 +7,18 @@ namespace DevelopmentMetrics.Builds
 {
     public class BuildMetric
     {
-        private readonly List<Build> _builds;
         private readonly ITellTheTime _tellTheTime;
 
-        public BuildMetric(List<Build> builds, ITellTheTime tellTheTime)
+        public BuildMetric(ITellTheTime tellTheTime)
         {
             _tellTheTime = tellTheTime;
-            _builds = builds;
         }
 
-        public List<Metric> CalculateBuildFailingRateByWeekFor(int numberOfWeeks)
+        public List<Metric> CalculateBuildFailingRateByWeekFor(List<Build> builds, int numberOfWeeks)
         {
             var results = new List<Metric>();
 
-            var fromDate = GetFromDate(numberOfWeeks);
+            var fromDate = GetFromDate(builds, numberOfWeeks);
 
             var weeks = GetNumberOfWeeksFrom(fromDate);
 
@@ -29,7 +27,7 @@ namespace DevelopmentMetrics.Builds
                 var startDate = fromDate.AddDays(x * 7);
                 var endDate = startDate.AddDays(7);
 
-                var selectedBuilds = _builds
+                var selectedBuilds = builds
                     .Where(b =>
                         b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase)
                         && b.StartDateTime >= startDate
@@ -66,7 +64,7 @@ namespace DevelopmentMetrics.Builds
                     .OrderBy(b => b.StartDateTime)
                     .ToList();
 
-                var alternatingBuilds = new BuildMetric(builds, _tellTheTime).GetAlternatingBuilds(selectedBuilds);
+                var alternatingBuilds = new BuildMetric(_tellTheTime).GetAlternatingBuilds(selectedBuilds);
 
                 var collection = CalculateMillisecondsBetweenAlternatingBuilds(alternatingBuilds);
 
@@ -135,14 +133,14 @@ namespace DevelopmentMetrics.Builds
             return (int)(_tellTheTime.Now() - fromDate).TotalDays / 7;
         }
 
-        private DateTime GetFromDate(int numberOfWeeks)
+        private DateTime GetFromDate(List<Build> builds, int numberOfWeeks)
         {
             switch (numberOfWeeks)
             {
                 case -1:
                     return GetStartOfWeekFor(_tellTheTime.Today()).AddDays(6 * -7);
                 case -2:
-                    return GetStartOfWeekFor(_builds.Min(c => c.StartDateTime));
+                    return GetStartOfWeekFor(builds.Min(c => c.StartDateTime));
                 default:
                     return GetStartOfWeekFor(_tellTheTime.Today()).AddDays(numberOfWeeks * -7);
             }

@@ -26,7 +26,7 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuildDataFrom(new DateTime(2017, 1, 1), 365);
 
-            var results = new BuildMetric(builds, _tellTheTime).CalculateBuildFailingRateByWeekFor(6);
+            var results = new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(builds, 6);
 
             Assert.That(results.Count(), Is.EqualTo(6));
             Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
@@ -49,7 +49,7 @@ namespace DevelopmentMetrics.Tests
 
             builds.AddRange(GetBuilds("build type 2"));
 
-            var milliseconds = new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(builds).Sum();
+            var milliseconds = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds).Sum();
 
             Assert.That(milliseconds, Is.EqualTo(57880000));
         }
@@ -64,7 +64,7 @@ namespace DevelopmentMetrics.Tests
             builds.AddRange(GetBuilds("build type 2"));
 
             doubles.AddRange(
-                new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(builds));
+                new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds));
 
             Assert.That(doubles, Is.EqualTo(new List<double> { 28940000d, 28940000d }));
         }
@@ -74,7 +74,7 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuilds();
 
-            var doubles = new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
+            var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
 
             Assert.That(doubles.First(), Is.EqualTo(28940000d));
         }
@@ -84,7 +84,7 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = new List<Build>();
 
-            var doubles = new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
+            var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
 
             Assert.That(doubles.Sum(), Is.EqualTo(0));
         }
@@ -94,7 +94,7 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuilds();
 
-            var doubles = new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
+            var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
 
             Assert.That(doubles.Sum(), Is.GreaterThan(300000));
         }
@@ -128,7 +128,7 @@ namespace DevelopmentMetrics.Tests
 
             builds.AddRange(GetBuilds("build type 1"));
 
-            var buildTypeIds = new BuildMetric(builds, _tellTheTime).GetDistinctBuildTypeIdsFrom(builds);
+            var buildTypeIds = new BuildMetric(_tellTheTime).GetDistinctBuildTypeIdsFrom(builds);
 
             Assert.That(buildTypeIds.Count, Is.EqualTo(2));
             Assert.That(buildTypeIds.First(), Is.EqualTo("build type 1"));
