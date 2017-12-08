@@ -121,6 +121,20 @@ namespace DevelopmentMetrics.Tests
             Assert.That(standardDeviation, Is.LessThan(0.84d));
         }
 
+        [Test]
+        public void Return_collection_of_distinct_buildd_type_ids()
+        {
+            var builds = GetBuilds("build type 2");
+
+            builds.AddRange(GetBuilds("build type 1"));
+
+            var buildTypeIds = new BuildMetric(builds, _tellTheTime).GetDistinctBuildTypeIdsFrom(builds);
+
+            Assert.That(buildTypeIds.Count, Is.EqualTo(2));
+            Assert.That(buildTypeIds.First(), Is.EqualTo("build type 1"));
+            Assert.That(buildTypeIds.Last(), Is.EqualTo("build type 2"));
+        }
+
         private static List<Build> GetBuilds(string buildTypeId = "blah blah")
         {
             return new List<Build>

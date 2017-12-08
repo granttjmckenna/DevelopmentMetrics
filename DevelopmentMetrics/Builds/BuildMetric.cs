@@ -54,7 +54,7 @@ namespace DevelopmentMetrics.Builds
 
             return results;
         }
-        
+
         public List<double> CalculateMillisecondsBetweenBuilds(List<Build> builds)
         {
             var doubles = new List<double>();
@@ -152,6 +152,11 @@ namespace DevelopmentMetrics.Builds
             var offset = (int)today.DayOfWeek * -1;
 
             return today.AddDays(offset);
+        }
+
+        public List<string> GetDistinctBuildTypeIdsFrom(List<Build> builds)
+        {
+            return builds.OrderBy(b => b.BuildTypeId).Select(b => b.BuildTypeId).Distinct().ToList();
         }
     }
 }
