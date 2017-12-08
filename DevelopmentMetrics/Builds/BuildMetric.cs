@@ -68,7 +68,9 @@ namespace DevelopmentMetrics.Builds
 
                 var alternatingBuilds = new BuildMetric(builds, _tellTheTime).GetAlternatingBuilds(selectedBuilds);
 
-                doubles.AddRange(CalculateMillisecondsBetweenAlternatingBuilds(alternatingBuilds));
+                var collection = CalculateMillisecondsBetweenAlternatingBuilds(alternatingBuilds);
+
+                doubles.Add(collection.Average());
             }
 
             return doubles;

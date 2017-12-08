@@ -66,7 +66,7 @@ namespace DevelopmentMetrics.Tests
             doubles.AddRange(
                 new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(builds));
 
-            Assert.That(doubles, Is.EqualTo(new List<double> { 180000d, 86520000d, 120000d, 180000d, 86520000d, 120000d, }));
+            Assert.That(doubles, Is.EqualTo(new List<double> { 28940000d, 28940000d }));
         }
 
         [Test]
