@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace DevelopmentMetrics.Tests
 {
     [TestFixture]
-    public class BuildMetricTestsTwo
+    public class BuildMetricTests
     {
         private ITellTheTime _tellTheTime;
 
@@ -51,7 +51,7 @@ namespace DevelopmentMetrics.Tests
 
             var milliseconds = new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(builds).Sum();
 
-            Assert.That(milliseconds, Is.EqualTo(173640000d));
+            Assert.That(milliseconds, Is.EqualTo(57880000));
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace DevelopmentMetrics.Tests
 
             var doubles = new BuildMetric(builds, _tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
 
-            Assert.That(doubles.First(), Is.EqualTo(180000d));
+            Assert.That(doubles.First(), Is.EqualTo(28940000d));
         }
 
         [Test]
@@ -203,7 +203,7 @@ namespace DevelopmentMetrics.Tests
 
         private string GetStatus(int i)
         {
-            return ((i % 3) == 0) ? Helpers.BuildStatus.Failure.ToString() : Helpers.BuildStatus.Success.ToString();
+            return ((i % 3) == 0) ? BuildStatus.Failure.ToString() : BuildStatus.Success.ToString();
         }
     }
 }
