@@ -89,7 +89,7 @@ namespace DevelopmentMetrics.Builds
                     results.Add(build);
                     isPreviousBuildSuccess = false;
                 }
-                else if (build.Status.Equals("Success", StringComparison.InvariantCultureIgnoreCase) && !isPreviousBuildSuccess)
+                else if (build.Status.Equals(BuildStatus.Success.ToString(), StringComparison.InvariantCultureIgnoreCase) && !isPreviousBuildSuccess)
                 {
                     results.Add(build);
                     isPreviousBuildSuccess = true;
