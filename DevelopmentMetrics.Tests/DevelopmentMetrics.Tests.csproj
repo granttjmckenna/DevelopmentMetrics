@@ -61,7 +61,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BuildMetricTestsTwo.cs" />
-    <Compile Include="BuildMetricTests.cs" />
     <Compile Include="CardMetricTests.cs" />
     <Compile Include="CardCountTests.cs" />
     <Compile Include="LeanKitDeserialiserTests.cs" />
