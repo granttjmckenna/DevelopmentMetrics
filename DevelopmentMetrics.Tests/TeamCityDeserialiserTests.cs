@@ -32,6 +32,7 @@ namespace DevelopmentMetrics.Tests
             var builds = new Build(_teamCityWebClient, _tellTheTime).GetBuilds();
 
             Assert.That(builds.Any());
+            Assert.That(builds.First().Id, Is.EqualTo(370831));
             Assert.That(builds.First().AgentName, Is.Not.Null);
             Assert.That(builds.First().StartDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
             Assert.That(builds.First().FinishDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));

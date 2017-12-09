@@ -61,14 +61,14 @@ namespace DevelopmentMetrics.Builds
             {
                 var selectedBuilds = builds
                     .Where(b => b.BuildTypeId.Equals(buildTypeId))
-                    .OrderBy(b => b.StartDateTime)
+                    .OrderBy(b => b.Id)
                     .ToList();
 
                 var alternatingBuilds = new BuildMetric(_tellTheTime).GetAlternatingBuilds(selectedBuilds);
 
                 var collection = CalculateMillisecondsBetweenAlternatingBuilds(alternatingBuilds);
 
-                if (collection.Any())
+                if(collection.Any())
                     doubles.Add(collection.Average());
             }
 

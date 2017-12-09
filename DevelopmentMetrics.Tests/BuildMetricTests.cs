@@ -52,7 +52,7 @@ namespace DevelopmentMetrics.Tests
 
             var milliseconds = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds).Sum();
 
-            Assert.That(milliseconds, Is.EqualTo(57880000));
+            Assert.That(milliseconds, Is.EqualTo(300000d));
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace DevelopmentMetrics.Tests
             doubles.AddRange(
                 new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds));
 
-            Assert.That(doubles, Is.EqualTo(new List<double> { 28940000d, 28940000d }));
+            Assert.That(doubles, Is.EqualTo(new List<double> { 150000d, 150000d }));
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace DevelopmentMetrics.Tests
 
             var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
 
-            Assert.That(doubles.First(), Is.EqualTo(28940000d));
+            Assert.That(doubles.First(), Is.EqualTo(150000d));
         }
 
         [Test]
@@ -95,9 +95,18 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuilds();
 
+            builds.Add(new Build
+            {
+                Id=999,
+                BuildTypeId = "blah blah",
+                StartDateTime = new DateTime(2017, 11, 2, 15, 3, 30),
+                FinishDateTime = new DateTime(2017, 11, 2, 15, 5, 30),
+                Status = "Failure"
+            });
+
             var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
 
-            Assert.That(doubles.Sum(), Is.GreaterThan(300000));
+            Assert.That(doubles.Sum(), Is.GreaterThan(150000d));
         }
 
 
@@ -177,6 +186,27 @@ namespace DevelopmentMetrics.Tests
                 new Build
                 {
                     BuildTypeId = "price-watch-build",
+                    StartDateTime = new DateTime(2017, 11, 12, 09, 43, 0),
+                    FinishDateTime = new DateTime(2017, 11, 12, 09, 45, 0),
+                    Status = "Success"
+                },
+                new Build
+                {
+                    BuildTypeId = "price-watch-build",
+                    StartDateTime = new DateTime(2017, 11, 12, 10, 43, 0),
+                    FinishDateTime = new DateTime(2017, 11, 12, 10, 45, 0),
+                    Status = "Success"
+                },
+                new Build
+                {
+                    BuildTypeId = "price-watch-build",
+                    StartDateTime = new DateTime(2017, 11, 12, 11, 43, 0),
+                    FinishDateTime = new DateTime(2017, 11, 12, 11, 45, 0),
+                    Status = "Success"
+                },
+                new Build
+                {
+                    BuildTypeId = "price-watch-build",
                     StartDateTime = new DateTime(2017, 11, 14, 11, 43, 0),
                     FinishDateTime = new DateTime(2017, 11, 14, 11, 45, 0),
                     Status = "Failure"
@@ -246,6 +276,7 @@ namespace DevelopmentMetrics.Tests
             {
                 new Build
                 {
+                    Id = 1,
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
@@ -254,6 +285,7 @@ namespace DevelopmentMetrics.Tests
 
                 new Build
                 {
+                    Id = 2,
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
@@ -262,6 +294,7 @@ namespace DevelopmentMetrics.Tests
 
                 new Build
                 {
+                    Id = 3,
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 3, 0),
@@ -270,6 +303,7 @@ namespace DevelopmentMetrics.Tests
 
                 new Build
                 {
+                    Id = 4,
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 2, 12, 0, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 3, 0),
@@ -278,6 +312,7 @@ namespace DevelopmentMetrics.Tests
 
                 new Build
                 {
+                    Id = 5,
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 2, 12, 3, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 4, 0),
@@ -286,6 +321,7 @@ namespace DevelopmentMetrics.Tests
 
                 new Build
                 {
+                    Id = 6,
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 2, 12, 3, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 5, 30),
