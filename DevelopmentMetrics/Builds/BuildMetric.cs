@@ -14,6 +14,28 @@ namespace DevelopmentMetrics.Builds
             _tellTheTime = tellTheTime;
         }
 
+        public List<FailureRate> GetTopFiveFailingBuildsByRate(List<Build> builds)
+        {
+            return (
+                    from buildTypeId in builds
+                        .Select(b => b.BuildTypeId)
+                        .Distinct()
+                    let selectedBuilds = builds
+                        .Where(
+                            b => b.BuildTypeId.Equals(buildTypeId, StringComparison.InvariantCultureIgnoreCase)
+                            && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
+                        .ToList()
+                    select new FailureRate
+                    {
+                        BuildTypeId = buildTypeId,
+                        Rate = new BuildMetric(_tellTheTime).CalculateBuildFailingRate(selectedBuilds)
+                    })
+                .OrderByDescending(b => b.Rate)
+                .ThenBy(b => b.BuildTypeId)
+                .Take(5)
+                .ToList();
+        }
+
         public List<Metric> CalculateBuildFailingRateByWeekFor(List<Build> builds, int numberOfWeeks)
         {
             var results = new List<Metric>();
@@ -33,7 +55,7 @@ namespace DevelopmentMetrics.Builds
                 results.Add(new Metric
                 {
                     Date = startDate,
-                    FailureRate = Calculator.Percentage(GetFailureCountFor(finishedBuilds), finishedBuilds.Count),
+                    FailureRate = CalculateFailureRateFor(finishedBuilds),
                     RecoveryTime = CalculateAverageRecoveryTimeInHoursFor(doubles),
                     RecoveryTimeStdDev = ConvertMillisecondsToHours(Calculator.CalculateStandardDeviation(doubles))
                 });
@@ -160,6 +182,16 @@ namespace DevelopmentMetrics.Builds
         public List<string> GetDistinctBuildTypeIdsFrom(List<Build> builds)
         {
             return builds.OrderBy(b => b.BuildTypeId).Select(b => b.BuildTypeId).Distinct().ToList();
+        }
+
+        private double CalculateFailureRateFor(List<Build> finishedBuilds)
+        {
+            return Calculator.Percentage(GetFailureCountFor(finishedBuilds), finishedBuilds.Count);
+        }
+
+        private double CalculateBuildFailingRate(List<Build> builds)
+        {
+            return CalculateFailureRateFor(builds);
         }
     }
 }

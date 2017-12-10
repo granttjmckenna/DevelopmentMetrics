@@ -26,9 +26,7 @@ namespace DevelopmentMetrics.Website.Controllers
         {
             _builds = GetBuilds();
 
-            var buildTypeIds = new BuildMetric(_tellTheTime).GetDistinctBuildTypeIdsFrom(_builds);
-
-            var model = new BuildStabilityViewModel(buildTypeIds);
+            var model = new BuildStabilityViewModel(_builds, _tellTheTime);
 
             return View(model);
         }

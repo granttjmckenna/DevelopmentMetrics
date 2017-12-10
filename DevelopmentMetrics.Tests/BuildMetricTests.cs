@@ -23,6 +23,36 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        public void Return_build_type_with_highest_failure_rate()
+        {
+            var builds = new List<Build>
+            {
+                    new Build
+                    {
+                        Id = 1,
+                        BuildTypeId = "lowest failing build type id",
+                        StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
+                        FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
+                        Status = "Success"
+                    },
+                    new Build
+                    {
+                        Id = 2,
+                        BuildTypeId = "lowest failing build type id",
+                        StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
+                        FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
+                        Status = "Success"
+                    }
+            };
+
+            builds.AddRange(GetBuilds("highest failing build type id"));
+
+            var failingBuilds = new BuildMetric(_tellTheTime).GetTopFiveFailingBuildsByRate(builds);
+
+            Assert.That(failingBuilds.First().BuildTypeId, Is.EqualTo("highest failing build type id"));
+        }
+
+        [Test]
         public void Should_calculate_failure_percentage_by_week()
         {
             var builds = GetBuildDataFrom(new DateTime(2017, 1, 1), 365);
@@ -97,7 +127,7 @@ namespace DevelopmentMetrics.Tests
 
             builds.Add(new Build
             {
-                Id=999,
+                Id = 999,
                 BuildTypeId = "blah blah",
                 StartDateTime = new DateTime(2017, 11, 2, 15, 3, 30),
                 FinishDateTime = new DateTime(2017, 11, 2, 15, 5, 30),
@@ -160,7 +190,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_average_recovery_time_in_hours()
         {
-            var doubles = new List<double> {2100000d, 2400000d, 2760000d};
+            var doubles = new List<double> { 2100000d, 2400000d, 2760000d };
 
             var average = new BuildMetric(_tellTheTime).CalculateAverageRecoveryTimeInHoursFor(doubles);
 
