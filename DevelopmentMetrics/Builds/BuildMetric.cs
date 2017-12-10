@@ -16,42 +16,16 @@ namespace DevelopmentMetrics.Builds
 
         public List<FailureRate> GetTopFiveFailingBuildsByRate(List<Build> builds)
         {
-            return (
-                    from buildTypeId in builds
-                        .Select(b => b.BuildTypeId)
-                        .Distinct()
-                    let selectedBuilds = builds
-                        .Where(
-                            b => b.BuildTypeId.Equals(buildTypeId, StringComparison.InvariantCultureIgnoreCase)
-                            && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
-                        .ToList()
-                    select new FailureRate
-                    {
-                        BuildTypeId = buildTypeId,
-                        Rate = new BuildMetric(_tellTheTime).CalculateBuildFailingRate(selectedBuilds)
-                    })
+            return GetFailureRatesFor(builds)
                 .OrderByDescending(b => b.Rate)
                 .ThenBy(b => b.BuildTypeId)
                 .Take(5)
                 .ToList();
         }
 
-        public List<FailureRate> GetTopFiveSucceedingBuildsByRate(List<Build> builds)
+        public List<FailureRate> GetTopFivePassingBuildsByRate(List<Build> builds)
         {
-            return (
-                    from buildTypeId in builds
-                        .Select(b => b.BuildTypeId)
-                        .Distinct()
-                    let selectedBuilds = builds
-                        .Where(
-                            b => b.BuildTypeId.Equals(buildTypeId, StringComparison.InvariantCultureIgnoreCase)
-                                 && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
-                        .ToList()
-                    select new FailureRate
-                    {
-                        BuildTypeId = buildTypeId,
-                        Rate = new BuildMetric(_tellTheTime).CalculateBuildFailingRate(selectedBuilds)
-                    })
+            return GetFailureRatesFor(builds)
                 .OrderBy(b => b.Rate)
                 .ThenBy(b => b.BuildTypeId)
                 .Take(5)
@@ -214,6 +188,23 @@ namespace DevelopmentMetrics.Builds
         private double CalculateBuildFailingRate(List<Build> builds)
         {
             return CalculateFailureRateFor(builds);
+        }
+
+        private IEnumerable<FailureRate> GetFailureRatesFor(List<Build> builds)
+        {
+            return from buildTypeId in builds
+                    .Select(b => b.BuildTypeId)
+                    .Distinct()
+                let selectedBuilds = builds
+                    .Where(
+                        b => b.BuildTypeId.Equals(buildTypeId, StringComparison.InvariantCultureIgnoreCase)
+                             && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
+                    .ToList()
+                select new FailureRate
+                {
+                    BuildTypeId = buildTypeId,
+                    Rate = new BuildMetric(_tellTheTime).CalculateBuildFailingRate(selectedBuilds)
+                };
         }
     }
 }

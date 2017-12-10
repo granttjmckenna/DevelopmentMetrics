@@ -81,7 +81,7 @@ namespace DevelopmentMetrics.Tests
 
             builds.AddRange(GetBuilds("highest failing build type id"));
 
-            var failingBuilds = new BuildMetric(_tellTheTime).GetTopFiveSucceedingBuildsByRate(builds);
+            var failingBuilds = new BuildMetric(_tellTheTime).GetTopFivePassingBuildsByRate(builds);
 
             Assert.That(failingBuilds.First().BuildTypeId, Is.EqualTo("lowest failing build type id"));
         }

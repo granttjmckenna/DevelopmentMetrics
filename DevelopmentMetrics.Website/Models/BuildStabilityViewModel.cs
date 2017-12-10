@@ -32,5 +32,10 @@ namespace DevelopmentMetrics.Website.Models
         {
             return new BuildMetric(_tellTheTime).GetTopFiveFailingBuildsByRate(_builds);
         }
+
+        public List<FailureRate> GetTopFivePassingBuildsByRate()
+        {
+            return new BuildMetric(_tellTheTime).GetTopFivePassingBuildsByRate(_builds);
+        }
     }
 }
