@@ -52,7 +52,7 @@ namespace DevelopmentMetrics.Tests
 
             var milliseconds = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds).Sum();
 
-            Assert.That(milliseconds, Is.EqualTo(300000d));
+            Assert.That(milliseconds, Is.EqualTo(600000d));
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace DevelopmentMetrics.Tests
             doubles.AddRange(
                 new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds));
 
-            Assert.That(doubles, Is.EqualTo(new List<double> { 150000d, 150000d }));
+            Assert.That(doubles, Is.EqualTo(new List<double> { 180000d, 120000d, 180000d, 120000d }));
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace DevelopmentMetrics.Tests
 
             var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
 
-            Assert.That(doubles.First(), Is.EqualTo(150000d));
+            Assert.That(doubles.First(), Is.EqualTo(180000d));
         }
 
         [Test]
