@@ -1,4 +1,4 @@
-﻿using System;
+﻿using DevelopmentMetrics.Helpers;
 
 namespace DevelopmentMetrics.Builds
 {
@@ -6,6 +6,6 @@ namespace DevelopmentMetrics.Builds
     {
         public string BuildTypeId { get; set; }
         public double Rate { get; set; }
-        public string DisplayRate => Math.Round(Rate * 100, 0) + "%";
+        public string DisplayRate => Display.PercentageAsString(Rate);
     }
 }

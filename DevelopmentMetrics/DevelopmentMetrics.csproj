@@ -54,6 +54,7 @@
     <Compile Include="Helpers\CacheHelper.cs" />
     <Compile Include="Helpers\Calculator.cs" />
     <Compile Include="Helpers\Configuration.cs" />
+    <Compile Include="Helpers\Display.cs" />
     <Compile Include="Helpers\TellTheTime.cs" />
     <Compile Include="Metric.cs" />
     <Compile Include="Cards\Card.cs" />

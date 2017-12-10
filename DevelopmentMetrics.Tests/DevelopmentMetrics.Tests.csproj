@@ -63,6 +63,7 @@
     <Compile Include="BuildMetricTests.cs" />
     <Compile Include="CardMetricTests.cs" />
     <Compile Include="CardCountTests.cs" />
+    <Compile Include="DisplayTests.cs" />
     <Compile Include="LeanKitDeserialiserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TeamCityDeserialiserTests.cs" />
