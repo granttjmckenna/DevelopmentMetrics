@@ -15,28 +15,34 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Helpers;
 
-namespace DevelopmentMetrics.Website.DependencyResolution {
+namespace DevelopmentMetrics.Website.DependencyResolution
+{
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
     using Repository;
-    
-    public class DefaultRegistry : Registry {
+
+    public class DefaultRegistry : Registry
+    {
         #region Constructors and Destructors
 
-        public DefaultRegistry() {
+        public DefaultRegistry()
+        {
             Scan(
-                scan => {
+                scan =>
+                {
                     scan.TheCallingAssembly();
                     scan.WithDefaultConventions();
-					scan.With(new ControllerConvention());
+                    scan.With(new ControllerConvention());
                 });
 
             For<ITeamCityWebClient>().Use<TeamCityWebClient>();
             For<IWebClient>().Use<WebClient>();
             For<ILeanKitWebClient>().Use<LeanKitWebClient>();
             For<ITellTheTime>().Use<TellTheTime>();
+            For<IBuildsToExclude>().Use<BuildsToExclude>();
         }
 
         #endregion

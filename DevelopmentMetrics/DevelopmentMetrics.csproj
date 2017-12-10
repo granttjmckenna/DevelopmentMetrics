@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Builds\Build.cs" />
     <Compile Include="Builds\BuildMetric.cs" />
+    <Compile Include="Builds\BuildsToExclude.cs" />
     <Compile Include="Builds\FailureRate.cs" />
     <Compile Include="Count.cs" />
     <Compile Include="Helpers\CacheHelper.cs" />

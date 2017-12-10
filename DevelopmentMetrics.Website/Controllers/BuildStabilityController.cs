@@ -13,12 +13,14 @@ namespace DevelopmentMetrics.Website.Controllers
     {
         private readonly ITellTheTime _tellTheTime;
         private readonly ITeamCityWebClient _teamCityWebClient;
+        private IBuildsToExclude _buildsToExclude;
         private List<Build> _builds;
 
-        public BuildStabilityController(ITeamCityWebClient teamCityWebClient, ITellTheTime tellTheTime)
+        public BuildStabilityController(ITeamCityWebClient teamCityWebClient, ITellTheTime tellTheTime, IBuildsToExclude buildsToExclude)
         {
             _teamCityWebClient = teamCityWebClient;
             _tellTheTime = tellTheTime;
+            _buildsToExclude = buildsToExclude;
         }
 
         // GET: BuildStability
@@ -63,7 +65,7 @@ namespace DevelopmentMetrics.Website.Controllers
 
         private List<Build> GetBuilds()
         {
-            return new Build(_teamCityWebClient, _tellTheTime).GetBuilds();
+            return new Build(_teamCityWebClient, _tellTheTime, _buildsToExclude).GetBuilds();
         }
 
         private bool IsClearCache(int numberOfWeeks)

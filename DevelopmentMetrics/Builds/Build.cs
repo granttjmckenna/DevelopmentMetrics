@@ -13,6 +13,7 @@ namespace DevelopmentMetrics.Builds
 
         private readonly ITeamCityWebClient _teamCityWebClient;
         private readonly ITellTheTime _tellTheTime;
+        private readonly IBuildsToExclude _buildsToExclude;
 
         [JsonProperty(PropertyName = "Build")]
         private List<Build> Builds { get; set; }
@@ -37,11 +38,12 @@ namespace DevelopmentMetrics.Builds
         public string Href { get; set; }
 
         public static string CacheKey = "builds";
-
-        public Build(ITeamCityWebClient teamCityWebClient, ITellTheTime tellTheTime)
+        
+        public Build(ITeamCityWebClient teamCityWebClient, ITellTheTime tellTheTime,IBuildsToExclude buildsToExclude)
         {
             _teamCityWebClient = teamCityWebClient;
             _tellTheTime = tellTheTime;
+            _buildsToExclude = buildsToExclude;
         }
 
         public List<Build> GetBuilds()
@@ -55,7 +57,13 @@ namespace DevelopmentMetrics.Builds
         {
             var results = new List<Build>();
 
-            foreach (var build in GetAllBuilds())
+            var allBuilds = GetAllBuilds().Where(b =>
+                    !_buildsToExclude.Builds()
+                        .Contains(b.BuildTypeId.Substring(0,
+                            b.BuildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase))))
+                .ToList();
+
+            foreach (var build in allBuilds)
             {
                 var buildDetails = GetBuildDetails(build.Href);
 

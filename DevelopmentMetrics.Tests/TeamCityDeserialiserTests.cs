@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Helpers;
@@ -13,6 +14,7 @@ namespace DevelopmentMetrics.Tests
     {
         private ITeamCityWebClient _teamCityWebClient;
         private ITellTheTime _tellTheTime;
+        private IBuildsToExclude _buildsToExclude;
 
         [SetUp]
         public void Setup()
@@ -20,19 +22,35 @@ namespace DevelopmentMetrics.Tests
             _teamCityWebClient = Substitute.For<ITeamCityWebClient>();
             _tellTheTime = Substitute.For<ITellTheTime>();
 
+            _buildsToExclude = Substitute.For<IBuildsToExclude>();
+
             _teamCityWebClient.GetBuildData().Returns(GetAllBuildJsonResponse());
             _teamCityWebClient.GetBuildDetailsDataFor(Arg.Any<string>()).Returns(GetBuildDetailsJsonResponse());
 
             _tellTheTime.ParseBuildDetailDateTimes(Arg.Any<string>()).Returns(new DateTime(2017, 01, 01));
         }
 
+
+        [Test]
+        public void Return_builds_excluding_designated_builds()
+        {
+            _buildsToExclude.Builds().Returns(new List<string> { "CcEnergyhelplineCom" });
+
+            var builds = new Build(_teamCityWebClient, _tellTheTime, _buildsToExclude).GetBuilds();
+
+            Assert.That(builds.Count(b => b.BuildTypeId.Equals("CcEnergyhelplineCom_03RunEndToEndTests")), Is.EqualTo(0));
+        }
+
+
         [Test]
         public void Return_builds_from_build_data()
         {
-            var builds = new Build(_teamCityWebClient, _tellTheTime).GetBuilds();
+            var builds = new Build(_teamCityWebClient, _tellTheTime, _buildsToExclude).GetBuilds();
+
+            builds = builds.OrderBy(b => b.Id).ToList();
 
             Assert.That(builds.Any());
-            Assert.That(builds.First().Id, Is.EqualTo(370831));
+            Assert.That(builds.First().Id, Is.EqualTo(369937));
             Assert.That(builds.First().AgentName, Is.Not.Null);
             Assert.That(builds.First().StartDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
             Assert.That(builds.First().FinishDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
