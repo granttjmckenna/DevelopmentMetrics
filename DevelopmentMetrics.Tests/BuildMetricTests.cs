@@ -106,7 +106,7 @@ namespace DevelopmentMetrics.Tests
 
             var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
 
-            Assert.That(doubles.Sum(), Is.GreaterThan(150000d));
+            Assert.That(doubles.Sum(), Is.EqualTo(300000d));
         }
 
 
