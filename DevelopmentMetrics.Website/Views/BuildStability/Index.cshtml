@@ -18,10 +18,10 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                    @foreach (var buildTypeId in @Model.GetBuildTypeIdList())
+                    @foreach (var buildType in @Model.GetBuildTypeIdList())
                     {
                         <li role="presentation">
-                            <a role="menuitem" tabindex="-1" href="javascript: filterBuildChartByBuildTypeId('@buildTypeId');">@buildTypeId</a>
+                            <a role="menuitem" tabindex="-1" href="javascript: filterBuildChartByBuildTypeId('@buildType.BuildTypeGroup');">@buildType.BuildTypeGroupDisplay</a>
                         </li>
                     }
                     <li class="divider"></li>

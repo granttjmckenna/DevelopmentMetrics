@@ -19,18 +19,14 @@ namespace DevelopmentMetrics.Website.Models
 
         public List<BuildType> GetBuildTypeIdList()
         {
-            var results = new List<BuildType>();
-
             var buildTypes = new BuildMetric(_tellTheTime).GetDistinctBuildTypeIdsFrom(_builds);
 
-            var buildTypeGroups = buildTypes.Select(b => b.BuildTypeGroup).Distinct().ToList();
-
-            foreach (var buildTypeGroup in buildTypeGroups)
-            {
-                results.Add(buildTypes.First(b => b.BuildTypeGroup.Equals(buildTypeGroup)));
-            }
-
-            return results;
+            return buildTypes
+                .Select(b => b.BuildTypeGroup)
+                .Distinct()
+                .Select(buildTypeGroup => buildTypes
+                    .First(b => b.BuildTypeGroup.Equals(buildTypeGroup)))
+                .ToList();
         }
 
         public List<FailureRate> GetTopFiveFailingBuildsByRate()
