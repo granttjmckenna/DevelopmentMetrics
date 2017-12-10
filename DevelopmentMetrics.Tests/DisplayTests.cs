@@ -13,5 +13,13 @@ namespace DevelopmentMetrics.Tests
 
             Assert.That(displayPercentage, Is.EqualTo("25%"));
         }
+
+        [Test]
+        public void Return_camel_case_string_with_spaces()
+        {
+            var convertedString = Display.ConvertCamelCaseString("ThisIsTheString");
+
+            Assert.That(convertedString,Is.EqualTo("This Is The String"));
+        }
     }
 }
