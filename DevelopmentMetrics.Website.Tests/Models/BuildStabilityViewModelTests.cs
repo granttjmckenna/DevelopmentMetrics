@@ -60,7 +60,8 @@ namespace DevelopmentMetrics.Website.Tests.Models
             var displayList = new BuildStabilityViewModel(builds, _tellTheTime).GetBuildTypeIdList();
 
             Assert.That(displayList.Count, Is.EqualTo(2));
-            Assert.That(displayList.First(), Is.EqualTo("buildtype1"));
+            Assert.That(displayList.First().BuildTypeId, Is.EqualTo("buildtype1_1"));
+            Assert.That(displayList.First().BuildTypeGroup, Is.EqualTo("buildtype1"));
         }
 
         private static Build GetBuild(string buildTypeId)

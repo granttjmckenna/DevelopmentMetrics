@@ -196,17 +196,17 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
-        public void Return_collection_of_distinct_buildd_type_ids()
+        public void Return_collection_of_distinct_build_type_ids()
         {
             var builds = GetBuilds("build type 2");
 
             builds.AddRange(GetBuilds("build type 1"));
 
-            var buildTypeIds = new BuildMetric(_tellTheTime).GetDistinctBuildTypeIdsFrom(builds);
+            var buildTypes = new BuildMetric(_tellTheTime).GetDistinctBuildTypeIdsFrom(builds);
 
-            Assert.That(buildTypeIds.Count, Is.EqualTo(2));
-            Assert.That(buildTypeIds.First(), Is.EqualTo("build type 1"));
-            Assert.That(buildTypeIds.Last(), Is.EqualTo("build type 2"));
+            Assert.That(buildTypes.Count, Is.EqualTo(2));
+            Assert.That(buildTypes.First().BuildTypeId, Is.EqualTo("build type 1"));
+            Assert.That(buildTypes.Last().BuildTypeId, Is.EqualTo("build type 2"));
         }
 
         [Test]

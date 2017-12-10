@@ -64,9 +64,9 @@ namespace DevelopmentMetrics.Builds
         {
             var doubles = new List<double>();
 
-            foreach (var buildTypeId in GetDistinctBuildTypeIdsFrom(builds))
+            foreach (var buildType in GetDistinctBuildTypeIdsFrom(builds))
             {
-                var buildTypeBuilds = GetBuildsFor(builds, buildTypeId);
+                var buildTypeBuilds = GetBuildsFor(builds, buildType.BuildTypeId);
 
                 var alternatingBuilds = new BuildMetric(_tellTheTime).GetAlternatingBuilds(buildTypeBuilds);
 
@@ -175,9 +175,14 @@ namespace DevelopmentMetrics.Builds
             return today.AddDays(offset);
         }
 
-        public List<string> GetDistinctBuildTypeIdsFrom(List<Build> builds)
+        public List<BuildType> GetDistinctBuildTypeIdsFrom(List<Build> builds)
         {
-            return builds.OrderBy(b => b.BuildTypeId).Select(b => b.BuildTypeId).Distinct().ToList();
+            return builds
+                .OrderBy(b => b.BuildTypeId)
+                .Select(b => b.BuildTypeId)
+                .Distinct()
+                .Select(buildTypeId => new BuildType(buildTypeId))
+                .ToList();
         }
 
         private double CalculateFailureRateFor(List<Build> finishedBuilds)
@@ -195,16 +200,30 @@ namespace DevelopmentMetrics.Builds
             return from buildTypeId in builds
                     .Select(b => b.BuildTypeId)
                     .Distinct()
-                let selectedBuilds = builds
-                    .Where(
-                        b => b.BuildTypeId.Equals(buildTypeId, StringComparison.InvariantCultureIgnoreCase)
-                             && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
-                    .ToList()
-                select new FailureRate
-                {
-                    BuildTypeId = buildTypeId,
-                    Rate = new BuildMetric(_tellTheTime).CalculateBuildFailingRate(selectedBuilds)
-                };
+                   let selectedBuilds = builds
+                       .Where(
+                           b => b.BuildTypeId.Equals(buildTypeId, StringComparison.InvariantCultureIgnoreCase)
+                                && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
+                       .ToList()
+                   select new FailureRate
+                   {
+                       BuildTypeId = buildTypeId,
+                       Rate = new BuildMetric(_tellTheTime).CalculateBuildFailingRate(selectedBuilds)
+                   };
+        }
+    }
+
+    public class BuildType
+    {
+        public string BuildTypeId { get; set; }
+
+        public string BuildTypeGroup => BuildTypeId.Substring(0, BuildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase));
+
+        public string BuildTypeGroupDisplay => Display.ConvertCamelCaseString(BuildTypeGroup);
+
+        public BuildType(string buildTypeId)
+        {
+            BuildTypeId = buildTypeId;
         }
     }
 }

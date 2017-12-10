@@ -11,21 +11,26 @@ namespace DevelopmentMetrics.Website.Models
         private readonly List<Build> _builds;
         private readonly ITellTheTime _tellTheTime;
 
-        public BuildStabilityViewModel(List<Build> builds,ITellTheTime tellTheTime)
+        public BuildStabilityViewModel(List<Build> builds, ITellTheTime tellTheTime)
         {
             _tellTheTime = tellTheTime;
             _builds = builds;
         }
 
-        public List<string> GetBuildTypeIdList()
+        public List<BuildType> GetBuildTypeIdList()
         {
-            var buildTypeIds = new BuildMetric(_tellTheTime).GetDistinctBuildTypeIdsFrom(_builds);
+            var results = new List<BuildType>();
 
-            var allBuildTypeIds = buildTypeIds
-                .Select(buildTypeId => buildTypeId.Substring(0, buildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase)))
-                .ToList();
+            var buildTypes = new BuildMetric(_tellTheTime).GetDistinctBuildTypeIdsFrom(_builds);
 
-            return new List<string>(allBuildTypeIds.OrderBy(x => x).Distinct());
+            var buildTypeGroups = buildTypes.Select(b => b.BuildTypeGroup).Distinct().ToList();
+
+            foreach (var buildTypeGroup in buildTypeGroups)
+            {
+                results.Add(buildTypes.First(b => b.BuildTypeGroup.Equals(buildTypeGroup)));
+            }
+
+            return results;
         }
 
         public List<FailureRate> GetTopFiveFailingBuildsByRate()
