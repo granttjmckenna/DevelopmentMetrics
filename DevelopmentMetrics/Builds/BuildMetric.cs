@@ -36,6 +36,28 @@ namespace DevelopmentMetrics.Builds
                 .ToList();
         }
 
+        public List<FailureRate> GetTopFiveSucceedingBuildsByRate(List<Build> builds)
+        {
+            return (
+                    from buildTypeId in builds
+                        .Select(b => b.BuildTypeId)
+                        .Distinct()
+                    let selectedBuilds = builds
+                        .Where(
+                            b => b.BuildTypeId.Equals(buildTypeId, StringComparison.InvariantCultureIgnoreCase)
+                                 && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
+                        .ToList()
+                    select new FailureRate
+                    {
+                        BuildTypeId = buildTypeId,
+                        Rate = new BuildMetric(_tellTheTime).CalculateBuildFailingRate(selectedBuilds)
+                    })
+                .OrderBy(b => b.Rate)
+                .ThenBy(b => b.BuildTypeId)
+                .Take(5)
+                .ToList();
+        }
+
         public List<Metric> CalculateBuildFailingRateByWeekFor(List<Build> builds, int numberOfWeeks)
         {
             var results = new List<Metric>();

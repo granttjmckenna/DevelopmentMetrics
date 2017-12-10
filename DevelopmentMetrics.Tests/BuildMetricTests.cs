@@ -33,7 +33,8 @@ namespace DevelopmentMetrics.Tests
                         BuildTypeId = "lowest failing build type id",
                         StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
                         FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
-                        Status = "Success"
+                        Status = "Success",
+                        State = "Finished"
                     },
                     new Build
                     {
@@ -41,7 +42,8 @@ namespace DevelopmentMetrics.Tests
                         BuildTypeId = "lowest failing build type id",
                         StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
                         FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
-                        Status = "Success"
+                        Status = "Success",
+                        State = "Finished"
                     }
             };
 
@@ -50,6 +52,38 @@ namespace DevelopmentMetrics.Tests
             var failingBuilds = new BuildMetric(_tellTheTime).GetTopFiveFailingBuildsByRate(builds);
 
             Assert.That(failingBuilds.First().BuildTypeId, Is.EqualTo("highest failing build type id"));
+        }
+
+        [Test]
+        public void Return_build_type_with_lowest_failure_rate()
+        {
+            var builds = new List<Build>
+            {
+                new Build
+                {
+                    Id = 1,
+                    BuildTypeId = "lowest failing build type id",
+                    StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
+                    Status = "Success",
+                    State = "Finished"
+                },
+                new Build
+                {
+                    Id = 2,
+                    BuildTypeId = "lowest failing build type id",
+                    StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
+                    Status = "Success",
+                    State = "Finished"
+                }
+            };
+
+            builds.AddRange(GetBuilds("highest failing build type id"));
+
+            var failingBuilds = new BuildMetric(_tellTheTime).GetTopFiveSucceedingBuildsByRate(builds);
+
+            Assert.That(failingBuilds.First().BuildTypeId, Is.EqualTo("lowest failing build type id"));
         }
 
         [Test]
@@ -310,7 +344,8 @@ namespace DevelopmentMetrics.Tests
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
-                    Status = "Failure"
+                    Status = "Failure",
+                    State = "Finished"
                 },
 
                 new Build
@@ -319,7 +354,8 @@ namespace DevelopmentMetrics.Tests
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
-                    Status = "Failure"
+                    Status = "Failure",
+                    State = "Finished"
                 },
 
                 new Build
@@ -328,7 +364,8 @@ namespace DevelopmentMetrics.Tests
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 3, 0),
-                    Status = "Success"
+                    Status = "Success",
+                    State = "Finished"
                 },
 
                 new Build
@@ -337,7 +374,8 @@ namespace DevelopmentMetrics.Tests
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 2, 12, 0, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 3, 0),
-                    Status = "Success"
+                    Status = "Success",
+                    State = "Finished"
                 },
 
                 new Build
@@ -346,7 +384,8 @@ namespace DevelopmentMetrics.Tests
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 2, 12, 3, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 4, 0),
-                    Status = "Failure"
+                    Status = "Failure",
+                    State = "Finished"
                 },
 
                 new Build
@@ -355,7 +394,8 @@ namespace DevelopmentMetrics.Tests
                     BuildTypeId = buildTypeId,
                     StartDateTime = new DateTime(2017, 11, 2, 12, 3, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 5, 30),
-                    Status = "Success"
+                    Status = "Success",
+                    State = "Finished"
                 }
             };
         }
