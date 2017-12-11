@@ -150,7 +150,7 @@ namespace DevelopmentMetrics.Builds
             return doubles;
         }
 
-        public int CalculateAverageRecoveryTimeInHoursFor(List<double> doubles)
+        private int CalculateAverageRecoveryTimeInHoursFor(List<double> doubles)
         {
             return !doubles.Any() ? 0 : ConvertMillisecondsToHours(doubles.Average());
         }

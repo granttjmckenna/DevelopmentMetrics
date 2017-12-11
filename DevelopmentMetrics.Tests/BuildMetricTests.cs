@@ -174,16 +174,6 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
-        public void Return_average_recovery_time_in_hours()
-        {
-            var doubles = new List<double> { 2100000d, 2400000d, 2760000d };
-
-            var average = new BuildMetric(_tellTheTime).CalculateAverageRecoveryTimeInHoursFor(doubles);
-
-            Assert.That(average, Is.EqualTo(1));
-        }
-
-        [Test]
         public void Return_standard_deviation_of_recovery_time_in_hours()
         {
             var doubles = new List<double> { 2100000d, 2400000d, 2760000d };
