@@ -13,7 +13,7 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuilds();
 
-            builds = new FilterBuilds(builds).Filter(new BuildFilter("All", "All"));
+            builds = new FilterBuilds(builds).Filter(new BuildFilter(0, "All", "All"));
 
             Assert.That(builds.Any(b => b.AgentName.Equals("agent 1")));
             Assert.That(builds.Any(b => b.AgentName.Equals("agent 2")));
@@ -24,7 +24,7 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuilds();
 
-            builds = new FilterBuilds(builds).Filter(new BuildFilter("agent 1", "All"));
+            builds = new FilterBuilds(builds).Filter(new BuildFilter(0, "agent 1", "All"));
 
             Assert.That(builds.All(b => b.AgentName.Equals("agent 1")));
         }
@@ -34,7 +34,7 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuilds();
 
-            builds = new FilterBuilds(builds).Filter(new BuildFilter("All", "All"));
+            builds = new FilterBuilds(builds).Filter(new BuildFilter(0, "All", "All"));
 
             Assert.That(builds.Any(b => b.BuildTypeId.Equals("build type 1")));
             Assert.That(builds.Any(b => b.BuildTypeId.Equals("build type 2")));
@@ -45,7 +45,7 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuilds();
 
-            builds = new FilterBuilds(builds).Filter(new BuildFilter("All", "build type 1"));
+            builds = new FilterBuilds(builds).Filter(new BuildFilter(0, "All", "build type 1"));
 
             Assert.That(builds.All(b => b.BuildTypeId.Equals("build type 1")));
         }
@@ -55,7 +55,7 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuilds();
 
-            builds = new FilterBuilds(builds).Filter(new BuildFilter("agent 1", "build type 1"));
+            builds = new FilterBuilds(builds).Filter(new BuildFilter(0, "agent 1", "build type 1"));
 
             Assert.That(builds.All(b => b.AgentName.Equals("agent 1")));
             Assert.That(builds.All(b => b.BuildTypeId.Equals("build type 1")));

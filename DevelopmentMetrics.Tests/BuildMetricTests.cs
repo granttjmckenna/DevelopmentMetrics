@@ -91,7 +91,9 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuildDataFrom(new DateTime(2017, 1, 1), 365);
 
-            var results = new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(builds, 6);
+            var results =
+                new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(builds,
+                    new BuildFilter(6, "All", "All"));
 
             Assert.That(results.Count(), Is.EqualTo(6));
             Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
@@ -118,6 +120,7 @@ namespace DevelopmentMetrics.Tests
                     BuildTypeId = "blah blah",
                     StartDateTime = new DateTime(2017, 11, 27, 15, 3, 30),
                     FinishDateTime = new DateTime(2017, 11, 27, 15, 5, 30),
+                    AgentName = "agent name",
                     Status = "Failure",
                     State = "Finished"
                 },
@@ -127,12 +130,15 @@ namespace DevelopmentMetrics.Tests
                     BuildTypeId = "blah blah",
                     StartDateTime = new DateTime(2017, 11, 27, 15, 3, 30),
                     FinishDateTime = new DateTime(2017, 11, 27, 16, 5, 30),
+                    AgentName = "agent name",
                     Status = "Success",
                     State = "Finished"
                 }
             };
 
-            var metrics = new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(builds, 1);
+            var metrics =
+                new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(builds,
+                    new BuildFilter(1, "All", "All"));
 
             Assert.That(metrics.First().RecoveryTime, Is.EqualTo(1));
         }
@@ -151,7 +157,7 @@ namespace DevelopmentMetrics.Tests
             Assert.That(buildTypes.Last().BuildTypeId, Is.EqualTo("build type 2"));
         }
 
-       private static List<Build> GetBuilds(string buildTypeId = "blah blah")
+        private static List<Build> GetBuilds(string buildTypeId = "blah blah")
         {
             return new List<Build>
             {

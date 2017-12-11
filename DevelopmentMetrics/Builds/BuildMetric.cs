@@ -14,11 +14,13 @@ namespace DevelopmentMetrics.Builds
             _tellTheTime = tellTheTime;
         }
 
-        public List<Metric> CalculateBuildFailingRateByWeekFor(List<Build> builds, int numberOfWeeks)
+        public List<Metric> CalculateBuildFailingRateByWeekFor(List<Build> builds, BuildFilter buildFilter)
         {
+            var filteredBuilds = new FilterBuilds(builds).Filter(buildFilter);
+
             var results = new List<Metric>();
 
-            var fromDate = GetFromDate(builds, numberOfWeeks);
+            var fromDate = GetFromDate(builds, buildFilter.NumberOfWeeks);
 
             var weeks = GetNumberOfWeeksFrom(fromDate);
 
@@ -26,7 +28,7 @@ namespace DevelopmentMetrics.Builds
             {
                 var startDate = fromDate.AddDays(x * 7);
 
-                var finishedBuilds = GetFinishedBuildsForDateRange(builds, startDate);
+                var finishedBuilds = GetFinishedBuildsForDateRange(filteredBuilds, startDate);
 
                 var doubles = CalculateMillisecondsBetweenBuilds(finishedBuilds);
 

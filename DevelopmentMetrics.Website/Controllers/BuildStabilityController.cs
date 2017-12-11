@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Helpers;
@@ -43,9 +41,8 @@ namespace DevelopmentMetrics.Website.Controllers
 
             _builds = GetBuilds();
 
-            var filteredBuilds = new FilterBuilds(_builds).Filter(new BuildFilter(buildAgent, buildTypeId));
-
-            var buildData = new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(filteredBuilds, numberOfWeeks);
+            var buildData = new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(_builds,
+                new BuildFilter(numberOfWeeks, buildAgent, buildTypeId));
 
             return Json(buildData);
         }
