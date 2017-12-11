@@ -52,15 +52,33 @@ namespace DevelopmentMetrics.Website.Controllers
         {
             _builds = GetBuilds();
 
-            var filteredBuilds = _builds
-                .Where(b => (
-                                b.AgentName.Equals(buildAgent, StringComparison.InvariantCultureIgnoreCase) ||
-                                buildAgent.Equals("All", StringComparison.InvariantCultureIgnoreCase))
-                            && b.BuildTypeId.StartsWith(buildTypeId, StringComparison.InvariantCultureIgnoreCase) ||
-                            buildTypeId.Equals("All", StringComparison.InvariantCultureIgnoreCase))
-                .ToList();
-
-            return filteredBuilds;
+            if (buildAgent.Equals("All") && buildTypeId.Equals("All"))
+            {
+                return _builds;
+            }
+            else if (!buildAgent.Equals("All") && !buildTypeId.Equals("All"))
+            {
+                return _builds.Where(b =>
+                        b.AgentName.Equals(buildAgent, StringComparison.InvariantCultureIgnoreCase)
+                        && b.BuildTypeId.StartsWith(buildTypeId, StringComparison.InvariantCultureIgnoreCase))
+                    .ToList();
+            }
+            else if (!buildAgent.Equals("All"))
+            {
+                return _builds.Where(b =>
+                        b.AgentName.Equals(buildAgent, StringComparison.InvariantCultureIgnoreCase))
+                    .ToList();
+            }
+            else if (!buildTypeId.Equals("All"))
+            {
+                return _builds.Where(b =>
+                        b.BuildTypeId.StartsWith(buildTypeId, StringComparison.InvariantCultureIgnoreCase))
+                    .ToList();
+            }
+            else
+            {
+                throw new Exception("This has not worked!");
+            }
         }
 
         private List<Build> GetBuilds()
