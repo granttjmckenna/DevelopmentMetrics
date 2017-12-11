@@ -80,7 +80,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <h4>Top 5 failing builds:</h4>
+        <h4>Top 5 failing builds (all time):</h4>
         @foreach (var build in Model.GetTopFiveFailingBuildsByRate())
         {
             <div class="col-md-12">
@@ -91,7 +91,7 @@
         }
     </div>
     <div class="col-md-6">
-        <h4>Top 5 passing builds:</h4>
+        <h4>Top 5 passing builds (all time):</h4>
         @foreach (var build in Model.GetTopFivePassingBuildsByRate())
         {
             <div class="col-md-12">
