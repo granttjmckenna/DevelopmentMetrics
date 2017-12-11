@@ -14,17 +14,21 @@ namespace DevelopmentMetrics.Website.Tests.Models
     public class BuildStabilityViewModelTests
     {
         private ITellTheTime _tellTheTime;
+        private IBuild _build;
 
         [SetUp]
         public void Setup()
         {
             _tellTheTime = Substitute.For<ITellTheTime>();
+            _build = Substitute.For<IBuild>();
         }
 
         [Test]
         public void Return_empty_display_list_when_build_type_ids_is_empty()
         {
-            var displayList = new BuildStabilityViewModel(new List<Build>(), _tellTheTime).GetBuildTypeIdList();
+            _build.GetBuilds().Returns(new List<Build>());
+
+            var displayList = new BuildStabilityViewModel(_build, _tellTheTime).GetBuildTypeIdList();
 
             Assert.That(displayList.Count, Is.EqualTo(0));
         }
@@ -40,7 +44,9 @@ namespace DevelopmentMetrics.Website.Tests.Models
                 GetBuild("buildtype2_2")
             };
 
-            var displayList = new BuildStabilityViewModel(builds, _tellTheTime).GetBuildTypeIdList();
+            _build.GetBuilds().Returns(builds);
+
+            var displayList = new BuildStabilityViewModel(_build, _tellTheTime).GetBuildTypeIdList();
 
             Assert.That(displayList.Count, Is.EqualTo(2));
         }
@@ -57,7 +63,9 @@ namespace DevelopmentMetrics.Website.Tests.Models
                 GetBuild("buildtype2_2")
             };
 
-            var displayList = new BuildStabilityViewModel(builds, _tellTheTime).GetBuildTypeIdList();
+            _build.GetBuilds().Returns(builds);
+
+            var displayList = new BuildStabilityViewModel(_build, _tellTheTime).GetBuildTypeIdList();
 
             Assert.That(displayList.Count, Is.EqualTo(2));
             Assert.That(displayList.First().BuildTypeId, Is.EqualTo("buildtype1_1"));

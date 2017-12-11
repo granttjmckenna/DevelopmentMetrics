@@ -43,6 +43,7 @@ namespace DevelopmentMetrics.Website.DependencyResolution
             For<ILeanKitWebClient>().Use<LeanKitWebClient>();
             For<ITellTheTime>().Use<TellTheTime>();
             For<IBuildsToExclude>().Use<BuildsToExclude>();
+            For<IBuild>().Use<Build>();
         }
 
         #endregion

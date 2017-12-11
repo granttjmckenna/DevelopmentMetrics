@@ -1,32 +1,25 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Helpers;
-using DevelopmentMetrics.Repository;
 using DevelopmentMetrics.Website.Models;
 
 namespace DevelopmentMetrics.Website.Controllers
 {
     public class BuildStabilityController : Controller
     {
+        private readonly IBuild _build;
         private readonly ITellTheTime _tellTheTime;
-        private readonly ITeamCityWebClient _teamCityWebClient;
-        private readonly IBuildsToExclude _buildsToExclude;
-        private List<Build> _builds;
 
-        public BuildStabilityController(ITeamCityWebClient teamCityWebClient, ITellTheTime tellTheTime, IBuildsToExclude buildsToExclude)
+        public BuildStabilityController(IBuild build, ITellTheTime tellTheTime)
         {
-            _teamCityWebClient = teamCityWebClient;
+            _build = build;
             _tellTheTime = tellTheTime;
-            _buildsToExclude = buildsToExclude;
         }
 
         // GET: BuildStability
         public ActionResult Index()
         {
-            _builds = GetBuilds();
-
-            var model = new BuildStabilityViewModel(_builds, _tellTheTime);
+            var model = new BuildStabilityViewModel(_build, _tellTheTime);
 
             return View(model);
         }
@@ -39,17 +32,10 @@ namespace DevelopmentMetrics.Website.Controllers
                 CacheHelper.ClearObjectFromCache(Build.CacheKey);
             }
 
-            _builds = GetBuilds();
-
-            var buildData = new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(_builds,
+            var buildData = new BuildMetric(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(
                 new BuildFilter(numberOfWeeks, buildAgent, buildTypeId));
 
             return Json(buildData);
-        }
-
-        private List<Build> GetBuilds()
-        {
-            return new Build(_teamCityWebClient, _tellTheTime, _buildsToExclude).GetBuilds();
         }
 
         private bool IsClearCache(int numberOfWeeks)

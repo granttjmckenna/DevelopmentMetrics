@@ -8,18 +8,20 @@ namespace DevelopmentMetrics.Website.Models
 {
     public class BuildStabilityViewModel
     {
-        private readonly List<Build> _builds;
         private readonly ITellTheTime _tellTheTime;
+        private readonly IBuild _build;
 
-        public BuildStabilityViewModel(List<Build> builds, ITellTheTime tellTheTime)
+        public BuildStabilityViewModel(IBuild build, ITellTheTime tellTheTime)
         {
+            _build = build;
             _tellTheTime = tellTheTime;
-            _builds = builds;
         }
 
         public List<BuildType> GetBuildTypeIdList()
         {
-            var buildTypes = new BuildMetric(_tellTheTime).GetDistinctBuildTypeIdsFrom(_builds);
+            var builds = _build.GetBuilds();
+
+            var buildTypes = new BuildMetric(_tellTheTime, _build).GetDistinctBuildTypeIdsFrom(builds);
 
             return buildTypes
                 .Select(b => b.BuildTypeGroup)
@@ -31,12 +33,16 @@ namespace DevelopmentMetrics.Website.Models
 
         public List<FailureRate> GetTopFiveFailingBuildsByRate()
         {
-            return new BuildMetric(_tellTheTime).GetTopFiveFailingBuildsByRate(_builds);
+            var builds = _build.GetBuilds();
+
+            return new BuildMetric(_tellTheTime, _build).GetTopFiveFailingBuildsByRate(builds);
         }
 
         public List<FailureRate> GetTopFivePassingBuildsByRate()
         {
-            return new BuildMetric(_tellTheTime).GetTopFivePassingBuildsByRate(_builds);
+            var builds = _build.GetBuilds();
+
+            return new BuildMetric(_tellTheTime, _build).GetTopFivePassingBuildsByRate(builds);
         }
     }
 }

@@ -8,14 +8,18 @@ namespace DevelopmentMetrics.Builds
     public class BuildMetric
     {
         private readonly ITellTheTime _tellTheTime;
+        private readonly IBuild _build;
 
-        public BuildMetric(ITellTheTime tellTheTime)
+        public BuildMetric(ITellTheTime tellTheTime, IBuild build)
         {
             _tellTheTime = tellTheTime;
+            _build = build;
         }
 
-        public List<Metric> CalculateBuildFailingRateByWeekFor(List<Build> builds, BuildFilter buildFilter)
+        public List<Metric> CalculateBuildFailingRateByWeekFor(BuildFilter buildFilter)
         {
+            var builds = _build.GetBuilds();
+
             var filteredBuilds = new FilterBuilds(builds).Filter(buildFilter);
 
             var results = new List<Metric>();
@@ -36,7 +40,7 @@ namespace DevelopmentMetrics.Builds
                 {
                     Date = startDate,
                     FailureRate = CalculateFailureRateFor(finishedBuilds),
-                    RecoveryTime =  CalculateAverageRecoveryTimeInHoursFor(doubles),
+                    RecoveryTime = CalculateAverageRecoveryTimeInHoursFor(doubles),
                     RecoveryTimeStdDev = Calculator.ConvertMillisecondsToHours(Calculator.CalculateStandardDeviation(doubles))
                 });
             }
@@ -80,7 +84,7 @@ namespace DevelopmentMetrics.Builds
             {
                 var buildTypeBuilds = GetBuildsFor(builds, buildType.BuildTypeId);
 
-                var alternatingBuilds = new BuildMetric(_tellTheTime).GetAlternatingBuilds(buildTypeBuilds);
+                var alternatingBuilds = GetAlternatingBuilds(buildTypeBuilds);
 
                 var collection = CalculateMillisecondsBetweenAlternatingBuilds(alternatingBuilds);
 
@@ -207,7 +211,7 @@ namespace DevelopmentMetrics.Builds
                    select new FailureRate
                    {
                        BuildTypeId = buildTypeId,
-                       Rate = new BuildMetric(_tellTheTime).CalculateBuildFailingRate(selectedBuilds)
+                       Rate = CalculateBuildFailingRate(selectedBuilds)
                    };
         }
     }

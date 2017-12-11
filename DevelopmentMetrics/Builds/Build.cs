@@ -7,7 +7,12 @@ using Newtonsoft.Json;
 
 namespace DevelopmentMetrics.Builds
 {
-    public class Build
+    public interface IBuild
+    {
+        List<Build> GetBuilds();
+    }
+
+    public class Build : IBuild
     {
         public Build() { }
 
@@ -38,8 +43,8 @@ namespace DevelopmentMetrics.Builds
         public string Href { get; set; }
 
         public static string CacheKey = "builds";
-        
-        public Build(ITeamCityWebClient teamCityWebClient, ITellTheTime tellTheTime,IBuildsToExclude buildsToExclude)
+
+        public Build(ITeamCityWebClient teamCityWebClient, ITellTheTime tellTheTime, IBuildsToExclude buildsToExclude)
         {
             _teamCityWebClient = teamCityWebClient;
             _tellTheTime = tellTheTime;
@@ -53,7 +58,7 @@ namespace DevelopmentMetrics.Builds
             return builds;
         }
 
-        public List<Build> GetBuildsFromRepo()
+        private List<Build> GetBuildsFromRepo()
         {
             var results = new List<Build>();
 

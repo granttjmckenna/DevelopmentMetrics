@@ -12,11 +12,13 @@ namespace DevelopmentMetrics.Tests
     public class BuildMetricTests
     {
         private ITellTheTime _tellTheTime;
+        private IBuild _build;
 
         [SetUp]
         public void Setup()
         {
             _tellTheTime = Substitute.For<ITellTheTime>();
+            _build = Substitute.For<IBuild>();
 
             _tellTheTime.Today().Returns(new DateTime(2017, 12, 04));
             _tellTheTime.Now().Returns(new DateTime(2017, 12, 04));
@@ -49,7 +51,7 @@ namespace DevelopmentMetrics.Tests
 
             builds.AddRange(GetBuilds("highest failing build type id"));
 
-            var failingBuilds = new BuildMetric(_tellTheTime).GetTopFiveFailingBuildsByRate(builds);
+            var failingBuilds = new BuildMetric(_tellTheTime, _build).GetTopFiveFailingBuildsByRate(builds);
 
             Assert.That(failingBuilds.First().BuildTypeId, Is.EqualTo("highest failing build type id"));
         }
@@ -81,7 +83,7 @@ namespace DevelopmentMetrics.Tests
 
             builds.AddRange(GetBuilds("highest failing build type id"));
 
-            var failingBuilds = new BuildMetric(_tellTheTime).GetTopFivePassingBuildsByRate(builds);
+            var failingBuilds = new BuildMetric(_tellTheTime, _build).GetTopFivePassingBuildsByRate(builds);
 
             Assert.That(failingBuilds.First().BuildTypeId, Is.EqualTo("lowest failing build type id"));
         }
@@ -91,9 +93,10 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuildDataFrom(new DateTime(2017, 1, 1), 365);
 
+            _build.GetBuilds().Returns(builds);
+
             var results =
-                new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(builds,
-                    new BuildFilter(6, "All", "All"));
+                new BuildMetric(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(new BuildFilter(6, "All", "All"));
 
             Assert.That(results.Count(), Is.EqualTo(6));
             Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
@@ -136,9 +139,10 @@ namespace DevelopmentMetrics.Tests
                 }
             };
 
+            _build.GetBuilds().Returns(builds);
+
             var metrics =
-                new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(builds,
-                    new BuildFilter(1, "All", "All"));
+                new BuildMetric(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(new BuildFilter(1, "All", "All"));
 
             Assert.That(metrics.First().RecoveryTime, Is.EqualTo(1));
         }
@@ -150,7 +154,7 @@ namespace DevelopmentMetrics.Tests
 
             builds.AddRange(GetBuilds("build type 1"));
 
-            var buildTypes = new BuildMetric(_tellTheTime).GetDistinctBuildTypeIdsFrom(builds);
+            var buildTypes = new BuildMetric(_tellTheTime, _build).GetDistinctBuildTypeIdsFrom(builds);
 
             Assert.That(buildTypes.Count, Is.EqualTo(2));
             Assert.That(buildTypes.First().BuildTypeId, Is.EqualTo("build type 1"));
