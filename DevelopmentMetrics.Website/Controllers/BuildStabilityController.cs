@@ -13,7 +13,7 @@ namespace DevelopmentMetrics.Website.Controllers
     {
         private readonly ITellTheTime _tellTheTime;
         private readonly ITeamCityWebClient _teamCityWebClient;
-        private IBuildsToExclude _buildsToExclude;
+        private readonly IBuildsToExclude _buildsToExclude;
         private List<Build> _builds;
 
         public BuildStabilityController(ITeamCityWebClient teamCityWebClient, ITellTheTime tellTheTime, IBuildsToExclude buildsToExclude)
@@ -41,44 +41,13 @@ namespace DevelopmentMetrics.Website.Controllers
                 CacheHelper.ClearObjectFromCache(Build.CacheKey);
             }
 
-            var filteredBuilds = GetFilteredBuilds(buildAgent, buildTypeId);
+            _builds = GetBuilds();
+
+            var filteredBuilds = new FilterBuilds(_builds).Filter(new BuildFilter(buildAgent, buildTypeId));
 
             var buildData = new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(filteredBuilds, numberOfWeeks);
 
             return Json(buildData);
-        }
-
-        private List<Build> GetFilteredBuilds(string buildAgent, string buildTypeId)
-        {
-            _builds = GetBuilds();
-
-            if (buildAgent.Equals("All") && buildTypeId.Equals("All"))
-            {
-                return _builds;
-            }
-            else if (!buildAgent.Equals("All") && !buildTypeId.Equals("All"))
-            {
-                return _builds.Where(b =>
-                        b.AgentName.Equals(buildAgent, StringComparison.InvariantCultureIgnoreCase)
-                        && b.BuildTypeId.StartsWith(buildTypeId, StringComparison.InvariantCultureIgnoreCase))
-                    .ToList();
-            }
-            else if (!buildAgent.Equals("All"))
-            {
-                return _builds.Where(b =>
-                        b.AgentName.Equals(buildAgent, StringComparison.InvariantCultureIgnoreCase))
-                    .ToList();
-            }
-            else if (!buildTypeId.Equals("All"))
-            {
-                return _builds.Where(b =>
-                        b.BuildTypeId.StartsWith(buildTypeId, StringComparison.InvariantCultureIgnoreCase))
-                    .ToList();
-            }
-            else
-            {
-                throw new Exception("This has not worked!");
-            }
         }
 
         private List<Build> GetBuilds()
