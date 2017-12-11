@@ -108,7 +108,7 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
-        public void Return_milliseconds_between_failing_and_next_succeeding_build_when_list_ends_with_failing_build()
+        public void Return_milliseconds_between_failing_and_next_succeeding_build()
         {
             var builds = new List<Build>
             {
