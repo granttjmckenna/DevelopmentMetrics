@@ -25,5 +25,10 @@ namespace DevelopmentMetrics.Helpers
 
             return Math.Sqrt(sumOf / (values.Count - 1));
         }
+
+        public static int ConvertMillisecondsToHours(double milliseconds)
+        {
+            return (int)(Math.Round(TimeSpan.FromMilliseconds(milliseconds).TotalHours, 0));
+        }
     }
 }

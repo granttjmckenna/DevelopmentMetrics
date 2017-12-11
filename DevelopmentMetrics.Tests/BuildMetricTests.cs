@@ -160,6 +160,18 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        public void Return_standard_deviation_of_recovery_time_in_hours()
+        {
+            var doubles = new List<double> { 2100000d, 2400000d, 2760000d };
+
+            var standardDeviationInHours =
+                Calculator.ConvertMillisecondsToHours(
+                    Calculator.CalculateStandardDeviation(doubles));
+
+            Assert.That(standardDeviationInHours, Is.EqualTo(0));
+        }
+
+        [Test]
         public void Return_collection_of_distinct_build_type_ids()
         {
             var builds = GetBuilds("build type 2");
@@ -171,18 +183,6 @@ namespace DevelopmentMetrics.Tests
             Assert.That(buildTypes.Count, Is.EqualTo(2));
             Assert.That(buildTypes.First().BuildTypeId, Is.EqualTo("build type 1"));
             Assert.That(buildTypes.Last().BuildTypeId, Is.EqualTo("build type 2"));
-        }
-
-        [Test]
-        public void Return_standard_deviation_of_recovery_time_in_hours()
-        {
-            var doubles = new List<double> { 2100000d, 2400000d, 2760000d };
-
-            var standardDeviationInHours =
-                new BuildMetric(_tellTheTime).ConvertMillisecondsToHours(
-                    Calculator.CalculateStandardDeviation(doubles));
-
-            Assert.That(standardDeviationInHours, Is.EqualTo(0));
         }
 
         private List<Build> GetPriceWatchBuilds()
