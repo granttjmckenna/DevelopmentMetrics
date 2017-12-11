@@ -14,24 +14,6 @@ namespace DevelopmentMetrics.Builds
             _tellTheTime = tellTheTime;
         }
 
-        public List<FailureRate> GetTopFiveFailingBuildsByRate(List<Build> builds)
-        {
-            return GetFailureRatesFor(builds)
-                .OrderByDescending(b => b.Rate)
-                .ThenBy(b => b.BuildTypeId)
-                .Take(5)
-                .ToList();
-        }
-
-        public List<FailureRate> GetTopFivePassingBuildsByRate(List<Build> builds)
-        {
-            return GetFailureRatesFor(builds)
-                .OrderBy(b => b.Rate)
-                .ThenBy(b => b.BuildTypeId)
-                .Take(5)
-                .ToList();
-        }
-
         public List<Metric> CalculateBuildFailingRateByWeekFor(List<Build> builds, int numberOfWeeks)
         {
             var results = new List<Metric>();
@@ -60,7 +42,35 @@ namespace DevelopmentMetrics.Builds
             return results;
         }
 
-        public List<double> CalculateMillisecondsBetweenBuilds(List<Build> builds)
+        public List<FailureRate> GetTopFiveFailingBuildsByRate(List<Build> builds)
+        {
+            return GetFailureRatesFor(builds)
+                .OrderByDescending(b => b.Rate)
+                .ThenBy(b => b.BuildTypeId)
+                .Take(5)
+                .ToList();
+        }
+
+        public List<FailureRate> GetTopFivePassingBuildsByRate(List<Build> builds)
+        {
+            return GetFailureRatesFor(builds)
+                .OrderBy(b => b.Rate)
+                .ThenBy(b => b.BuildTypeId)
+                .Take(5)
+                .ToList();
+        }
+
+        public List<BuildType> GetDistinctBuildTypeIdsFrom(List<Build> builds)
+        {
+            return builds
+                .OrderBy(b => b.BuildTypeId)
+                .Select(b => b.BuildTypeId)
+                .Distinct()
+                .Select(buildTypeId => new BuildType(buildTypeId))
+                .ToList();
+        }
+
+        private List<double> CalculateMillisecondsBetweenBuilds(List<Build> builds)
         {
             var doubles = new List<double>();
 
@@ -173,16 +183,6 @@ namespace DevelopmentMetrics.Builds
             var offset = (int)today.DayOfWeek * -1;
 
             return today.AddDays(offset);
-        }
-
-        public List<BuildType> GetDistinctBuildTypeIdsFrom(List<Build> builds)
-        {
-            return builds
-                .OrderBy(b => b.BuildTypeId)
-                .Select(b => b.BuildTypeId)
-                .Distinct()
-                .Select(buildTypeId => new BuildType(buildTypeId))
-                .ToList();
         }
 
         private double CalculateFailureRateFor(List<Build> finishedBuilds)

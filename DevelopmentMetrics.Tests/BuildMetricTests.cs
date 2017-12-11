@@ -63,8 +63,8 @@ namespace DevelopmentMetrics.Tests
                 {
                     Id = 1,
                     BuildTypeId = "lowest failing build type id",
-                    StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
-                    FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
+                    StartDateTime = new DateTime(2017, 12, 5, 12, 0, 0),
+                    FinishDateTime = new DateTime(2017, 12, 5, 12, 0, 30),
                     Status = "Success",
                     State = "Finished"
                 },
@@ -72,8 +72,8 @@ namespace DevelopmentMetrics.Tests
                 {
                     Id = 2,
                     BuildTypeId = "lowest failing build type id",
-                    StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
-                    FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
+                    StartDateTime = new DateTime(2017, 12, 5, 12, 1, 0),
+                    FinishDateTime = new DateTime(2017, 12, 5, 12, 1, 30),
                     Status = "Success",
                     State = "Finished"
                 }
@@ -108,69 +108,33 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
-        public void Return_cumulative_milliseconds_when_two_build_types_exist()
-        {
-            var builds = GetBuilds("build type 1");
-
-            builds.AddRange(GetBuilds("build type 2"));
-
-            var milliseconds = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds).Sum();
-
-            Assert.That(milliseconds, Is.EqualTo(600000d));
-        }
-
-        [Test]
-        public void Return_collection_of_doubles_representing_milliseconds_between_failing_and_succeeding_builds()
-        {
-            var doubles = new List<double>();
-
-            var builds = GetBuilds("build type 1");
-
-            builds.AddRange(GetBuilds("build type 2"));
-
-            doubles.AddRange(
-                new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds));
-
-            Assert.That(doubles, Is.EqualTo(new List<double> { 180000d, 120000d, 180000d, 120000d }));
-        }
-
-        [Test]
-        public void Return_milliseconds_between_failing_and_next_succeeding_build()
-        {
-            var builds = GetBuilds();
-
-            var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
-
-            Assert.That(doubles.First(), Is.EqualTo(180000d));
-        }
-
-        [Test]
-        public void Return_zero_milliseconds_between_failing_and_next_succeeding_build_when_list_is_empty()
-        {
-            var builds = new List<Build>();
-
-            var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
-
-            Assert.That(doubles.Sum(), Is.EqualTo(0));
-        }
-
-        [Test]
         public void Return_milliseconds_between_failing_and_next_succeeding_build_when_list_ends_with_failing_build()
         {
-            var builds = GetBuilds();
-
-            builds.Add(new Build
+            var builds = new List<Build>
             {
-                Id = 999,
-                BuildTypeId = "blah blah",
-                StartDateTime = new DateTime(2017, 11, 2, 15, 3, 30),
-                FinishDateTime = new DateTime(2017, 11, 2, 15, 5, 30),
-                Status = "Failure"
-            });
+                new Build
+                {
+                    Id = 999,
+                    BuildTypeId = "blah blah",
+                    StartDateTime = new DateTime(2017, 11, 27, 15, 3, 30),
+                    FinishDateTime = new DateTime(2017, 11, 27, 15, 5, 30),
+                    Status = "Failure",
+                    State = "Finished"
+                },
+                new Build
+                {
+                    Id = 1001,
+                    BuildTypeId = "blah blah",
+                    StartDateTime = new DateTime(2017, 11, 27, 15, 3, 30),
+                    FinishDateTime = new DateTime(2017, 11, 27, 16, 5, 30),
+                    Status = "Success",
+                    State = "Finished"
+                }
+            };
 
-            var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
+            var metrics = new BuildMetric(_tellTheTime).CalculateBuildFailingRateByWeekFor(builds, 1);
 
-            Assert.That(doubles.Sum(), Is.EqualTo(300000d));
+            Assert.That(metrics.First().RecoveryTime, Is.EqualTo(1));
         }
 
 
@@ -207,18 +171,6 @@ namespace DevelopmentMetrics.Tests
             Assert.That(buildTypes.Count, Is.EqualTo(2));
             Assert.That(buildTypes.First().BuildTypeId, Is.EqualTo("build type 1"));
             Assert.That(buildTypes.Last().BuildTypeId, Is.EqualTo("build type 2"));
-        }
-
-        [Test]
-        public void Return_the_difference_in_milliseconds_between_failing_and_succeeding_builds()
-        {
-            var builds = GetPriceWatchBuilds();
-
-            var doubles = new BuildMetric(_tellTheTime).CalculateMillisecondsBetweenBuilds(builds);
-
-            Assert.That(doubles[0], Is.EqualTo(2100000d));
-            Assert.That(doubles[1], Is.EqualTo(2400000d));
-            Assert.That(doubles[2], Is.EqualTo(2760000d));
         }
 
         [Test]
