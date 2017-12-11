@@ -6,6 +6,13 @@ namespace DevelopmentMetrics.Tests
 {
     public class CalculatorTests
     {
+        [TestCase(1, 4, ExpectedResult = 0.25d)]
+        [TestCase(1, 3, ExpectedResult = 0.33d)]
+        public double Return_percentage(int nominator, int denominator)
+        {
+            return Calculator.Percentage(nominator, denominator);
+        }
+
         [Test]
         public void Return_for_standard_deviation_when_list_is_empty()
         {

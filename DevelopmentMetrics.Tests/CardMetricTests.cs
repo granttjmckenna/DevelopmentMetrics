@@ -18,12 +18,6 @@ namespace DevelopmentMetrics.Tests
             _cards = GetCards().ToList();
         }
 
-        [TestCase(1, 4, ExpectedResult = 0.25d)]
-        [TestCase(1, 3, ExpectedResult = 0.33d)]
-        public double Return_percentage(int nominator, int denominator)
-        {
-            return Calculator.Percentage(nominator, denominator);
-        }
         [Test]
         public void Return_lead_time_for_a_given_day()
         {
