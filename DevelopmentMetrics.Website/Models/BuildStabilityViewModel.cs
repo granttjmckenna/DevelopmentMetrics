@@ -33,16 +33,12 @@ namespace DevelopmentMetrics.Website.Models
 
         public List<FailureRate> GetTopFiveFailingBuildsByRate()
         {
-            var builds = _build.GetBuilds();
-
-            return new BuildMetric(_tellTheTime, _build).GetTopFiveFailingBuildsByRate(builds);
+            return new BuildMetric(_tellTheTime, _build).GetFailingBuildsByRate();
         }
 
         public List<FailureRate> GetTopFivePassingBuildsByRate()
         {
-            var builds = _build.GetBuilds();
-
-            return new BuildMetric(_tellTheTime, _build).GetTopFivePassingBuildsByRate(builds);
+            return new BuildMetric(_tellTheTime, _build).GetPassingBuildsByRate();
         }
     }
 }

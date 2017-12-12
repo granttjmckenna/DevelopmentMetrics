@@ -48,21 +48,25 @@ namespace DevelopmentMetrics.Builds
             return results;
         }
 
-        public List<FailureRate> GetTopFiveFailingBuildsByRate(List<Build> builds)
+        public List<FailureRate> GetFailingBuildsByRate()
         {
+            var builds = _build.GetBuilds();
+
             return GetFailureRatesFor(builds)
+                .Where(b => b.Rate > 0.5d)
                 .OrderByDescending(b => b.Rate)
                 .ThenBy(b => b.BuildTypeId)
-                .Take(5)
                 .ToList();
         }
 
-        public List<FailureRate> GetTopFivePassingBuildsByRate(List<Build> builds)
+        public List<FailureRate> GetPassingBuildsByRate()
         {
+            var builds = _build.GetBuilds();
+
             return GetFailureRatesFor(builds)
-                .OrderBy(b => b.Rate)
+                .Where(b => b.Rate <= 0.5d)
+                .OrderByDescending(b => b.Rate)
                 .ThenBy(b => b.BuildTypeId)
-                .Take(5)
                 .ToList();
         }
 

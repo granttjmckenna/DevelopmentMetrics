@@ -25,69 +25,73 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
-        public void Return_build_type_with_highest_failure_rate()
-        {
-            var builds = new List<Build>
-            {
-                    new Build
-                    {
-                        Id = 1,
-                        BuildTypeId = "lowest failing build type id",
-                        StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
-                        FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
-                        Status = "Success",
-                        State = "Finished"
-                    },
-                    new Build
-                    {
-                        Id = 2,
-                        BuildTypeId = "lowest failing build type id",
-                        StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
-                        FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
-                        Status = "Success",
-                        State = "Finished"
-                    }
-            };
-
-            builds.AddRange(GetBuilds("highest failing build type id"));
-
-            var failingBuilds = new BuildMetric(_tellTheTime, _build).GetTopFiveFailingBuildsByRate(builds);
-
-            Assert.That(failingBuilds.First().BuildTypeId, Is.EqualTo("highest failing build type id"));
-        }
-
-        [Test]
-        public void Return_build_type_with_lowest_failure_rate()
+        public void Return_all_failing_builds()
         {
             var builds = new List<Build>
             {
                 new Build
                 {
                     Id = 1,
-                    BuildTypeId = "lowest failing build type id",
-                    StartDateTime = new DateTime(2017, 12, 5, 12, 0, 0),
-                    FinishDateTime = new DateTime(2017, 12, 5, 12, 0, 30),
+                    BuildTypeId = "passing build type id",
+                    StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
                     Status = "Success",
                     State = "Finished"
                 },
                 new Build
                 {
                     Id = 2,
-                    BuildTypeId = "lowest failing build type id",
-                    StartDateTime = new DateTime(2017, 12, 5, 12, 1, 0),
-                    FinishDateTime = new DateTime(2017, 12, 5, 12, 1, 30),
+                    BuildTypeId = "passing build type id",
+                    StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
                     Status = "Success",
                     State = "Finished"
                 }
             };
 
-            builds.AddRange(GetBuilds("highest failing build type id"));
+            builds.AddRange(GetBuilds("failing build type id"));
 
-            var failingBuilds = new BuildMetric(_tellTheTime, _build).GetTopFivePassingBuildsByRate(builds);
+            _build.GetBuilds().Returns(builds);
 
-            Assert.That(failingBuilds.First().BuildTypeId, Is.EqualTo("lowest failing build type id"));
+            var failingBuilds = new BuildMetric(_tellTheTime, _build).GetFailingBuildsByRate();
+
+            Assert.That(failingBuilds.All(b => b.BuildTypeId.Equals("failing build type id")));
         }
 
+        [Test]
+        public void Return_all_passing_builds()
+        {
+            var builds = new List<Build>
+            {
+                new Build
+                {
+                    Id = 1,
+                    BuildTypeId = "passing build type id",
+                    StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
+                    Status = "Success",
+                    State = "Finished"
+                },
+                new Build
+                {
+                    Id = 2,
+                    BuildTypeId = "passing build type id",
+                    StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
+                    FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
+                    Status = "Success",
+                    State = "Finished"
+                }
+            };
+
+            builds.AddRange(GetBuilds("passing build type id"));
+
+            _build.GetBuilds().Returns(builds);
+
+            var failingBuilds = new BuildMetric(_tellTheTime, _build).GetPassingBuildsByRate();
+
+            Assert.That(failingBuilds.All(b => b.BuildTypeId.Equals("passing build type id")));
+        }
+        
         [Test]
         public void Should_calculate_failure_percentage_by_week()
         {
