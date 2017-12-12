@@ -18,6 +18,11 @@ namespace DevelopmentMetrics.Builds
 
         public List<Metric> CalculateBuildFailingRateByWeekFor(BuildFilter buildFilter)
         {
+            if (IsClearCache(buildFilter.NumberOfWeeks))
+            {
+                CacheHelper.ClearObjectFromCache(Build.CacheKey);
+            }
+
             var builds = _build.GetBuilds();
 
             var filteredBuilds = new FilterBuilds(builds).Filter(buildFilter);
@@ -236,6 +241,11 @@ namespace DevelopmentMetrics.Builds
                        BuildTypeId = buildTypeId,
                        Rate = CalculateBuildFailingRate(selectedBuilds)
                    };
+        }
+
+        private bool IsClearCache(int numberOfWeeks)
+        {
+            return numberOfWeeks == -1;
         }
     }
 

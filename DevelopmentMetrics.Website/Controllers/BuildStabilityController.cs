@@ -27,20 +27,10 @@ namespace DevelopmentMetrics.Website.Controllers
         [HttpPost]
         public JsonResult GetBuildChartDataFor(int numberOfWeeks, string buildAgent, string buildTypeId)
         {
-            if (IsClearCache(numberOfWeeks))
-            {
-                CacheHelper.ClearObjectFromCache(Build.CacheKey);
-            }
-
             var buildData = new BuildMetric(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(
                 new BuildFilter(numberOfWeeks, buildAgent, buildTypeId));
 
             return Json(buildData);
-        }
-
-        private bool IsClearCache(int numberOfWeeks)
-        {
-            return numberOfWeeks == -1;
         }
     }
 }
