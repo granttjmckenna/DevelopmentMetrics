@@ -1,0 +1,19 @@
+﻿@model DevelopmentMetrics.Website.Models.PartialViewModel
+
+<div class="col-md-12">
+    @{
+        int rowId = 1;
+        foreach (var build in Model.FailureRates)
+        {
+            string divId = @Model.DivId + "_" + rowId;
+
+            <div id="@divId" class="col-md-12 buildItem">
+                <div class="@Model.CssStyle">
+                    @build.BuildTypeId - @build.DisplayRate
+                </div>
+            </div>
+
+            rowId = rowId + 1;
+        }
+    }
+</div>

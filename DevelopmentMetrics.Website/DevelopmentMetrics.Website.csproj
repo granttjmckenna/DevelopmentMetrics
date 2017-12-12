@@ -171,6 +171,7 @@
     </Compile>
     <Compile Include="Models\BuildStabilityViewModel.cs" />
     <Compile Include="Models\CardsViewModel.cs" />
+    <Compile Include="Models\PartialViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +212,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BuildStability\Index.cshtml" />
     <Content Include="Views\Cards\Index.cshtml" />
+    <Content Include="Views\BuildStability\_BuildList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

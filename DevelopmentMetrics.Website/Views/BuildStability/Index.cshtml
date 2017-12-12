@@ -1,4 +1,5 @@
-﻿@model DevelopmentMetrics.Website.Models.BuildStabilityViewModel
+﻿@using DevelopmentMetrics.Website.Models
+@model DevelopmentMetrics.Website.Models.BuildStabilityViewModel
 @{
     ViewBag.Title = "Build Stability";
 }
@@ -102,34 +103,10 @@
 </div>
 <div class="row">
     <div class="col-md-6">
-        @{
-            int failingRowId = 1;
-            foreach (var build in Model.GetFailingBuildsByRate())
-            {
-                <div id="failingBuild_@failingRowId" class="col-md-12 buildItem">
-                    <div class="alert alert-danger">
-                        @build.BuildTypeId - @build.DisplayRate
-                    </div>
-                </div>
-
-                failingRowId = failingRowId + 1;
-            }
-        }
+        @Html.Partial("_BuildList", new PartialViewModel(Model.GetFailingBuildsByRate(), "alert alert-danger", "failingBuild"))
     </div>
     <div class="col-md-6">
-        @{
-            int passingRowId = 1;
-            foreach (var build in Model.GetPassingBuildsByRate())
-            {
-                <div id="passingBuild_@passingRowId" class="col-md-12 buildItem">
-                    <div class="alert alert-success">
-                        @build.BuildTypeId - @build.DisplayRate
-                    </div>
-                </div>
-
-                passingRowId = passingRowId + 1;
-            }
-        }
+        @Html.Partial("_BuildList", new PartialViewModel(Model.GetPassingBuildsByRate(), "alert alert-success", "passingBuild"))
     </div>
 </div>
 
