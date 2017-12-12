@@ -160,7 +160,7 @@ namespace DevelopmentMetrics.Tests
 
             _build.GetBuilds().Returns(builds);
 
-            var buildTypes = new BuildMetric(_tellTheTime, _build).GetDistinctBuildTypeIds();
+            var buildTypes = new BuildMetric(_tellTheTime, _build).GetDistinctBuildGroups();
 
             Assert.That(buildTypes.Count, Is.EqualTo(2));
             Assert.That(buildTypes.First().BuildTypeId, Is.EqualTo("build type 1"));

@@ -18,7 +18,7 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                    @foreach (var buildType in @Model.GetBuildTypeIdList())
+                    @foreach (var buildType in @Model.GetBuildGroupList())
                     {
                         <li role="presentation">
                             <a role="menuitem" tabindex="-1" href="javascript: filterBuildChartByBuildTypeId('@buildType.BuildTypeGroup');">@buildType.BuildTypeGroupDisplay</a>
@@ -103,31 +103,31 @@
 <div class="row">
     <div class="col-md-6">
         @{
-            var rowId = 1;
+            int failingRowId = 1;
             foreach (var build in Model.GetFailingBuildsByRate())
             {
-                <div id="failingBuild_@rowId" class="col-md-12 buildItem">
+                <div id="failingBuild_@failingRowId" class="col-md-12 buildItem">
                     <div class="alert alert-danger">
                         @build.BuildTypeId - @build.DisplayRate
                     </div>
                 </div>
 
-                @rowId += 1;
+                failingRowId = failingRowId + 1;
             }
         }
     </div>
     <div class="col-md-6">
         @{
-            var rowId = 1;
+            int passingRowId = 1;
             foreach (var build in Model.GetPassingBuildsByRate())
             {
-                <div id="passingBuild_@rowId" class="col-md-12 buildItem">
+                <div id="passingBuild_@passingRowId" class="col-md-12 buildItem">
                     <div class="alert alert-success">
                         @build.BuildTypeId - @build.DisplayRate
                     </div>
                 </div>
 
-                @rowId += 1;
+                passingRowId = passingRowId + 1;
             }
         }
     </div>
@@ -145,7 +145,7 @@
 
     google.setOnLoadCallback(filterBuildChart);
 
-    $(document.ready(function () {
+    $(document).ready(function () {
         showBuilds(5);
-    }));
+    });
 </script>

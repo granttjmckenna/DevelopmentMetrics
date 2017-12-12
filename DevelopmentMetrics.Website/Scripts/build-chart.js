@@ -199,14 +199,14 @@ function showBuilds(numberOfItems) {
 };
 
 function hideAllItems() {
-    $(".buildItem").forEach(function () {
-        this.addClass("hideBuildItem");
+    $(".buildItem").each(function () {
+        $(this).removeClass("showBuildItem").addClass("hideBuildItem");
     });
 };
 
 function showAllItems() {
-    $(".buildItem").forEach(function () {
-        this.addClass("showBuildItem");
+    $(".buildItem").each(function () {
+        $(this).removeClass("hideBuildItem").addClass("showBuildItem");
     });
 };
 

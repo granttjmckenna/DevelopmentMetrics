@@ -17,16 +17,16 @@ namespace DevelopmentMetrics.Website.Models
             _tellTheTime = tellTheTime;
         }
 
-        public List<BuildType> GetBuildTypeIdList()
+        public List<BuildType> GetBuildGroupList()
         {
-            var buildTypes = new BuildMetric(_tellTheTime, _build).GetDistinctBuildTypeIds();
+            return new BuildMetric(_tellTheTime, _build).GetDistinctBuildGroups();
 
-            return buildTypes
-                .Select(b => b.BuildTypeGroup)
-                .Distinct()
-                .Select(buildTypeGroup => buildTypes
-                    .First(b => b.BuildTypeGroup.Equals(buildTypeGroup)))
-                .ToList();
+            //return buildTypes
+            //    .Select(b => b.BuildTypeGroup)
+            //    .Distinct()
+            //    .Select(buildTypeGroup => buildTypes
+            //        .First(b => b.BuildTypeGroup.Equals(buildTypeGroup)))
+            //    .ToList();
         }
 
         public List<FailureRate> GetFailingBuildsByRate()

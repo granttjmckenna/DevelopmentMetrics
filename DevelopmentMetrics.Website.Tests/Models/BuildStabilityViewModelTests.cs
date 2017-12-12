@@ -28,7 +28,7 @@ namespace DevelopmentMetrics.Website.Tests.Models
         {
             _build.GetBuilds().Returns(new List<Build>());
 
-            var displayList = new BuildStabilityViewModel(_build, _tellTheTime).GetBuildTypeIdList();
+            var displayList = new BuildStabilityViewModel(_build, _tellTheTime).GetBuildGroupList();
 
             Assert.That(displayList.Count, Is.EqualTo(0));
         }
@@ -46,7 +46,7 @@ namespace DevelopmentMetrics.Website.Tests.Models
 
             _build.GetBuilds().Returns(builds);
 
-            var displayList = new BuildStabilityViewModel(_build, _tellTheTime).GetBuildTypeIdList();
+            var displayList = new BuildStabilityViewModel(_build, _tellTheTime).GetBuildGroupList();
 
             Assert.That(displayList.Count, Is.EqualTo(2));
         }
@@ -65,7 +65,7 @@ namespace DevelopmentMetrics.Website.Tests.Models
 
             _build.GetBuilds().Returns(builds);
 
-            var displayList = new BuildStabilityViewModel(_build, _tellTheTime).GetBuildTypeIdList();
+            var displayList = new BuildStabilityViewModel(_build, _tellTheTime).GetBuildGroupList();
 
             Assert.That(displayList.Count, Is.EqualTo(2));
             Assert.That(displayList.First().BuildTypeId, Is.EqualTo("buildtype1_1"));
