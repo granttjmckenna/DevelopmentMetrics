@@ -19,9 +19,7 @@ namespace DevelopmentMetrics.Website.Models
 
         public List<BuildType> GetBuildTypeIdList()
         {
-            var builds = _build.GetBuilds();
-
-            var buildTypes = new BuildMetric(_tellTheTime, _build).GetDistinctBuildTypeIdsFrom(builds);
+            var buildTypes = new BuildMetric(_tellTheTime, _build).GetDistinctBuildTypeIds();
 
             return buildTypes
                 .Select(b => b.BuildTypeGroup)

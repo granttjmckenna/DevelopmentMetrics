@@ -158,7 +158,9 @@ namespace DevelopmentMetrics.Tests
 
             builds.AddRange(GetBuilds("build type 1"));
 
-            var buildTypes = new BuildMetric(_tellTheTime, _build).GetDistinctBuildTypeIdsFrom(builds);
+            _build.GetBuilds().Returns(builds);
+
+            var buildTypes = new BuildMetric(_tellTheTime, _build).GetDistinctBuildTypeIds();
 
             Assert.That(buildTypes.Count, Is.EqualTo(2));
             Assert.That(buildTypes.First().BuildTypeId, Is.EqualTo("build type 1"));

@@ -70,7 +70,19 @@ namespace DevelopmentMetrics.Builds
                 .ToList();
         }
 
-        public List<BuildType> GetDistinctBuildTypeIdsFrom(List<Build> builds)
+        public List<BuildType> GetDistinctBuildTypeIds()
+        {
+            var builds = _build.GetBuilds();
+
+            return builds
+                .OrderBy(b => b.BuildTypeId)
+                .Select(b => b.BuildTypeId)
+                .Distinct()
+                .Select(buildTypeId => new BuildType(buildTypeId))
+                .ToList();
+        }
+
+        public List<BuildType> GetDistinctBuildTypeIds(List<Build> builds)
         {
             return builds
                 .OrderBy(b => b.BuildTypeId)
@@ -84,7 +96,7 @@ namespace DevelopmentMetrics.Builds
         {
             var doubles = new List<double>();
 
-            foreach (var buildType in GetDistinctBuildTypeIdsFrom(builds))
+            foreach (var buildType in GetDistinctBuildTypeIds(builds))
             {
                 var buildTypeBuilds = GetBuildsFor(builds, buildType.BuildTypeId);
 
