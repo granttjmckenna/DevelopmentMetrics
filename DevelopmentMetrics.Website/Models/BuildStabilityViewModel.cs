@@ -31,12 +31,12 @@ namespace DevelopmentMetrics.Website.Models
                 .ToList();
         }
 
-        public List<FailureRate> GetTopFiveFailingBuildsByRate()
+        public List<FailureRate> GetFailingBuildsByRate()
         {
             return new BuildMetric(_tellTheTime, _build).GetFailingBuildsByRate();
         }
 
-        public List<FailureRate> GetTopFivePassingBuildsByRate()
+        public List<FailureRate> GetPassingBuildsByRate()
         {
             return new BuildMetric(_tellTheTime, _build).GetPassingBuildsByRate();
         }

@@ -40,3 +40,13 @@ textarea {
 .loaded {
     border: 1px solid #000;
 }
+
+.buildItem { }
+
+.showBuildItem {
+    display: block;
+}
+
+.hideBuildItem {
+    display: none;
+}

@@ -166,10 +166,10 @@ function getChartTitleWeeks(weeks) {
 
 function getChartTitleBuildTypeId(buildTypeId) {
     switch (buildTypeId) {
-    case -1:
-        return "All";
-    default:
-        return buildTypeId;
+        case -1:
+            return "All";
+        default:
+            return buildTypeId;
     }
 };
 
@@ -183,4 +183,33 @@ function getChartValue(id) {
     var input = getElementById(id);
 
     return input.value;
-};;
+};
+
+function showBuilds(numberOfItems) {
+    hideAllItems();
+
+    if (numberOfItems === -1) {
+        showAllItems();
+    } else {
+        for (var i = 1; i <= numberOfItems; i++) {
+            showBuildItem("failingBuild_" + i);
+            showBuildItem("passingBuild_" + i);
+        }
+    }
+};
+
+function hideAllItems() {
+    $(".buildItem").forEach(function () {
+        this.addClass("hideBuildItem");
+    });
+};
+
+function showAllItems() {
+    $(".buildItem").forEach(function () {
+        this.addClass("showBuildItem");
+    });
+};
+
+function showBuildItem(id) {
+    $("#" + id).removeClass("hideBuildItem").addClass("showBuildItem");
+};
