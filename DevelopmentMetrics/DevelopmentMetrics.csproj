@@ -50,6 +50,7 @@
     <Compile Include="Builds\BuildFilter.cs" />
     <Compile Include="Builds\BuildMetric.cs" />
     <Compile Include="Builds\BuildsToExclude.cs" />
+    <Compile Include="Builds\BuildType.cs" />
     <Compile Include="Builds\FailureRate.cs" />
     <Compile Include="Builds\FilterBuilds.cs" />
     <Compile Include="Count.cs" />
