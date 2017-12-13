@@ -16,7 +16,7 @@
             new ChartFilterViewModel(
                 "menu1",
                 "Builds",
-                "filterBuildChartByBuildTypeId",
+                "buildsMenuItem",
                 @Model.GetBuildGroupList().ToDictionary(b => b.BuildTypeGroupDisplay, b => b.BuildTypeGroup),
                 new Dictionary<string, string> { { "All (default)", "All" } }
                 ))
@@ -25,7 +25,7 @@
         @Html.Partial("_ChartFilter",
             new ChartFilterViewModel(
                 "menu2",
-                "Agents",
+                "agentsMenuItem",
                 "filterBuildChartByBuildAgent",
                 @Model.GetBuildAgentList(),
                 new Dictionary<string, string> { { "All (default)", "All" } }
@@ -36,7 +36,7 @@
             new ChartFilterViewModel(
                 "menu3",
                 "Chart data",
-                "filterBuildChartByWeeks",
+                "dataMenuItem",
                 @Model.GetBuildWeeksList(),
                 new Dictionary<string, string> { { "Refresh data", "-1" } }
                 ))

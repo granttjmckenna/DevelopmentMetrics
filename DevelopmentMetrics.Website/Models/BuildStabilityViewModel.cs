@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Helpers;
 
@@ -17,7 +15,7 @@ namespace DevelopmentMetrics.Website.Models
             _tellTheTime = tellTheTime;
         }
 
-        public List<BuildType> GetBuildGroupList()
+        public List<BuildGroup> GetBuildGroupList()
         {
             return new BuildMetric(_tellTheTime, _build).GetDistinctBuildGroups();
         }

@@ -1,4 +1,28 @@
-﻿function filterBuildChartByWeeks(weeks) {
+﻿$(document).ready(function () {
+    $("a.dataMenuItem").click(function () {
+        var weeks = $(this).attr("data-seq");
+
+        filterBuildChartByWeeks(weeks);
+    });
+});
+
+$(document).ready(function () {
+    $("a.agentsMenuItem").click(function () {
+        var buildAgent = $(this).attr("data-seq");
+
+        filterBuildChartByBuildAgent(buildAgent);
+    });
+});
+
+$(document).ready(function () {
+    $("a.buildsMenuItem").click(function () {
+        var buildTypeId = $(this).attr("data-seq");
+
+        filterBuildChartByBuildTypeId(buildTypeId);
+    });
+});
+
+function filterBuildChartByWeeks(weeks) {
     setChartValue("numberOfWeeks", weeks);
 
     filterBuildChart();

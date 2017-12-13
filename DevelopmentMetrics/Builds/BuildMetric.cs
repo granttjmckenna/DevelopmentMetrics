@@ -75,19 +75,18 @@ namespace DevelopmentMetrics.Builds
                 .ToList();
         }
 
-        public List<BuildType> GetDistinctBuildGroups()
+        public List<BuildGroup> GetDistinctBuildGroups()
         {
-            var buildGroups = new List<BuildType>();
+            var results = new List<BuildGroup>();
 
-            foreach (var build in _build.GetBuilds())
+            foreach (var buildGroup in _build.GetBuilds()
+                .Select(b => new BuildGroup(b.BuildTypeId)))
             {
-                var buildType = new BuildType(build.BuildTypeId);
+                if (!results.Exists(b => b.BuildTypeGroup.Equals(buildGroup.BuildTypeGroup)))
+                    results.Add(buildGroup);
+            };
 
-                if (!buildGroups.Exists(b => b.BuildTypeId.Equals(build.BuildTypeId)))
-                    buildGroups.Add(buildType);
-            }
-
-            return buildGroups;
+            return results.OrderBy(b => b.BuildTypeGroup).ToList();
         }
 
         private List<BuildType> GetDistinctBuildTypeIds(List<Build> builds)
@@ -242,6 +241,18 @@ namespace DevelopmentMetrics.Builds
         private bool IsClearCache(int numberOfWeeks)
         {
             return numberOfWeeks == -1;
+        }
+    }
+
+    public class BuildGroup
+    {
+        public string BuildTypeGroup { get; }
+
+        public string BuildTypeGroupDisplay => Display.ConvertCamelCaseString(BuildTypeGroup);
+
+        public BuildGroup(string buildTypeId)
+        {
+            BuildTypeGroup = buildTypeId.Substring(0, buildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }
