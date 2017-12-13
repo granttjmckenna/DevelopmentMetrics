@@ -37,6 +37,20 @@ namespace DevelopmentMetrics.Tests
             Assert.That(buildsForWeek.All(b => b.StartDateTime < new DateTime(2017, 10, 08)));
         }
 
+        [Test]
+        public void Return_time_in_milliseconds_between_successful_builds()
+        {
+            var builds = GetBuildDataFrom(new DateTime(2017, 01, 01), 300);
+
+            var buildStepBuilds = new BuildThroughput().GetSuccessfulBuildStepBuildsFrom(builds);
+
+            var buildsForWeek = new BuildThroughput().GetBuildsForDateRange(buildStepBuilds, new DateTime(2017, 10, 01));
+
+            var doubles = new BuildThroughput().GetTimeInMillisecondsBetweenBuildsFor(buildsForWeek);
+
+            Assert.That(doubles.Count, Is.EqualTo(3));
+        }
+
         private List<Build> GetBuildDataFrom(DateTime fromDate, int rows)
         {
             var dummyBuilds = new List<Build>();
@@ -93,6 +107,18 @@ namespace DevelopmentMetrics.Tests
                     b.StartDateTime >= startDate
                     && b.StartDateTime < endDate)
                 .ToList();
+        }
+
+        public List<double> GetTimeInMillisecondsBetweenBuildsFor(List<Build> builds)
+        {
+            var results = new List<double>();
+
+            for (var x = builds.Count - 1; x > 0; x--)
+            {
+                results.Add((builds[x].StartDateTime - builds[x - 1].StartDateTime).TotalMilliseconds);
+            }
+
+            return results;
         }
     }
 }
