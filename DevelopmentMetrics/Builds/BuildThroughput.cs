@@ -10,11 +10,6 @@ namespace DevelopmentMetrics.Builds
         private readonly IBuild _build;
         private readonly ITellTheTime _tellTheTime;
 
-        public BuildThroughput()
-        {
-            //to be deleted later
-        }
-
         public BuildThroughput(IBuild build, ITellTheTime tellTheTime)
         {
             _build = build;
@@ -45,6 +40,7 @@ namespace DevelopmentMetrics.Builds
 
                     doubles.AddRange(GetTimeInMillisecondsBetweenBuildsFor(buildsByType));
                 }
+
                 results.Add(new BuildThroughputMetric()
                 {
                     Date = startDate,
