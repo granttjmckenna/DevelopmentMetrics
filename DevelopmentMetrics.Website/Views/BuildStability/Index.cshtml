@@ -18,7 +18,7 @@
                 "Builds",
                 "filterBuildChartByBuildTypeId",
                 @Model.GetBuildGroupList().ToDictionary(b => b.BuildTypeGroupDisplay, b => b.BuildTypeGroup),
-                new Dictionary<string, string> { "All (default)", "All" }
+                new Dictionary<string, string> { { "All (default)", "All" } }
                 ))
     </div>
     <div class="col-md-2">
@@ -28,7 +28,7 @@
                 "Agents",
                 "filterBuildChartByBuildAgent",
                 @Model.GetBuildAgentList(),
-                new Dictionary<string, string>() { "All (default)", "All" }
+                new Dictionary<string, string> { { "All (default)", "All" } }
                 ))
     </div>
     <div class="col-md-2">
@@ -38,7 +38,7 @@
                 "Chart data",
                 "filterBuildChartByWeeks",
                 @Model.GetBuildWeeksList(),
-                new Dictionary<string, string>() { "Refresh data", "-1" }
+                new Dictionary<string, string> { { "Refresh data", "-1" } }
                 ))
     </div>
 </div>
@@ -53,21 +53,14 @@
         <h4>Failing and passing builds by rate (all time)</h4>
     </div>
     <div class="col-md-2">
-        <div style="float: right;">
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" id="menu4" type="button" data-toggle="dropdown">
-                    show builds
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu4">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: showBuilds(5);">Top 5 (default)</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: showBuilds(10);">Top 10</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: showBuilds(20);">Top 20</a></li>
-                    <li class="divider"></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: showBuilds(-1);">All</a></li>
-                </ul>
-            </div>
-        </div>
+        @Html.Partial("_ChartFilter",
+            new ChartFilterViewModel(
+                "menu4",
+                "Show builds",
+                "showBuilds",
+                new Dictionary<string, string> { { "Top 5 (default)", "5" }, { "Top 10", "10" }, { "Top 20", "20" } },
+                new Dictionary<string, string> { { "All", "-1" } }
+                ))
     </div>
 </div>
 <div class="row">
