@@ -77,21 +77,17 @@ namespace DevelopmentMetrics.Builds
 
         public List<BuildType> GetDistinctBuildGroups()
         {
-            var builds = _build.GetBuilds();
+            var buildGroups = new List<BuildType>();
 
-            var buildTypeIds = builds
-                .OrderBy(b => b.BuildTypeId)
-                .Select(b => b.BuildTypeId)
-                .Distinct()
-                .Select(buildTypeId => new BuildType(buildTypeId))
-                .ToList();
+            foreach (var build in _build.GetBuilds())
+            {
+                var buildType = new BuildType(build.BuildTypeId);
 
-            return buildTypeIds
-                .Select(b => b.BuildTypeGroup)
-                .Distinct()
-                .Select(buildTypeGroup => buildTypeIds
-                    .First(b => b.BuildTypeGroup.Equals(buildTypeGroup)))
-                .ToList();
+                if (!buildGroups.Exists(b => b.BuildTypeId.Equals(build.BuildTypeId)))
+                    buildGroups.Add(buildType);
+            }
+
+            return buildGroups;
         }
 
         private List<BuildType> GetDistinctBuildTypeIds(List<Build> builds)
