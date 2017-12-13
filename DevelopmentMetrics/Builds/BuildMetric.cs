@@ -243,16 +243,4 @@ namespace DevelopmentMetrics.Builds
             return numberOfWeeks == -1;
         }
     }
-
-    public class BuildGroup
-    {
-        public string BuildTypeGroup { get; }
-
-        public string BuildTypeGroupDisplay => Display.ConvertCamelCaseString(BuildTypeGroup);
-
-        public BuildGroup(string buildTypeId)
-        {
-            BuildTypeGroup = buildTypeId.Substring(0, buildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase));
-        }
-    }
 }

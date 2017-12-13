@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Builds\Build.cs" />
     <Compile Include="Builds\BuildFilter.cs" />
+    <Compile Include="Builds\BuildGroup.cs" />
     <Compile Include="Builds\BuildMetric.cs" />
     <Compile Include="Builds\BuildsToExclude.cs" />
     <Compile Include="Builds\BuildType.cs" />
