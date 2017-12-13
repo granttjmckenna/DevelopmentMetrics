@@ -41,14 +41,16 @@ function renderBuildThroughputChartData(data) {
     dataTable.addColumn("date", "Day");
     dataTable.addColumn("number", "Build Interval Time");
     dataTable.addColumn("number", "Build Interval Time (std dev)");
+    dataTable.addColumn("number", "Build Duration Time");
+    dataTable.addColumn("number", "Build Duration Time (std dev)");
 
     $.each(data,
         function (i, item) {
-            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.BuildIntervalTime, item.BuildIntervalTimeStdDev]]);
+            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.BuildIntervalTime, item.BuildIntervalTimeStdDev, item.BuildDurationTime, item.BuildDurationTimeStdDev]]);
         });
 
     var options = {
-        title: getBuildChartTitle(),
+        title: "Build throughput",
         titleTextStyle: {
             fontSize: 20,
             italic: false
@@ -78,7 +80,7 @@ function renderBuildThroughputChartData(data) {
                 italic: false
             }
         },
-        colors: ["#FF0000", "#34A853", "#FF6600"]
+        colors: ["#FF0000", "#34A853", "#FF6600", "#34BB35"]
     };
 
     drawChart(dataTable, options);
