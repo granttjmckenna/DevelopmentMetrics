@@ -20,6 +20,8 @@ namespace DevelopmentMetrics.Tests
             Assert.That(buildStepBuilds.Any());
             Assert.That(buildStepBuilds.All(b => b.BuildTypeId.Contains("_01")));
             Assert.That(buildStepBuilds.All(b => b.Status.Equals(BuildStatus.Success.ToString())));
+            Assert.That(buildStepBuilds.All(
+                    b => b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase)));
         }
 
         private List<Build> GetBuildDataFrom(DateTime fromDate, int rows)
@@ -63,8 +65,9 @@ namespace DevelopmentMetrics.Tests
         {
             return builds
                 .Where(
-                    b => b.BuildTypeId.Contains("_01") 
-                    && b.Status.Equals(BuildStatus.Success.ToString()))
+                    b => b.BuildTypeId.Contains("_01")
+                    && b.Status.Equals(BuildStatus.Success.ToString())
+                    && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
         }
     }
