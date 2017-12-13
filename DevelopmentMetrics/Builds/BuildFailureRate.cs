@@ -2,7 +2,7 @@
 
 namespace DevelopmentMetrics.Builds
 {
-    public class BuildRate
+    public class BuildFailureRate
     {
         public string BuildTypeId { get; set; }
         public double Rate { get; set; }

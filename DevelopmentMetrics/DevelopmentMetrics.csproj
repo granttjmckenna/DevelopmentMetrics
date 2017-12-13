@@ -53,7 +53,7 @@
     <Compile Include="Builds\BuildsToExclude.cs" />
     <Compile Include="Builds\BuildThroughput.cs" />
     <Compile Include="Builds\BuildType.cs" />
-    <Compile Include="Builds\BuildRate.cs" />
+    <Compile Include="Builds\BuildFailureRate.cs" />
     <Compile Include="Builds\FilterBuilds.cs" />
     <Compile Include="Count.cs" />
     <Compile Include="Helpers\CacheHelper.cs" />
