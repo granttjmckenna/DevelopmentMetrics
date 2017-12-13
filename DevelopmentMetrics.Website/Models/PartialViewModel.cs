@@ -5,13 +5,13 @@ namespace DevelopmentMetrics.Website.Models
 {
     public class PartialViewModel
     {
-        public List<FailureRate> FailureRates { get; }
+        public List<BuildRate> BuildRates { get; }
         public string CssStyle { get; }
         public string DivId { get; }
 
-        public PartialViewModel(List<FailureRate> failureRates, string cssStyle, string divId)
+        public PartialViewModel(List<BuildRate> buildRates, string cssStyle, string divId)
         {
-            FailureRates = failureRates;
+            BuildRates = buildRates;
             CssStyle = cssStyle;
             DivId = divId;
         }

@@ -53,7 +53,7 @@ namespace DevelopmentMetrics.Builds
             return results;
         }
 
-        public List<FailureRate> GetFailingBuildsByRate()
+        public List<BuildRate> GetFailingBuildsByRate()
         {
             var builds = _build.GetBuilds();
 
@@ -64,7 +64,7 @@ namespace DevelopmentMetrics.Builds
                 .ToList();
         }
 
-        public List<FailureRate> GetPassingBuildsByRate()
+        public List<BuildRate> GetPassingBuildsByRate()
         {
             var builds = _build.GetBuilds();
 
@@ -221,7 +221,7 @@ namespace DevelopmentMetrics.Builds
             return CalculateFailureRateFor(builds);
         }
 
-        private IEnumerable<FailureRate> GetFailureRatesFor(List<Build> builds)
+        private IEnumerable<BuildRate> GetFailureRatesFor(List<Build> builds)
         {
             return from buildTypeId in builds
                     .Select(b => b.BuildTypeId)
@@ -231,7 +231,7 @@ namespace DevelopmentMetrics.Builds
                            b => b.BuildTypeId.Equals(buildTypeId, StringComparison.InvariantCultureIgnoreCase)
                                 && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
                        .ToList()
-                   select new FailureRate
+                   select new BuildRate
                    {
                        BuildTypeId = buildTypeId,
                        Rate = CalculateBuildFailingRate(selectedBuilds)

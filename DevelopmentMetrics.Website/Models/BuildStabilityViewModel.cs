@@ -20,12 +20,12 @@ namespace DevelopmentMetrics.Website.Models
             return new BuildMetric(_tellTheTime, _build).GetDistinctBuildGroups();
         }
 
-        public List<FailureRate> GetFailingBuildsByRate()
+        public List<BuildRate> GetFailingBuildsByRate()
         {
             return new BuildMetric(_tellTheTime, _build).GetFailingBuildsByRate();
         }
 
-        public List<FailureRate> GetPassingBuildsByRate()
+        public List<BuildRate> GetPassingBuildsByRate()
         {
             return new BuildMetric(_tellTheTime, _build).GetPassingBuildsByRate();
         }

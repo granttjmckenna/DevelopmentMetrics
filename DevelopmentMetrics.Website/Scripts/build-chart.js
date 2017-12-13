@@ -22,6 +22,19 @@ $(document).ready(function () {
     });
 });
 
+$(document).ready(function () {
+    $("a.showBuildsMenuItem").click(function () {
+        var numberOfItems = $(this).attr("data-seq");
+
+        if (numberOfItems === "-1") {
+            showAllItems();
+        } else {
+            showBuilds(numberOfItems);
+        }
+    });
+});
+
+
 function filterBuildChartByWeeks(weeks) {
     setChartValue("numberOfWeeks", weeks);
 
