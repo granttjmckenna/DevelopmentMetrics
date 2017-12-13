@@ -1,4 +1,12 @@
-﻿function filterBuildThroughputChart() {
+﻿$(document).ready(function () {
+    $("a.dataThroughputMenuItem").click(function () {
+        var weeks = $(this).attr("data-seq");
+
+        drawBuildThroughputChart(weeks);
+    });
+});
+
+function filterBuildThroughputChart() {
     drawBuildThroughputChart(6);
 };
 

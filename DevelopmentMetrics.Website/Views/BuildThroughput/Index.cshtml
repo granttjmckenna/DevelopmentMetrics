@@ -1,4 +1,5 @@
 ﻿@using DevelopmentMetrics.Website.Models
+@model BuildThroughputViewModel
 
 @{
     ViewBag.Title = "Build Throughput";
@@ -15,7 +16,7 @@
             new ChartFilterViewModel(
                 "menu1",
                 "Chart data",
-                "dataMenuItem",
+                "dataThroughputMenuItem",
                 BuildChartMenu.GetBuildWeeksList(),
                 new Dictionary<string, string> { { "Refresh data", "-1" } }
                 ))
