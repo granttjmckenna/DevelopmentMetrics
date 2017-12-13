@@ -41,7 +41,13 @@ textarea {
     border: 1px solid #000;
 }
 
-.buildItem { }
+.dropDownFloatRight {
+    float: right;
+}
+
+.buildItem {
+    background: transparent;
+}
 
 .showBuildItem {
     display: block;
