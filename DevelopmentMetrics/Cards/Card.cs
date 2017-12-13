@@ -7,7 +7,12 @@ using Newtonsoft.Json;
 
 namespace DevelopmentMetrics.Cards
 {
-    public class Card
+    public interface ICard
+    {
+        List<Card> GetCards();
+    }
+
+    public class Card : ICard
     {
         private readonly ILeanKitWebClient _leanKitLeanKitWebClient;
         private readonly ITellTheTime _tellTheTime;

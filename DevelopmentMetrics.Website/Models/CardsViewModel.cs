@@ -8,33 +8,33 @@ namespace DevelopmentMetrics.Website.Models
 {
     public class CardsViewModel
     {
-        private readonly IEnumerable<Card> _cards;
         private readonly ITellTheTime _tellTheTime;
+        private readonly ICard _card;
 
-        public CardsViewModel(ITellTheTime tellTheTime, IEnumerable<Card> cards)
+        public CardsViewModel(ICard card, ITellTheTime tellTheTime)
         {
-            _cards = cards;
+            _card = card;
             _tellTheTime = tellTheTime;
         }
 
         public Dictionary<CardStatus.Status, int> GetCardCountByStatus()
         {
-            return new CardCount(_tellTheTime, _cards).GetCountByStatus();
+            return new CardCount(_card, _tellTheTime).GetCountByStatus();
         }
 
         public int CalculateLeadTime()
         {
-            return new CardMetric(_cards).CalculateLeadTimeFor(DateTime.Now);
+            return new CardMetric(_card).CalculateLeadTimeFor(DateTime.Now);
         }
 
         public List<Card> GetCardsInTodo()
         {
-            return _cards.Where(Predicate(CardStatus.Status.Todo)).ToList();
+            return _card.GetCards().Where(Predicate(CardStatus.Status.Todo)).ToList();
         }
 
         public List<Card> GetCardsInDoing()
         {
-            return _cards.Where(Predicate(CardStatus.Status.Doing)).ToList();
+            return _card.GetCards().Where(Predicate(CardStatus.Status.Doing)).ToList();
         }
 
         private static Func<Card, bool> Predicate(CardStatus.Status cardStatus)

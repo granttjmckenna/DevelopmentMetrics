@@ -11,21 +11,23 @@ namespace DevelopmentMetrics.Tests
     [TestFixture]
     public class CardCountTests
     {
-        private List<Card> _cards;
         private ITellTheTime _tellTheTime;
+        private ICard _card;
 
         [SetUp]
         public void Setup()
         {
-            _cards = GetCards().ToList();
             _tellTheTime = Substitute.For<ITellTheTime>();
+            _card = Substitute.For<ICard>();
+
             _tellTheTime.Now().Returns(new DateTime(2017, 10, 05));
+            _card.GetCards().Returns(GetCards());
         }
 
         [Test]
         public void Return_card_count_by_status()
         {
-            var countByStatus = new CardCount(_tellTheTime, _cards).GetCountByStatus();
+            var countByStatus = new CardCount(_card, _tellTheTime).GetCountByStatus();
 
             Assert.That(countByStatus[CardStatus.Status.Todo], Is.EqualTo(4));
             Assert.That(countByStatus[CardStatus.Status.Doing], Is.EqualTo(2));
@@ -36,7 +38,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_collection_of_count_by_day_for_all_cards()
         {
-            var countByDays = new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(4);
+            var countByDays = new CardCount(_card, _tellTheTime).GetCardCountByDayFrom(4);
 
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 01)).Total, Is.EqualTo(4));
             Assert.That(countByDays.First(c => c.Date == new DateTime(2017, 10, 02)).Total, Is.EqualTo(9));
@@ -54,7 +56,7 @@ namespace DevelopmentMetrics.Tests
         {
             var dateTime = new DateTime(2017, 10, 03);
 
-            var workInProcess = new CardCount(_tellTheTime, _cards).GetInWorkInProcessCountFor(dateTime);
+            var workInProcess = new CardCount(_card, _tellTheTime).GetInWorkInProcessCountFor(dateTime);
 
             Assert.That(workInProcess, Is.EqualTo(7));
         }

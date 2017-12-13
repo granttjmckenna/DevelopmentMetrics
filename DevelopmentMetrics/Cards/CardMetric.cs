@@ -1,25 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace DevelopmentMetrics.Cards
 {
     public class CardMetric
     {
-        private readonly IEnumerable<Card> _cards;
+        private readonly ICard _card;
 
-        public CardMetric(IEnumerable<Card> cards)
+        public CardMetric(ICard card)
         {
-            _cards = cards;
+            _card = card;
         }
         
         public int CalculateLeadTimeFor(DateTime calculationDate)
         {
-            var cardPosition = _cards
+            var cards = _card.GetCards();
+
+            var cardPosition = cards
                 .OrderBy(c => c.CreateDate)
                 .Count(DonePredicateFor(calculationDate));
 
-            var cardDate = _cards.OrderBy(c => c.CreateDate).Take(cardPosition).Max(c => c.CreateDate);
+            var cardDate = cards.OrderBy(c => c.CreateDate).Take(cardPosition).Max(c => c.CreateDate);
 
             return (calculationDate - cardDate).Days;
         }

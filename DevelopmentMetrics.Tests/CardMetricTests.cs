@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using DevelopmentMetrics.Cards;
-using DevelopmentMetrics.Helpers;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace DevelopmentMetrics.Tests
@@ -10,12 +9,14 @@ namespace DevelopmentMetrics.Tests
     [TestFixture]
     public class CardMetricTests
     {
-        private List<Card> _cards;
+        private ICard _card;
 
         [SetUp]
         public void Setup()
         {
-            _cards = GetCards().ToList();
+            _card = Substitute.For<ICard>();
+
+            _card.GetCards().Returns(GetCards());
         }
 
         [Test]
@@ -23,7 +24,7 @@ namespace DevelopmentMetrics.Tests
         {
             var dateTime = new DateTime(2017, 10, 03);
 
-            var leadTime = new CardMetric(_cards).CalculateLeadTimeFor(dateTime);
+            var leadTime = new CardMetric(_card).CalculateLeadTimeFor(dateTime);
 
             Assert.That(leadTime, Is.EqualTo(2));
         }

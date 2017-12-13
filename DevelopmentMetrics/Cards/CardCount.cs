@@ -8,13 +8,12 @@ namespace DevelopmentMetrics.Cards
     public class CardCount
     {
         private readonly ITellTheTime _tellTheTime;
+        private readonly ICard _card;
 
-        private readonly IEnumerable<Card> _cards;
-
-        public CardCount(ITellTheTime tellTheTime, IEnumerable<Card> cards)
+        public CardCount(ICard card, ITellTheTime tellTheTime)
         {
+            _card = card;
             _tellTheTime = tellTheTime;
-            _cards = cards;
         }
 
         public List<Count> GetCardCountByDayFrom(int numberOfDays)
@@ -45,13 +44,15 @@ namespace DevelopmentMetrics.Cards
 
         public Dictionary<CardStatus.Status, int> GetCountByStatus()
         {
+            var cards = _card.GetCards();
+
             var result = new Dictionary<CardStatus.Status, int>
             {
-                {CardStatus.Status.Todo, _cards.Count(c => c.Status.Equals(CardStatus.Status.Todo))},
-                {CardStatus.Status.Doing, _cards.Count(c => c.Status.Equals(CardStatus.Status.Doing))},
-                {CardStatus.Status.Done, _cards.Count(c => c.Status.Equals(CardStatus.Status.Done))},
-                {CardStatus.Status.Unassigned, _cards.Count(c => c.Status.Equals(CardStatus.Status.Unassigned))},
-                {CardStatus.Status.All, _cards.Count() }
+                {CardStatus.Status.Todo, cards.Count(c => c.Status.Equals(CardStatus.Status.Todo))},
+                {CardStatus.Status.Doing, cards.Count(c => c.Status.Equals(CardStatus.Status.Doing))},
+                {CardStatus.Status.Done, cards.Count(c => c.Status.Equals(CardStatus.Status.Done))},
+                {CardStatus.Status.Unassigned, cards.Count(c => c.Status.Equals(CardStatus.Status.Unassigned))},
+                {CardStatus.Status.All, cards.Count() }
             };
 
             return result;
@@ -59,8 +60,10 @@ namespace DevelopmentMetrics.Cards
 
         public int GetInWorkInProcessCountFor(DateTime calculationDateTime)
         {
-            return _cards.Count(c => c.CreateDate <= calculationDateTime)
-                - _cards.Count(DonePredicateFor(calculationDateTime));
+            var cards = _card.GetCards();
+
+            return cards.Count(c => c.CreateDate <= calculationDateTime)
+                - cards.Count(DonePredicateFor(calculationDateTime));
         }
 
         private DateTime GetFromDate(int numberOfDays)
@@ -70,7 +73,7 @@ namespace DevelopmentMetrics.Cards
                 case -1:
                     return _tellTheTime.Now().AddDays(-42);
                 case -2:
-                    return _cards.Min(c => c.CreateDate);
+                    return _card.GetCards().Min(c => c.CreateDate);
                 default:
                     return _tellTheTime.Now().AddDays(numberOfDays * -1);
             }
@@ -94,7 +97,7 @@ namespace DevelopmentMetrics.Cards
 
         private int GetCardCountsFor(Func<Card, bool> func)
         {
-            return _cards.Count(func);
+            return _card.GetCards().Count(func);
         }
 
         private bool IsClearCache(int numberOfDays)

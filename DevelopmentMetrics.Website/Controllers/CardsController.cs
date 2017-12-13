@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using DevelopmentMetrics.Cards;
 using DevelopmentMetrics.Helpers;
-using DevelopmentMetrics.Repository;
 using DevelopmentMetrics.Website.Models;
 
 namespace DevelopmentMetrics.Website.Controllers
 {
     public class CardsController : Controller
     {
-        private readonly ILeanKitWebClient _leanKitWebClient;
         private readonly ITellTheTime _tellTheTime;
-        private List<Card> _cards;
+        private readonly ICard _card;
 
-        public CardsController(ILeanKitWebClient leanKitWebClient, ITellTheTime tellTheTime)
+        public CardsController(ICard card, ITellTheTime tellTheTime)
         {
+            _card = card;
             _tellTheTime = tellTheTime;
-            _leanKitWebClient = leanKitWebClient;
         }
 
 
         // GET: Cards
         public ActionResult Index()
         {
-            _cards = GetCards();
-
-            var model = new CardsViewModel(_tellTheTime, _cards);
+            var model = new CardsViewModel(_card, _tellTheTime);
 
             return View(model);
         }
@@ -34,16 +28,9 @@ namespace DevelopmentMetrics.Website.Controllers
         [HttpPost]
         public JsonResult GetCardChartDataFor(int numberOfDays)
         {
-            _cards = GetCards();
-
-            var cardCounts = new CardCount(_tellTheTime, _cards).GetCardCountByDayFrom(numberOfDays);
+            var cardCounts = new CardCount(_card, _tellTheTime).GetCardCountByDayFrom(numberOfDays);
 
             return Json(cardCounts);
-        }
-
-        private List<Card> GetCards()
-        {
-            return new Card(_leanKitWebClient, _tellTheTime).GetCards();
         }
     }
 }
