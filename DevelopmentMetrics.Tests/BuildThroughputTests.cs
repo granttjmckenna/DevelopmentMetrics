@@ -37,41 +37,6 @@ namespace DevelopmentMetrics.Tests
             Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
         }
 
-        [Test]
-        public void Return_all_successful_create_artifact_build_steps_from_builds_list()
-        {
-            var buildStepBuilds = _buildThroughput.GetSuccessfulBuildStepBuilds();
-
-            Assert.That(buildStepBuilds.Any());
-            Assert.That(buildStepBuilds.All(b => b.BuildTypeId.Contains("_01")));
-            Assert.That(buildStepBuilds.All(b => b.Status.Equals(BuildStatus.Success.ToString())));
-            Assert.That(buildStepBuilds.All(
-                    b => b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase)));
-        }
-
-        [Test]
-        public void Return_all_builds_for_one_week()
-        {
-            var buildStepBuilds = _buildThroughput.GetSuccessfulBuildStepBuilds();
-
-            var buildsForWeek = new BuildThroughput().GetBuildsForDateRange(buildStepBuilds, new DateTime(2017, 10, 01));
-
-            Assert.That(buildsForWeek.All(b => b.StartDateTime >= new DateTime(2017, 10, 01)));
-            Assert.That(buildsForWeek.All(b => b.StartDateTime < new DateTime(2017, 10, 08)));
-        }
-
-        [Test]
-        public void Return_time_in_milliseconds_between_successful_builds()
-        {
-            var buildStepBuilds = _buildThroughput.GetSuccessfulBuildStepBuilds();
-
-            var buildsForWeek = new BuildThroughput().GetBuildsForDateRange(buildStepBuilds, new DateTime(2017, 10, 01));
-
-            var doubles = new BuildThroughput().GetTimeInMillisecondsBetweenBuildsFor(buildsForWeek);
-
-            Assert.That(doubles.Count, Is.EqualTo(3));
-        }
-
         private List<Build> GetBuildDataFrom(DateTime fromDate, int rows)
         {
             var dummyBuilds = new List<Build>();
