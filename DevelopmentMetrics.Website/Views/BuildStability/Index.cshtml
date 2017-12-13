@@ -18,27 +18,18 @@
                 "Builds",
                 "filterBuildChartByBuildTypeId",
                 @Model.GetBuildGroupList().ToDictionary(b => b.BuildTypeGroupDisplay, b => b.BuildTypeGroup),
-                new Dictionary<string, string>() { "All (default)", "All" }
-       ))
+                new Dictionary<string, string> { "All (default)", "All" }
+                ))
     </div>
     <div class="col-md-2">
-        <div style="float: right;">
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" id="menu2" type="button" data-toggle="dropdown">
-                    Filter data
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChartByBuildAgent('lon-devtcagent1');">TC-Agent 1</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChartByBuildAgent('lon-devtcagent2');">TC-Agent 2</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChartByBuildAgent('lon-devtcagent3');">TC-Agent 3</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChartByBuildAgent('lon-devtcagent4');">TC-Agent 4</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChartByBuildAgent('lon-devtcagent5');">TC-Agent 5</a></li>
-                    <li class="divider"></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript: filterBuildChartByBuildAgent('All');">All</a></li>
-                </ul>
-            </div>
-        </div>
+        @Html.Partial("_ChartFilter",
+            new ChartFilterViewModel(
+                "menu2",
+                "Agents",
+                "filterBuildChartByBuildAgent",
+                @Model.GetBuildAgentList(),
+                new Dictionary<string, string>() { "All (default)", "All" }
+                ))
     </div>
     <div class="col-md-2">
         <div style="float: right;">

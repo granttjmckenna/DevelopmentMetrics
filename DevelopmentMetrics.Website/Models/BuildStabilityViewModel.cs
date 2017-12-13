@@ -20,13 +20,6 @@ namespace DevelopmentMetrics.Website.Models
         public List<BuildType> GetBuildGroupList()
         {
             return new BuildMetric(_tellTheTime, _build).GetDistinctBuildGroups();
-
-            //return buildTypes
-            //    .Select(b => b.BuildTypeGroup)
-            //    .Distinct()
-            //    .Select(buildTypeGroup => buildTypes
-            //        .First(b => b.BuildTypeGroup.Equals(buildTypeGroup)))
-            //    .ToList();
         }
 
         public List<FailureRate> GetFailingBuildsByRate()
@@ -37,6 +30,21 @@ namespace DevelopmentMetrics.Website.Models
         public List<FailureRate> GetPassingBuildsByRate()
         {
             return new BuildMetric(_tellTheTime, _build).GetPassingBuildsByRate();
+        }
+
+        public Dictionary<string, string> GetBuildAgentList()
+        {
+            var results = new Dictionary<string, string>
+            {
+                {"TC-Agent 1", "lon-devtcagent1"},
+                {"TC-Agent 2", "lon-devtcagent2"},
+                {"TC-Agent 3", "lon-devtcagent3"},
+                {"TC-Agent 4", "lon-devtcagent4"},
+                {"TC-Agent 5", "lon-devtcagent5"}
+            };
+
+
+            return results;
         }
     }
 }
