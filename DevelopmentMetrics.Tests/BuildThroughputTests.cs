@@ -24,6 +24,19 @@ namespace DevelopmentMetrics.Tests
                     b => b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase)));
         }
 
+        [Test]
+        public void Return_all_builds_for_one_week()
+        {
+            var builds = GetBuildDataFrom(new DateTime(2017, 01, 01), 300);
+
+            var buildStepBuilds = new BuildThroughput().GetSuccessfulBuildStepBuildsFrom(builds);
+
+            var buildsForWeek = new BuildThroughput().GetBuildsForDateRange(buildStepBuilds, new DateTime(2017, 10, 01));
+
+            Assert.That(buildsForWeek.All(b => b.StartDateTime >= new DateTime(2017, 10, 01)));
+            Assert.That(buildsForWeek.All(b => b.StartDateTime < new DateTime(2017, 10, 08)));
+        }
+
         private List<Build> GetBuildDataFrom(DateTime fromDate, int rows)
         {
             var dummyBuilds = new List<Build>();
@@ -68,6 +81,17 @@ namespace DevelopmentMetrics.Tests
                     b => b.BuildTypeId.Contains("_01")
                     && b.Status.Equals(BuildStatus.Success.ToString())
                     && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+        }
+
+        public List<Build> GetBuildsForDateRange(List<Build> builds, DateTime startDate)
+        {
+            var endDate = startDate.AddDays(7);
+
+            return builds
+                .Where(b =>
+                    b.StartDateTime >= startDate
+                    && b.StartDateTime < endDate)
                 .ToList();
         }
     }
