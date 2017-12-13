@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Helpers;
+using DevelopmentMetrics.Website.Models;
 
 namespace DevelopmentMetrics.Website.Controllers
 {
@@ -17,7 +18,9 @@ namespace DevelopmentMetrics.Website.Controllers
         // GET: BuildThroughput
         public ActionResult Index()
         {
-            return View();
+            var model = new BuildThroughputViewModel(_build, _tellTheTime);
+
+            return View(model);
         }
 
         [HttpPost]

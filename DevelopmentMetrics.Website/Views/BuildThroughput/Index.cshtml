@@ -1,4 +1,5 @@
-﻿
+﻿@using DevelopmentMetrics.Website.Models
+
 @{
     ViewBag.Title = "Build Throughput";
 }
@@ -10,7 +11,14 @@
         <h2>Build throughput</h2>
     </div>
     <div class="col-md-8">
-        
+        @Html.Partial("_ChartFilter",
+            new ChartFilterViewModel(
+                "menu1",
+                "Chart data",
+                "dataMenuItem",
+                BuildChartMenu.GetBuildWeeksList(),
+                new Dictionary<string, string> { { "Refresh data", "-1" } }
+                ))
     </div>
 </div>
 <div class="row">

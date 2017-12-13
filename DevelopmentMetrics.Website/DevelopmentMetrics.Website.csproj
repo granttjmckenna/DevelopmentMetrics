@@ -170,7 +170,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BuildChartMenu.cs" />
     <Compile Include="Models\BuildStabilityViewModel.cs" />
+    <Compile Include="Models\BuildThroughputViewModel.cs" />
     <Compile Include="Models\CardsViewModel.cs" />
     <Compile Include="Models\ChartFilterViewModel.cs" />
     <Compile Include="Models\PartialViewModel.cs" />
