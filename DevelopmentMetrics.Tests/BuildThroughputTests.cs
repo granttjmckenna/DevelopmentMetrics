@@ -11,13 +11,15 @@ namespace DevelopmentMetrics.Tests
     public class BuildThroughputTests
     {
         [Test]
-        public void Return_all_create_artifact_build_steps_from_builds_list()
+        public void Return_all_successful_create_artifact_build_steps_from_builds_list()
         {
             var builds = GetBuildDataFrom(new DateTime(2017, 01, 01), 300);
 
-            var buildStepBuilds = new BuildThroughput().GetBuildStepBuildsFrom(builds);
+            var buildStepBuilds = new BuildThroughput().GetSuccessfulBuildStepBuildsFrom(builds);
 
+            Assert.That(buildStepBuilds.Any());
             Assert.That(buildStepBuilds.All(b => b.BuildTypeId.Contains("_01")));
+            Assert.That(buildStepBuilds.All(b => b.Status.Equals(BuildStatus.Success.ToString())));
         }
 
         private List<Build> GetBuildDataFrom(DateTime fromDate, int rows)
@@ -29,7 +31,7 @@ namespace DevelopmentMetrics.Tests
                 dummyBuilds.Add(
                     new Build
                     {
-                        BuildTypeId = "Blah_blah",
+                        BuildTypeId = GetBuildStep(i),
                         Id = i,
                         AgentName = "Blah",
                         StartDateTime = fromDate.AddDays(i).AddMinutes(1),
@@ -44,6 +46,11 @@ namespace DevelopmentMetrics.Tests
             return dummyBuilds;
         }
 
+        private string GetBuildStep(int i)
+        {
+            return (i % 3) == 0 ? $"blah_blah_{i}" : $"blah_blah_01";
+        }
+
         private string GetStatus(int i)
         {
             return ((i % 3) == 0) ? BuildStatus.Failure.ToString() : BuildStatus.Success.ToString();
@@ -52,10 +59,12 @@ namespace DevelopmentMetrics.Tests
 
     public class BuildThroughput
     {
-        public List<Build> GetBuildStepBuildsFrom(List<Build> builds)
+        public List<Build> GetSuccessfulBuildStepBuildsFrom(List<Build> builds)
         {
             return builds
-                .Where(b => b.BuildTypeId.Contains("_01"))
+                .Where(
+                    b => b.BuildTypeId.Contains("_01") 
+                    && b.Status.Equals(BuildStatus.Success.ToString()))
                 .ToList();
         }
     }
