@@ -61,7 +61,7 @@
     <Compile Include="Helpers\Configuration.cs" />
     <Compile Include="Helpers\Display.cs" />
     <Compile Include="Helpers\TellTheTime.cs" />
-    <Compile Include="Metric.cs" />
+    <Compile Include="BuildStabilityMetric.cs" />
     <Compile Include="Cards\Card.cs" />
     <Compile Include="Cards\CardCount.cs" />
     <Compile Include="Cards\CardMetric.cs" />

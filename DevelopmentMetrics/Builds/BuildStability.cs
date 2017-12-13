@@ -16,7 +16,7 @@ namespace DevelopmentMetrics.Builds
             _build = build;
         }
 
-        public List<Metric> CalculateBuildFailingRateByWeekFor(BuildFilter buildFilter)
+        public List<BuildStabilityMetric> CalculateBuildFailingRateByWeekFor(BuildFilter buildFilter)
         {
             if (IsClearCache(buildFilter.NumberOfWeeks))
             {
@@ -27,7 +27,7 @@ namespace DevelopmentMetrics.Builds
 
             var filteredBuilds = new FilterBuilds(builds).Filter(buildFilter);
 
-            var results = new List<Metric>();
+            var results = new List<BuildStabilityMetric>();
 
             var fromDate = GetFromDate(builds, buildFilter.NumberOfWeeks);
 
@@ -41,7 +41,7 @@ namespace DevelopmentMetrics.Builds
 
                 var doubles = CalculateMillisecondsBetweenBuilds(finishedBuilds);
 
-                results.Add(new Metric
+                results.Add(new BuildStabilityMetric
                 {
                     Date = startDate,
                     FailureRate = CalculateFailureRateFor(finishedBuilds),

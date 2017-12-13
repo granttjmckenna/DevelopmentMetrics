@@ -2,7 +2,7 @@
 
 namespace DevelopmentMetrics
 {
-    public class Metric
+    public class BuildStabilityMetric
     {
         public DateTime Date { get; set; }
         public double FailureRate { get; set; }
