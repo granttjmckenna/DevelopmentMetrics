@@ -17,6 +17,7 @@ namespace DevelopmentMetrics.Website
             bundles.Add(new ScriptBundle("~/bundles/google-charts").Include(
                 "~/Scripts/chart.js",
                 "~/Scripts/card-chart.js",
+                "~/Scripts/build-throughput-chart.js",
                 "~/Scripts/build-chart.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're

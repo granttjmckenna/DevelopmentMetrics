@@ -1,0 +1,3 @@
+﻿function filterBuildThroughputChart() {
+    //does nothing!
+};
