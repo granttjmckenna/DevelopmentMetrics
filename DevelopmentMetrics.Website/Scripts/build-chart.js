@@ -127,7 +127,7 @@ function renderBuildChartData(data) {
                 gridlines: {
                     color: "transparent"
                 },
-                title: "Failure rate",
+                title: "Build Failure Rate (%)",
                 titleTextStyle: {
                     fontSize: 20,
                     italic: false
@@ -142,7 +142,7 @@ function renderBuildChartData(data) {
                 gridlines: {
                     color: "transparent"
                 },
-                title: "Recovery time (hours)",
+                title: "Build Failure Recovery Time (hours)",
                 titleTextStyle: {
                     fontSize: 20,
                     italic: false
