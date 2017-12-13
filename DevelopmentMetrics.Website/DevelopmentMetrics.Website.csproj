@@ -159,6 +159,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\BuildStabilityController.cs" />
+    <Compile Include="Controllers\BuildThroughputController.cs" />
     <Compile Include="Controllers\CardsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
@@ -215,6 +216,7 @@
     <Content Include="Views\Cards\Index.cshtml" />
     <Content Include="Views\BuildStability\_BuildList.cshtml" />
     <Content Include="Views\Shared\_ChartFilter.cshtml" />
+    <Content Include="Views\BuildThroughput\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
