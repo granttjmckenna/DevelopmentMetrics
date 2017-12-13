@@ -214,7 +214,7 @@
     <Content Include="Views\BuildStability\Index.cshtml" />
     <Content Include="Views\Cards\Index.cshtml" />
     <Content Include="Views\BuildStability\_BuildList.cshtml" />
-    <Content Include="Views\_ChartFilter.cshtml" />
+    <Content Include="Views\Shared\_ChartFilter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

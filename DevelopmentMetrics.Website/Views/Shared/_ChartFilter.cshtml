@@ -10,7 +10,7 @@
             @foreach (var item in @Model.MenuItems)
             {
                 <li role="presentation">
-                    <a role="menuitem" tabindex="-1" href="javascript: @Model.JavaScript('@item.Value');">
+                    <a class="@Model.MenuClass" role="menuitem" tabindex="-1" data-seq="@item.Value">
                         @item.Key
                     </a>
                 </li>
@@ -21,12 +21,12 @@
                 foreach (var extraItem in Model.ExtraItems)
                 {
                     <li role="presentation">
-                        <a role="menuitem" tabindex="-1" href="javascript: @Model.JavaScript('@extraItem.Value');">
+                        <a role="menuitem" tabindex="-1" href="javascript: @Model.MenuClass;" data-seq="@extraItem.Value">
                             @extraItem.Key
                         </a>
                     </li>
                 }
-            }@
+            }
         </ul>
     </div>
 </div>

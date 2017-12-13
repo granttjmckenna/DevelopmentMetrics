@@ -16,6 +16,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using DevelopmentMetrics.Builds;
+using DevelopmentMetrics.Cards;
 using DevelopmentMetrics.Helpers;
 
 namespace DevelopmentMetrics.Website.DependencyResolution
@@ -44,6 +45,7 @@ namespace DevelopmentMetrics.Website.DependencyResolution
             For<ITellTheTime>().Use<TellTheTime>();
             For<IBuildsToExclude>().Use<BuildsToExclude>();
             For<IBuild>().Use<Build>();
+            For<ICard>().Use<Card>();
         }
 
         #endregion

@@ -37,6 +37,23 @@ namespace DevelopmentMetrics.Website.Models
             return _card.GetCards().Where(Predicate(CardStatus.Status.Doing)).ToList();
         }
 
+        public Dictionary<string, string> GetBuildWeeksList()
+        {
+            var results = new Dictionary<string, string>
+            {
+                {"6 weeks (default)", "6"},
+                {"7 weeks", "7"},
+                {"8 weeks", "8"},
+                {"9 weeks", "9"},
+                {"10 weeks", "10"},
+                {"15 weeks", "15"},
+                {"20 weeks", "20"},
+                {"All", "-2"}
+            };
+
+            return results;
+        }
+
         private static Func<Card, bool> Predicate(CardStatus.Status cardStatus)
         {
             return c => c.Status == cardStatus;

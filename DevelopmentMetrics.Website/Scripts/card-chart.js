@@ -1,4 +1,14 @@
-﻿function drawCardChart(days) {
+﻿$(document).ready(function() {
+    $("a.chartMenuItem").click(function() {
+        var weeks = $(this).attr("data-seq");
+
+        var days = weeks * 7;
+
+        drawCardChart(days);
+    });
+});
+
+function drawCardChart(days) {
     var chartDays = 42;
 
     if (days && typeof days == "number") {
