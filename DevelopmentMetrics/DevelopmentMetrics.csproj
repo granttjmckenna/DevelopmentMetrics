@@ -51,6 +51,7 @@
     <Compile Include="Builds\BuildGroup.cs" />
     <Compile Include="Builds\BuildStability.cs" />
     <Compile Include="Builds\BuildsToExclude.cs" />
+    <Compile Include="Builds\BuildThroughput.cs" />
     <Compile Include="Builds\BuildType.cs" />
     <Compile Include="Builds\BuildRate.cs" />
     <Compile Include="Builds\FilterBuilds.cs" />

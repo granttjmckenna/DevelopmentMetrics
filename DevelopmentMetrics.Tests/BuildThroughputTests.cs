@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Helpers;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace DevelopmentMetrics.Tests
@@ -10,12 +11,21 @@ namespace DevelopmentMetrics.Tests
     [TestFixture]
     public class BuildThroughputTests
     {
+        private BuildThroughput _buildThroughput;
+
+        [SetUp]
+        public void Setup()
+        {
+            var build = Substitute.For<IBuild>();
+
+            build.GetBuilds().Returns(GetBuildDataFrom(new DateTime(2017, 01, 01), 300));
+
+            _buildThroughput = new BuildThroughput(build);
+        }
         [Test]
         public void Return_all_successful_create_artifact_build_steps_from_builds_list()
         {
-            var builds = GetBuildDataFrom(new DateTime(2017, 01, 01), 300);
-
-            var buildStepBuilds = new BuildThroughput().GetSuccessfulBuildStepBuildsFrom(builds);
+            var buildStepBuilds = _buildThroughput.GetSuccessfulBuildStepBuilds();
 
             Assert.That(buildStepBuilds.Any());
             Assert.That(buildStepBuilds.All(b => b.BuildTypeId.Contains("_01")));
@@ -27,9 +37,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_all_builds_for_one_week()
         {
-            var builds = GetBuildDataFrom(new DateTime(2017, 01, 01), 300);
-
-            var buildStepBuilds = new BuildThroughput().GetSuccessfulBuildStepBuildsFrom(builds);
+            var buildStepBuilds = _buildThroughput.GetSuccessfulBuildStepBuilds();
 
             var buildsForWeek = new BuildThroughput().GetBuildsForDateRange(buildStepBuilds, new DateTime(2017, 10, 01));
 
@@ -40,9 +48,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_time_in_milliseconds_between_successful_builds()
         {
-            var builds = GetBuildDataFrom(new DateTime(2017, 01, 01), 300);
-
-            var buildStepBuilds = new BuildThroughput().GetSuccessfulBuildStepBuildsFrom(builds);
+            var buildStepBuilds = _buildThroughput.GetSuccessfulBuildStepBuilds();
 
             var buildsForWeek = new BuildThroughput().GetBuildsForDateRange(buildStepBuilds, new DateTime(2017, 10, 01));
 
@@ -83,42 +89,6 @@ namespace DevelopmentMetrics.Tests
         private string GetStatus(int i)
         {
             return ((i % 3) == 0) ? BuildStatus.Failure.ToString() : BuildStatus.Success.ToString();
-        }
-    }
-
-    public class BuildThroughput
-    {
-        public List<Build> GetSuccessfulBuildStepBuildsFrom(List<Build> builds)
-        {
-            return builds
-                .Where(
-                    b => b.BuildTypeId.Contains("_01")
-                    && b.Status.Equals(BuildStatus.Success.ToString())
-                    && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
-                .ToList();
-        }
-
-        public List<Build> GetBuildsForDateRange(List<Build> builds, DateTime startDate)
-        {
-            var endDate = startDate.AddDays(7);
-
-            return builds
-                .Where(b =>
-                    b.StartDateTime >= startDate
-                    && b.StartDateTime < endDate)
-                .ToList();
-        }
-
-        public List<double> GetTimeInMillisecondsBetweenBuildsFor(List<Build> builds)
-        {
-            var results = new List<double>();
-
-            for (var x = builds.Count - 1; x > 0; x--)
-            {
-                results.Add((builds[x].StartDateTime - builds[x - 1].StartDateTime).TotalMilliseconds);
-            }
-
-            return results;
         }
     }
 }
