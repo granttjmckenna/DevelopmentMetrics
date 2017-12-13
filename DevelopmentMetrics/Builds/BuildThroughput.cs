@@ -39,18 +39,18 @@ namespace DevelopmentMetrics.Builds
                         .Where(b => b.BuildTypeId.Equals(buildType.BuildTypeId))
                         .ToList();
 
-                    buildIntervals.AddRange(GetTimeInMillisecondsBetweenBuildsFor(buildsByType));
+                    buildIntervals.AddRange(GetBuildIntervalInMillisecondsFor(buildsByType));
 
-                    buildDurations.AddRange(GetBuildTimeInMillisecondsFor(buildsByType));
+                    buildDurations.AddRange(GetBuildDurationInMillisecondsFor(buildsByType));
                 }
 
                 results.Add(new BuildThroughputMetric()
                 {
                     Date = startDate,
-                    BuildIntervalTime = CalculateAverageBuildIntervalTimeInHoursFor(buildIntervals),
+                    BuildIntervalTime = CalculateAverageTimeInHoursFor(buildIntervals),
                     BuildIntervalTimeStdDev =
                         Calculator.ConvertMillisecondsToHours(Calculator.CalculateStandardDeviation(buildIntervals)),
-                    BuildDurationTime = CalculateAverageBuildIntervalTimeInHoursFor(buildDurations),
+                    BuildDurationTime = CalculateAverageTimeInHoursFor(buildDurations),
                     BuildDurationTimeStdDev =
                         Calculator.ConvertMillisecondsToHours(Calculator.CalculateStandardDeviation(buildDurations))
                 });
@@ -59,7 +59,7 @@ namespace DevelopmentMetrics.Builds
             return results;
         }
 
-        private List<double> GetTimeInMillisecondsBetweenBuildsFor(List<Build> builds)
+        private List<double> GetBuildIntervalInMillisecondsFor(List<Build> builds)
         {
             var results = new List<double>();
 
@@ -71,7 +71,7 @@ namespace DevelopmentMetrics.Builds
             return results;
         }
 
-        private List<double> GetBuildTimeInMillisecondsFor(List<Build> builds)
+        private List<double> GetBuildDurationInMillisecondsFor(List<Build> builds)
         {
             return builds
                 .Select(build => (build.FinishDateTime - build.StartDateTime).TotalMilliseconds)
@@ -99,7 +99,7 @@ namespace DevelopmentMetrics.Builds
                 .ToList();
         }
 
-        private int CalculateAverageBuildIntervalTimeInHoursFor(List<double> doubles)
+        private int CalculateAverageTimeInHoursFor(List<double> doubles)
         {
             return doubles.Any()
                 ? Calculator.ConvertMillisecondsToHours(doubles.Average())
