@@ -17,17 +17,17 @@ namespace DevelopmentMetrics.Website.Models
 
         public List<BuildGroup> GetBuildGroupList()
         {
-            return new BuildMetric(_tellTheTime, _build).GetDistinctBuildGroups();
+            return new BuildStability(_tellTheTime, _build).GetDistinctBuildGroups();
         }
 
         public List<BuildRate> GetFailingBuildsByRate()
         {
-            return new BuildMetric(_tellTheTime, _build).GetFailingBuildsByRate();
+            return new BuildStability(_tellTheTime, _build).GetFailingBuildsByRate();
         }
 
         public List<BuildRate> GetPassingBuildsByRate()
         {
-            return new BuildMetric(_tellTheTime, _build).GetPassingBuildsByRate();
+            return new BuildStability(_tellTheTime, _build).GetPassingBuildsByRate();
         }
 
         public Dictionary<string, string> GetBuildAgentList()

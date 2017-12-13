@@ -27,7 +27,7 @@ namespace DevelopmentMetrics.Website.Controllers
         [HttpPost]
         public JsonResult GetBuildChartDataFor(int numberOfWeeks, string buildAgent, string buildTypeId)
         {
-            var buildData = new BuildMetric(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(
+            var buildData = new BuildStability(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(
                 new BuildFilter(numberOfWeeks, buildAgent, buildTypeId));
 
             return Json(buildData);

@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace DevelopmentMetrics.Tests
 {
     [TestFixture]
-    public class BuildMetricTests
+    public class BuildStabilityTests
     {
         private ITellTheTime _tellTheTime;
         private IBuild _build;
@@ -53,7 +53,7 @@ namespace DevelopmentMetrics.Tests
 
             _build.GetBuilds().Returns(builds);
 
-            var failingBuilds = new BuildMetric(_tellTheTime, _build).GetFailingBuildsByRate();
+            var failingBuilds = new BuildStability(_tellTheTime, _build).GetFailingBuildsByRate();
 
             Assert.That(failingBuilds.All(b => b.BuildTypeId.Equals("failing build type id")));
         }
@@ -87,7 +87,7 @@ namespace DevelopmentMetrics.Tests
 
             _build.GetBuilds().Returns(builds);
 
-            var failingBuilds = new BuildMetric(_tellTheTime, _build).GetPassingBuildsByRate();
+            var failingBuilds = new BuildStability(_tellTheTime, _build).GetPassingBuildsByRate();
 
             Assert.That(failingBuilds.All(b => b.BuildTypeId.Equals("passing build type id")));
         }
@@ -100,7 +100,7 @@ namespace DevelopmentMetrics.Tests
             _build.GetBuilds().Returns(builds);
 
             var results =
-                new BuildMetric(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(new BuildFilter(6, "All", "All"));
+                new BuildStability(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(new BuildFilter(6, "All", "All"));
 
             Assert.That(results.Count(), Is.EqualTo(6));
             Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
@@ -146,7 +146,7 @@ namespace DevelopmentMetrics.Tests
             _build.GetBuilds().Returns(builds);
 
             var metrics =
-                new BuildMetric(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(new BuildFilter(1, "All", "All"));
+                new BuildStability(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(new BuildFilter(1, "All", "All"));
 
             Assert.That(metrics.First().RecoveryTime, Is.EqualTo(1));
         }
@@ -160,7 +160,7 @@ namespace DevelopmentMetrics.Tests
 
             _build.GetBuilds().Returns(builds);
 
-            var buildTypes = new BuildMetric(_tellTheTime, _build).GetDistinctBuildGroups();
+            var buildTypes = new BuildStability(_tellTheTime, _build).GetDistinctBuildGroups();
 
             Assert.That(buildTypes.Count, Is.EqualTo(2));
             Assert.That(buildTypes.First().BuildTypeGroup, Is.EqualTo("BuildType1"));

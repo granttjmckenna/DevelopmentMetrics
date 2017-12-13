@@ -60,7 +60,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="BuildMetricTests.cs" />
+    <Compile Include="BuildStabilityTests.cs" />
     <Compile Include="CalculatorTests.cs" />
     <Compile Include="CardMetricTests.cs" />
     <Compile Include="CardCountTests.cs" />

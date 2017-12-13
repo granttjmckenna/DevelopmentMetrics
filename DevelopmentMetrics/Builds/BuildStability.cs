@@ -5,12 +5,12 @@ using DevelopmentMetrics.Helpers;
 
 namespace DevelopmentMetrics.Builds
 {
-    public class BuildMetric
+    public class BuildStability
     {
         private readonly ITellTheTime _tellTheTime;
         private readonly IBuild _build;
 
-        public BuildMetric(ITellTheTime tellTheTime, IBuild build)
+        public BuildStability(ITellTheTime tellTheTime, IBuild build)
         {
             _tellTheTime = tellTheTime;
             _build = build;
