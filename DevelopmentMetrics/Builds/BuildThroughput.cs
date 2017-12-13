@@ -26,7 +26,8 @@ namespace DevelopmentMetrics.Builds
 
             for (var x = 0; x < numberOfWeeks; x++)
             {
-                var doubles = new List<double>();
+                var buildIntervals = new List<double>();
+                var buildDurations = new List<double>();
 
                 var startDate = fromDate.AddDays(x * 7);
 
@@ -38,15 +39,20 @@ namespace DevelopmentMetrics.Builds
                         .Where(b => b.BuildTypeId.Equals(buildType.BuildTypeId))
                         .ToList();
 
-                    doubles.AddRange(GetTimeInMillisecondsBetweenBuildsFor(buildsByType));
+                    buildIntervals.AddRange(GetTimeInMillisecondsBetweenBuildsFor(buildsByType));
+
+                    buildDurations.AddRange(GetBuildTimeInMillisecondsFor(buildsByType));
                 }
 
                 results.Add(new BuildThroughputMetric()
                 {
                     Date = startDate,
-                    BuildIntervalTime = CalculateAverageBuildIntervalTimeInHoursFor(doubles),
+                    BuildIntervalTime = CalculateAverageBuildIntervalTimeInHoursFor(buildIntervals),
                     BuildIntervalTimeStdDev =
-                        Calculator.ConvertMillisecondsToHours(Calculator.CalculateStandardDeviation(doubles))
+                        Calculator.ConvertMillisecondsToHours(Calculator.CalculateStandardDeviation(buildIntervals)),
+                    BuildDurationTime = CalculateAverageBuildIntervalTimeInHoursFor(buildDurations),
+                    BuildDurationTimeStdDev =
+                        Calculator.ConvertMillisecondsToHours(Calculator.CalculateStandardDeviation(buildDurations))
                 });
             }
 
@@ -63,6 +69,13 @@ namespace DevelopmentMetrics.Builds
             }
 
             return results;
+        }
+
+        private List<double> GetBuildTimeInMillisecondsFor(List<Build> builds)
+        {
+            return builds
+                .Select(build => (build.FinishDateTime - build.StartDateTime).TotalMilliseconds)
+                .ToList();
         }
 
         private List<Build> GetSuccessfulBuildStepBuilds()
