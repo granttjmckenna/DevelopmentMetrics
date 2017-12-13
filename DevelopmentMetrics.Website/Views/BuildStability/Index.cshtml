@@ -1,5 +1,5 @@
 ﻿@using DevelopmentMetrics.Website.Models
-@model DevelopmentMetrics.Website.Models.BuildStabilityViewModel
+@model BuildStabilityViewModel
 @{
     ViewBag.Title = "Build Stability";
 }
@@ -25,8 +25,8 @@
         @Html.Partial("_ChartFilter",
             new ChartFilterViewModel(
                 "menu2",
+                "Agents",
                 "agentsMenuItem",
-                "filterBuildChartByBuildAgent",
                 @Model.GetBuildAgentList(),
                 new Dictionary<string, string> { { "All (default)", "All" } }
                 ))

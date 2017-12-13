@@ -21,7 +21,7 @@
                 foreach (var extraItem in Model.ExtraItems)
                 {
                     <li role="presentation">
-                        <a role="menuitem" tabindex="-1" href="javascript: @Model.MenuClass;" data-seq="@extraItem.Value">
+                        <a class="@Model.MenuClass" role="menuitem" tabindex="-1" data-seq="@extraItem.Value">
                             @extraItem.Key
                         </a>
                     </li>
