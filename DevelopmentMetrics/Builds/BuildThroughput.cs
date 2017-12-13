@@ -20,14 +20,14 @@ namespace DevelopmentMetrics.Builds
         {
             var results = new List<BuildThroughputMetric>();
 
-            var doubles = new List<double>();
-
             var builds = GetSuccessfulBuildStepBuilds();
 
             var fromDate = GetFromDate(numberOfWeeks);
 
             for (var x = 0; x < numberOfWeeks; x++)
             {
+                var doubles = new List<double>();
+
                 var startDate = fromDate.AddDays(x * 7);
 
                 var buildsForDateRange = GetBuildsForDateRange(builds, startDate);

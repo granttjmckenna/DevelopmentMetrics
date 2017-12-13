@@ -37,6 +37,26 @@ namespace DevelopmentMetrics.Tests
             Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
         }
 
+        [Test]
+        public void Return_build_time_in_milliseconds()
+        {
+            var builds = GetBuildDataFrom(new DateTime(2017, 01, 01), 20);
+
+            var successfulBuilds = builds.Where(b => b.Status.Equals(BuildStatus.Success.ToString())).ToList();
+
+            var doubles = GetBuildTimeInMillisecondsFor(successfulBuilds);
+
+            Assert.That(doubles.Count, Is.EqualTo(14));
+            Assert.That(doubles.All(ms => ms == 60000d));
+        }
+
+        private List<double> GetBuildTimeInMillisecondsFor(List<Build> successfulBuilds)
+        {
+            return successfulBuilds
+                .Select(build => (build.FinishDateTime - build.StartDateTime).TotalMilliseconds)
+                .ToList();
+        }
+
         private List<Build> GetBuildDataFrom(DateTime fromDate, int rows)
         {
             var dummyBuilds = new List<Build>();
