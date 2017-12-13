@@ -1,0 +1,32 @@
+﻿@model DevelopmentMetrics.Website.Models.ChartFilterViewModel
+
+<div style="float: right;">
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" id="@Model.Id" type="button" data-toggle="dropdown">
+            @Model.Title
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="@Model.Id">
+            @foreach (var item in @Model.MenuItems)
+            {
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript: @Model.JavaScript('@item.Value');">
+                        @item.Key
+                    </a>
+                </li>
+            }
+            @if (@Model.ExtraItems.Any())
+            {
+                <li class="divider"></li>
+                foreach (var extraItem in Model.ExtraItems)
+                {
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="javascript: @Model.JavaScript('@extraItem.Value');">
+                            @extraItem.Key
+                        </a>
+                    </li>
+                }
+            }@
+        </ul>
+    </div>
+</div>
