@@ -89,21 +89,11 @@ namespace DevelopmentMetrics.Builds
             return results.OrderBy(b => b.BuildTypeGroup).ToList();
         }
 
-        private List<BuildType> GetDistinctBuildTypeIds(List<Build> builds)
-        {
-            return builds
-                .OrderBy(b => b.BuildTypeId)
-                .Select(b => b.BuildTypeId)
-                .Distinct()
-                .Select(buildTypeId => new BuildType(buildTypeId))
-                .ToList();
-        }
-
         private List<double> CalculateMillisecondsBetweenBuilds(List<Build> builds)
         {
             var doubles = new List<double>();
 
-            foreach (var buildType in GetDistinctBuildTypeIds(builds))
+            foreach (var buildType in new BuildType().GetDistinctBuildTypeIds(builds))
             {
                 var buildTypeBuilds = GetBuildsFor(builds, buildType.BuildTypeId);
 

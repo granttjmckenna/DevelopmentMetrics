@@ -12,16 +12,31 @@ namespace DevelopmentMetrics.Tests
     public class BuildThroughputTests
     {
         private BuildThroughput _buildThroughput;
+        private IBuild _build;
+        private ITellTheTime _tellTheTime;
 
         [SetUp]
         public void Setup()
         {
-            var build = Substitute.For<IBuild>();
+            _build = Substitute.For<IBuild>();
+            _tellTheTime = Substitute.For<ITellTheTime>();
 
-            build.GetBuilds().Returns(GetBuildDataFrom(new DateTime(2017, 01, 01), 300));
+            _build.GetBuilds().Returns(GetBuildDataFrom(new DateTime(2017, 01, 01), 300));
+            _tellTheTime.Today().Returns(new DateTime(2017, 12, 04));
+            _tellTheTime.Now().Returns(new DateTime(2017, 12, 04));
 
-            _buildThroughput = new BuildThroughput(build);
+            _buildThroughput = new BuildThroughput(_build, _tellTheTime);
         }
+
+        [Test]
+        public void Should_calculate_build_interval_by_week()
+        {
+            var results = _buildThroughput.CalculateBuildIntervalByWeekFor(6);
+
+            Assert.That(results.Count(), Is.EqualTo(6));
+            Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
+        }
+
         [Test]
         public void Return_all_successful_create_artifact_build_steps_from_builds_list()
         {
