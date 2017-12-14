@@ -15,9 +15,19 @@ namespace DevelopmentMetrics.Website.Models
             _tellTheTime = tellTheTime;
         }
 
-        public List<BuildGroup> GetBuildGroupList()
+        public Dictionary<string, string> GetBuildGroupList()
         {
-            return new BuildStability(_tellTheTime, _build).GetDistinctBuildGroups();
+            return new BuildChartMenu(_tellTheTime, _build).GetBuildGroupList();
+        }
+
+        public Dictionary<string, string> GetAgentsList()
+        {
+            return new BuildChartMenu(_tellTheTime, _build).GetBuildAgentList();
+        }
+
+        public Dictionary<string, string> GetBuildWeeksList()
+        {
+            return new BuildChartMenu(_tellTheTime, _build).GetBuildWeeksList();
         }
 
         public List<BuildFailureRate> GetFailingBuildsByRate()

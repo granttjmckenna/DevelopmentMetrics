@@ -1,4 +1,5 @@
-﻿using DevelopmentMetrics.Builds;
+﻿using System.Collections.Generic;
+using DevelopmentMetrics.Builds;
 using DevelopmentMetrics.Helpers;
 
 namespace DevelopmentMetrics.Website.Models
@@ -12,6 +13,21 @@ namespace DevelopmentMetrics.Website.Models
         {
             _build = build;
             _tellTheTime = tellTheTime;
+        }
+
+        public Dictionary<string, string> GetBuildGroupList()
+        {
+            return new BuildChartMenu(_tellTheTime, _build).GetBuildGroupList();
+        }
+
+        public Dictionary<string, string> GetAgentsList()
+        {
+            return new BuildChartMenu(_tellTheTime, _build).GetBuildAgentList();
+        }
+
+        public Dictionary<string, string> GetBuildWeeksList()
+        {
+            return new BuildChartMenu(_tellTheTime, _build).GetBuildWeeksList();
         }
     }
 }

@@ -16,7 +16,7 @@
                 "menu1",
                 "Builds",
                 "buildsMenuItem",
-                @Model.GetBuildGroupList().ToDictionary(b => b.BuildTypeGroupDisplay, b => b.BuildTypeGroup),
+                @Model.GetBuildGroupList(),
                 new Dictionary<string, string> { { "All (default)", "All" } }
                 ))
     </div>
@@ -26,7 +26,7 @@
                 "menu2",
                 "Agents",
                 "agentsMenuItem",
-                @Model.GetBuildAgentList(),
+                @Model.GetAgentsList(),
                 new Dictionary<string, string> { { "All (default)", "All" } }
                 ))
     </div>
@@ -36,7 +36,7 @@
                 "menu3",
                 "Chart data",
                 "dataMenuItem",
-                BuildChartMenu.GetBuildWeeksList(),
+                @Model.GetBuildWeeksList(),
                 new Dictionary<string, string> { { "Refresh data", "-1" } }
                 ))
     </div>

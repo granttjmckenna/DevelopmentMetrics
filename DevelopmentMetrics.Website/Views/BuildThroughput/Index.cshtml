@@ -11,13 +11,33 @@
     <div class="col-md-4">
         <h2>Build throughput</h2>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-4">
         @Html.Partial("_ChartFilter",
             new ChartFilterViewModel(
                 "menu1",
+                "Builds",
+                "throughputBuildTypeMenuItem",
+                @Model.GetBuildGroupList(),
+                new Dictionary<string, string> { { "All (default)", "All" } }
+                ))
+    </div>
+    <div class="col-md-2">
+        @Html.Partial("_ChartFilter",
+            new ChartFilterViewModel(
+                "menu2",
+                "Agents",
+                "throughputAgentsMenuItem",
+                @Model.GetAgentsList(),
+                new Dictionary<string, string> { { "All (default)", "All" } }
+                ))
+    </div>
+    <div class="col-md-2">
+        @Html.Partial("_ChartFilter",
+            new ChartFilterViewModel(
+                "menu3",
                 "Chart data",
                 "dataThroughputMenuItem",
-                BuildChartMenu.GetBuildWeeksList(),
+                @Model.GetBuildWeeksList(),
                 new Dictionary<string, string> { { "Refresh data", "-1" } }
                 ))
     </div>
