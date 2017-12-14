@@ -58,23 +58,19 @@ namespace DevelopmentMetrics.Tests
 
             var duration = (productionBuild.FinishDateTime - buildStep.StartDateTime).TotalMilliseconds;
 
-            Assert.That(duration,Is.EqualTo(60000d));
+            Assert.That(duration, Is.EqualTo(60000d));
         }
 
         [Test]
-        public void Return_list_of_duration_in_milliseconds_between_production_and_build_step()
+        public void Return_list_of_lead_time_in_milliseconds_between_production_and_build_step()
         {
-            var durations = new List<double>();
+            var leadTimes = (from productionBuild in
+                                 _build.GetSuccessfulBuildStepsContaining("Production")
+                             let buildStep = GetMatchingBuildStep(productionBuild)
+                             select (productionBuild.FinishDateTime - buildStep.StartDateTime).TotalMilliseconds)
+                             .ToList();
 
-            foreach (var productionBuild in _build.GetSuccessfulBuildStepsContaining("Production"))
-            {
-                var buildStep = GetMatchingBuildStep(productionBuild);
-
-                durations.Add((productionBuild.FinishDateTime - buildStep.StartDateTime).TotalMilliseconds);
-
-            }
-
-            Assert.That(durations.Count,Is.EqualTo(200));
+            Assert.That(leadTimes.Count, Is.EqualTo(200));
         }
 
         private Build GetMatchingBuildStep(Build productionBuild)
