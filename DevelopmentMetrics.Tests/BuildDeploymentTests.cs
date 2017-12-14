@@ -79,10 +79,10 @@ namespace DevelopmentMetrics.Tests
 
         private Build GetMatchingBuildStep(Build productionBuild)
         {
-            var buildStep = _build.GetBuilds()
+            var buildStep = _build.GetSuccessfulBuildStepsContaining("01")
                 .First(b =>
                     b.Number == productionBuild.Number &&
-                    b.BuildTypeId.Equals(productionBuild.BuildTypeId, StringComparison.InvariantCultureIgnoreCase) &&
+                    b.BuildTypeId.StartsWith(new BuildGroup(b.BuildTypeId).BuildTypeGroup, StringComparison.InvariantCultureIgnoreCase) &&
                     b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase) &&
                     b.Status.Equals(BuildStatus.Success.ToString()));
 
