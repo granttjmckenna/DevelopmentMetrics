@@ -2,21 +2,61 @@
     $("a.dataThroughputMenuItem").click(function () {
         var weeks = $(this).attr("data-seq");
 
-        drawBuildThroughputChart(weeks);
+        filterBuildThroughputChartByWeeks(weeks);
     });
 });
 
-function filterBuildThroughputChart() {
-    drawBuildThroughputChart(6);
+$(document).ready(function () {
+    $("a.throughputAgentsMenuItem").click(function () {
+        var buildAgent = $(this).attr("data-seq");
+
+        filterBuildThroughputChartByBuildAgent(buildAgent);
+    });
+});
+
+$(document).ready(function () {
+    $("a.throughputBuildTypeMenuItem").click(function () {
+        var buildTypeId = $(this).attr("data-seq");
+
+        filterBuildThroughputChartByBuildTypeId(buildTypeId);
+    });
+});
+
+function filterBuildThroughputChartByWeeks(weeks) {
+    setChartValue("numberOfWeeks", weeks);
+
+    filterBuildThroughputChart();
 };
 
-function drawBuildThroughputChart(weeks) {
+function filterBuildThroughputChartByBuildAgent(buildAgent) {
+    setChartValue("buildAgent", buildAgent);
+
+    filterBuildThroughputChart();
+};
+
+function filterBuildThroughputChartByBuildTypeId(buildTypeId) {
+    setChartValue("buildTypeId", buildTypeId);
+
+    filterBuildThroughputChart();
+};
+
+function filterBuildThroughputChart() {
+    var chartWeeks = getChartValue("numberOfWeeks");
+    var filterByBuildAgent = getChartValue("buildAgent");
+    var filterByBuildTypeId = getChartValue("buildTypeId");
+
+    drawBuildThroughputChart(chartWeeks, filterByBuildAgent, filterByBuildTypeId);
+};
+
+function drawBuildThroughputChart(weeks, buildAgent, buildTypeId) {
 
     $.ajax({
         url: "/BuildThroughput/GetBuildThroughputChartDataFor",
         dataType: "json",
         data: {
-            numberOfWeeks: weeks
+            numberOfWeeks: weeks,
+            buildAgent: buildAgent,
+            buildTypeId: buildTypeId
         },
         type: "POST",
         error: function () {

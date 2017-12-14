@@ -24,9 +24,10 @@ namespace DevelopmentMetrics.Website.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetBuildThroughputChartDataFor(int numberOfWeeks)
+        public JsonResult GetBuildThroughputChartDataFor(int numberOfWeeks, string buildAgent, string buildTypeId)
         {
-            var buildData = new BuildThroughput(_build, _tellTheTime).CalculateBuildIntervalByWeekFor(numberOfWeeks);
+            var buildData = new BuildThroughput(_build, _tellTheTime)
+                .CalculateBuildIntervalByWeekFor(new BuildFilter(numberOfWeeks, buildAgent, buildTypeId));
 
             return Json(buildData);
         }

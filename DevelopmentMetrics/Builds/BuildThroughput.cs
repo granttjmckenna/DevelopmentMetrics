@@ -16,24 +16,31 @@ namespace DevelopmentMetrics.Builds
             _tellTheTime = tellTheTime;
         }
 
-        public List<BuildThroughputMetric> CalculateBuildIntervalByWeekFor(int numberOfWeeks)
+        public List<BuildThroughputMetric> CalculateBuildIntervalByWeekFor(BuildFilter buildFilter)
         {
+            if (IsClearCache(buildFilter.NumberOfWeeks))
+            {
+                CacheHelper.ClearObjectFromCache(Build.CacheKey);
+            }
+
             var results = new List<BuildThroughputMetric>();
 
             var builds = _build.GetSuccessfulBuildStepsContaining("_01");
 
-            var fromDate = GetFromDate(numberOfWeeks);
+            var filteredBuilds = new FilterBuilds(builds).Filter(buildFilter);
 
-            for (var x = 0; x < numberOfWeeks; x++)
+            var fromDate = GetFromDate(buildFilter.NumberOfWeeks);
+
+            for (var x = 0; x < buildFilter.NumberOfWeeks; x++)
             {
                 var buildIntervals = new List<double>();
                 var buildDurations = new List<double>();
 
                 var startDate = fromDate.AddDays(x * 7);
 
-                var buildsForDateRange = GetBuildsForDateRange(builds, startDate);
+                var buildsForDateRange = GetBuildsForDateRange(filteredBuilds, startDate);
 
-                foreach (var buildType in new BuildType().GetDistinctBuildTypeIds(buildsForDateRange))
+                foreach (var buildType in new BuildType().GetDistinctBuildTypeIds(filteredBuilds))
                 {
                     var buildsByType = buildsForDateRange
                         .Where(b => b.BuildTypeId.Equals(buildType.BuildTypeId))
@@ -57,6 +64,11 @@ namespace DevelopmentMetrics.Builds
             }
 
             return results;
+        }
+
+        private bool IsClearCache(int numberOfWeeks)
+        {
+            return numberOfWeeks == -1;
         }
 
         private List<double> GetBuildIntervalInMillisecondsFor(List<Build> builds)
