@@ -10,6 +10,8 @@ namespace DevelopmentMetrics.Builds
     public interface IBuild
     {
         List<Build> GetBuilds();
+
+        List<Build> GetSuccessfulBuildStepsContaining(string step);
     }
 
     public class Build : IBuild
@@ -56,6 +58,18 @@ namespace DevelopmentMetrics.Builds
             var builds = CacheHelper.GetObjectFromCache<List<Build>>(CacheKey, 60, GetBuildsFromRepo);
 
             return builds;
+        }
+
+        public List<Build> GetSuccessfulBuildStepsContaining(string step)
+        {
+            var build = GetBuilds();
+
+            return build
+                .Where(
+                    b => b.BuildTypeId.Contains(step)
+                         && b.Status.Equals(BuildStatus.Success.ToString())
+                         && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
         }
 
         private List<Build> GetBuildsFromRepo()

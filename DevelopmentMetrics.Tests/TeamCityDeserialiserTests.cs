@@ -23,6 +23,7 @@ namespace DevelopmentMetrics.Tests
             _tellTheTime = Substitute.For<ITellTheTime>();
 
             _buildsToExclude = Substitute.For<IBuildsToExclude>();
+            _buildsToExclude.Builds().Returns(new List<string> { "CcEnergyhelplineCom" });
 
             _teamCityWebClient.GetBuildData().Returns(GetAllBuildJsonResponse());
             _teamCityWebClient.GetBuildDetailsDataFor(Arg.Any<string>()).Returns(GetBuildDetailsJsonResponse());
@@ -34,8 +35,6 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Return_builds_excluding_designated_builds()
         {
-            _buildsToExclude.Builds().Returns(new List<string> { "CcEnergyhelplineCom" });
-
             var builds = new Build(_teamCityWebClient, _tellTheTime, _buildsToExclude).GetBuilds();
 
             Assert.That(builds.Count(b => b.BuildTypeId.Equals("CcEnergyhelplineCom_03RunEndToEndTests")), Is.EqualTo(0));
@@ -55,6 +54,17 @@ namespace DevelopmentMetrics.Tests
             Assert.That(builds.First().StartDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
             Assert.That(builds.First().FinishDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
             Assert.That(builds.First().QueueDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
+        }
+
+        [Test]
+        public void Return_successful_finished_builds_for_step()
+        {
+            var builds =
+                new Build(_teamCityWebClient, _tellTheTime, _buildsToExclude).GetSuccessfulBuildStepsContaining("_01");
+
+            Assert.That(builds.All(b => b.State.Equals("Finished", StringComparison.CurrentCultureIgnoreCase)));
+            Assert.That(builds.All(b => b.Status.Equals("Success", StringComparison.CurrentCultureIgnoreCase)));
+            Assert.That(builds.All(b => b.BuildTypeId.Contains("_01")));
         }
 
         private string GetAllBuildJsonResponse()

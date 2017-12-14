@@ -20,7 +20,7 @@ namespace DevelopmentMetrics.Builds
         {
             var results = new List<BuildThroughputMetric>();
 
-            var builds = GetSuccessfulBuildStepBuilds();
+            var builds = _build.GetSuccessfulBuildStepsContaining("_01");
 
             var fromDate = GetFromDate(numberOfWeeks);
 
@@ -75,16 +75,6 @@ namespace DevelopmentMetrics.Builds
         {
             return builds
                 .Select(build => (build.FinishDateTime - build.StartDateTime).TotalMilliseconds)
-                .ToList();
-        }
-
-        private List<Build> GetSuccessfulBuildStepBuilds()
-        {
-            return _build.GetBuilds()
-                .Where(
-                    b => b.BuildTypeId.Contains("_01")
-                         && b.Status.Equals(BuildStatus.Success.ToString())
-                         && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
         }
 

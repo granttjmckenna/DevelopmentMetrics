@@ -18,10 +18,20 @@ namespace DevelopmentMetrics.Tests
         [SetUp]
         public void Setup()
         {
+            var builds = GetBuildDataFrom(new DateTime(2017, 01, 01), 300);
+
             _build = Substitute.For<IBuild>();
             _tellTheTime = Substitute.For<ITellTheTime>();
 
-            _build.GetBuilds().Returns(GetBuildDataFrom(new DateTime(2017, 01, 01), 300));
+            _build.GetBuilds().Returns(builds);
+            _build.GetSuccessfulBuildStepsContaining(Arg.Any<string>()).Returns(
+                builds
+                .Where(b =>
+                    b.BuildTypeId.Contains("_01")
+                    && b.Status.Equals(BuildStatus.Success.ToString())
+                    && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
+                .ToList());
+
             _tellTheTime.Today().Returns(new DateTime(2017, 12, 04));
             _tellTheTime.Now().Returns(new DateTime(2017, 12, 04));
 
