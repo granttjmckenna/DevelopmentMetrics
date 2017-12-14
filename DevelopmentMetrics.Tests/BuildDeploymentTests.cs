@@ -41,6 +41,28 @@ namespace DevelopmentMetrics.Tests
         {
             var productionBuild = _build.GetSuccessfulBuildStepsContaining("Production").First();
 
+            var buildStep = GetMatchingBuildStep(productionBuild);
+
+            Assert.That(buildStep.BuildTypeId, Is.EqualTo(productionBuild.BuildTypeId));
+            Assert.That(buildStep.Number, Is.EqualTo(productionBuild.Number));
+            Assert.That(buildStep.State, Is.EqualTo("Finished"));
+            Assert.That(buildStep.Status, Is.EqualTo("Success"));
+        }
+
+        [Test]
+        public void Return_duration_in_milliseconds_between_production_and_build_step()
+        {
+            var productionBuild = _build.GetSuccessfulBuildStepsContaining("Production").First();
+
+            var buildStep = GetMatchingBuildStep(productionBuild);
+
+            var duration = (productionBuild.FinishDateTime - buildStep.StartDateTime).TotalMilliseconds;
+
+            Assert.That(duration,Is.EqualTo(60000d));
+        }
+
+        private Build GetMatchingBuildStep(Build productionBuild)
+        {
             var buildStep = _build.GetBuilds()
                 .First(b =>
                     b.Number == productionBuild.Number &&
@@ -48,10 +70,7 @@ namespace DevelopmentMetrics.Tests
                     b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase) &&
                     b.Status.Equals(BuildStatus.Success.ToString()));
 
-            Assert.That(buildStep.BuildTypeId, Is.EqualTo(productionBuild.BuildTypeId));
-            Assert.That(buildStep.Number, Is.EqualTo(productionBuild.Number));
-            Assert.That(buildStep.State, Is.EqualTo("Finished"));
-            Assert.That(buildStep.Status, Is.EqualTo("Success"));
+            return buildStep;
         }
 
 
