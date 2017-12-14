@@ -1,4 +1,16 @@
-﻿function getElementById(id) {
+﻿function setChartValue(id, value) {
+    var input = getElementById(id);
+
+    input.value = value;
+};
+
+function getChartValue(id) {
+    var input = getElementById(id);
+
+    return input.value;
+};
+
+function getElementById(id) {
     return document.getElementById(id);
 };
 
@@ -40,4 +52,31 @@ function drawChart(dataTable, options) {
     var chart = new google.visualization.LineChart(chartDiv);
 
     chart.draw(dataTable, options);
+};
+
+function getChartTitleAgentName(agentName) {
+    if (agentName === "All") {
+        return agentName;
+    };
+    return "TC-A" + agentName.replace("lon-devtca", "");
+}
+
+function getChartTitleWeeks(weeks) {
+    switch (weeks) {
+    case -1:
+        return "6";
+    case -2:
+        return "All";
+    default:
+        return weeks;
+    }
+};
+
+function getChartTitleBuildTypeId(buildTypeId) {
+    switch (buildTypeId) {
+    case -1:
+        return "All";
+    default:
+        return buildTypeId;
+    }
 };

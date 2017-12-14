@@ -183,45 +183,6 @@ function getBuildChartTitle() {
     return "Build stability - weeks: " + getChartTitleWeeks(weeks) + " & build agent: " + getChartTitleAgentName(buildAgent) + " & build type: " + getChartTitleBuildTypeId(buildTypeId);
 };
 
-function getChartTitleAgentName(agentName) {
-    if (agentName === "All") {
-        return agentName;
-    };
-    return "TC-A" + agentName.replace("lon-devtca", "");
-}
-
-function getChartTitleWeeks(weeks) {
-    switch (weeks) {
-        case -1:
-            return "6";
-        case -2:
-            return "All";
-        default:
-            return weeks;
-    }
-};
-
-function getChartTitleBuildTypeId(buildTypeId) {
-    switch (buildTypeId) {
-        case -1:
-            return "All";
-        default:
-            return buildTypeId;
-    }
-};
-
-function setChartValue(id, value) {
-    var input = getElementById(id);
-
-    input.value = value;
-};
-
-function getChartValue(id) {
-    var input = getElementById(id);
-
-    return input.value;
-};
-
 function showBuilds(numberOfItems) {
     hideAllItems();
 

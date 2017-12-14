@@ -90,7 +90,7 @@ function renderBuildThroughputChartData(data) {
         });
 
     var options = {
-        title: "Build throughput",
+        title: getBuildThroughputChartTitle(),
         titleTextStyle: {
             fontSize: 20,
             italic: false
@@ -164,4 +164,12 @@ function renderBuildThroughputChartData(data) {
     drawChart(dataTable, options);
 
     return false;
+};
+
+function getBuildThroughputChartTitle() {
+    var weeks = getChartValue("numberOfWeeks");
+    var buildAgent = getChartValue("buildAgent");
+    var buildTypeId = getChartValue("buildTypeId");
+
+    return "Build throughput - weeks: " + getChartTitleWeeks(weeks) + " & build agent: " + getChartTitleAgentName(buildAgent) + " & build type: " + getChartTitleBuildTypeId(buildTypeId);
 };
