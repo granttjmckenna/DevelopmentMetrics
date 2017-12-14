@@ -50,9 +50,9 @@ namespace DevelopmentMetrics.Builds
                     BuildIntervalTime = CalculateAverageTimeInHoursFor(buildIntervals),
                     BuildIntervalTimeStdDev =
                         Calculator.ConvertMillisecondsToHours(Calculator.CalculateStandardDeviation(buildIntervals)),
-                    BuildDurationTime = CalculateAverageTimeInHoursFor(buildDurations),
+                    BuildDurationTime = CalculateAverageTimeInMinutesFor(buildDurations),
                     BuildDurationTimeStdDev =
-                        Calculator.ConvertMillisecondsToHours(Calculator.CalculateStandardDeviation(buildDurations))
+                        Calculator.ConvertMillisecondsToMinutes(Calculator.CalculateStandardDeviation(buildDurations))
                 });
             }
 
@@ -96,6 +96,13 @@ namespace DevelopmentMetrics.Builds
         {
             return doubles.Any()
                 ? Calculator.ConvertMillisecondsToHours(doubles.Average())
+                : 0;
+        }
+
+        private int CalculateAverageTimeInMinutesFor(List<double> doubles)
+        {
+            return doubles.Any()
+                ? Calculator.ConvertMillisecondsToMinutes(doubles.Average())
                 : 0;
         }
 

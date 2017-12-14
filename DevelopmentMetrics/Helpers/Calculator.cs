@@ -30,5 +30,10 @@ namespace DevelopmentMetrics.Helpers
         {
             return (int)(Math.Round(TimeSpan.FromMilliseconds(milliseconds).TotalHours, 0));
         }
+
+        public static int ConvertMillisecondsToMinutes(double milliseconds)
+        {
+            return (int)(Math.Round(TimeSpan.FromMilliseconds(milliseconds).TotalMinutes, 0));
+        }
     }
 }
