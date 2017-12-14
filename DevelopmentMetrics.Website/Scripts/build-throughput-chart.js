@@ -118,7 +118,7 @@ function renderBuildThroughputChartData(data) {
                 lineWidth: 3
             }
         },
-        colors: ["#FF0000", "#34A853", "#FF6600", "#34BB35"]
+        colors: ["#000099", "#8080ff", "#33cc33", "#99e699"]
     };
 
     drawChart(dataTable, options);
