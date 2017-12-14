@@ -20,7 +20,7 @@ namespace DevelopmentMetrics.Website.Models
         {
             return new BuildStability(_tellTheTime, _build)
                 .GetDistinctBuildGroups()
-                .ToDictionary(b => b.BuildTypeGroup, b => b.BuildTypeGroupDisplay);
+                .ToDictionary(b => b.BuildTypeGroupDisplay, b => b.BuildTypeGroup);
         }
 
         public Dictionary<string, string> GetBuildAgentList()
