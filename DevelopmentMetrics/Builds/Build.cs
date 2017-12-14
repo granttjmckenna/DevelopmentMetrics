@@ -67,7 +67,7 @@ namespace DevelopmentMetrics.Builds
             return build
                 .Where(
                     b => b.BuildTypeId.Contains(step)
-                         && b.Status.Equals(BuildStatus.Success.ToString())
+                         && b.Status.Equals(BuildStatus.Success.ToString(), StringComparison.InvariantCultureIgnoreCase)
                          && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
         }

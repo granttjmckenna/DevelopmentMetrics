@@ -39,10 +39,10 @@ function drawBuildThroughputChart(weeks) {
 function renderBuildThroughputChartData(data) {
     var dataTable = new google.visualization.DataTable();
     dataTable.addColumn("date", "Day");
-    dataTable.addColumn("number", "Build Interval Time");
-    dataTable.addColumn("number", "Build Interval Time (std dev)");
-    dataTable.addColumn("number", "Build Duration Time");
-    dataTable.addColumn("number", "Build Duration Time (std dev)");
+    dataTable.addColumn("number", "Build Interval");
+    dataTable.addColumn("number", "Build Interval (std dev)");
+    dataTable.addColumn("number", "Build Duration");
+    dataTable.addColumn("number", "Build Duration (std dev)");
 
     $.each(data,
         function (i, item) {
@@ -70,14 +70,52 @@ function renderBuildThroughputChartData(data) {
                 italic: false
             }
         },
-        vAxis: {
-            gridlines: {
-                color: "transparent"
+        vAxes: {
+            0: {
+                gridlines: {
+                    color: "transparent"
+                },
+                title: "Build Interval (hours)",
+                titleTextStyle: {
+                    fontSize: 20,
+                    italic: false
+                },
+                format: "short",
+                viewWindow: {
+                    min: 0
+                }
             },
-            title: "Hours",
-            titleTextStyle: {
-                fontSize: 20,
-                italic: false
+            1: {
+                gridlines: {
+                    color: "transparent"
+                },
+                title: "Build Duration (minutes)",
+                titleTextStyle: {
+                    fontSize: 20,
+                    italic: false
+                },
+                format: "short",
+                viewWindow: {
+                    min: 0
+                }
+            }
+        },
+        series: {
+            0: {
+                targetAxisIndex: 0,
+                lineWidth: 3
+            },
+            1: {
+                targetAxisIndex: 0,
+                lineWidth: 3
+            },
+            2: {
+                targetAxisIndex: 1,
+                lineWidth: 3
+            },
+            3: {
+                targetAxisIndex: 1,
+                lineWidth: 3
             }
         },
         colors: ["#FF0000", "#34A853", "#FF6600", "#34BB35"]

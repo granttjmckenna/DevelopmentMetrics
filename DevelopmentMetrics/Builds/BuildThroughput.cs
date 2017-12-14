@@ -61,11 +61,14 @@ namespace DevelopmentMetrics.Builds
 
         private List<double> GetBuildIntervalInMillisecondsFor(List<Build> builds)
         {
+            var buildsInDescendingOrder = builds.OrderByDescending(b => b.StartDateTime).ToList();
+
             var results = new List<double>();
 
-            for (var x = builds.Count - 1; x > 0; x--)
+            for (var x = 0; x < buildsInDescendingOrder.Count - 1; x++)
             {
-                results.Add((builds[x].StartDateTime - builds[x - 1].StartDateTime).TotalMilliseconds);
+                results.Add((buildsInDescendingOrder[x].StartDateTime
+                             - buildsInDescendingOrder[x + 1].StartDateTime).TotalMilliseconds);
             }
 
             return results;
