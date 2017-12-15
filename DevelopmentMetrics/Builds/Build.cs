@@ -72,6 +72,16 @@ namespace DevelopmentMetrics.Builds
                 .ToList();
         }
 
+        public Build GetMatchingBuildStep(Build productionBuild)
+        {
+            var buildStep = GetSuccessfulBuildStepsContaining("01")
+                .First(b =>
+                    b.Number == productionBuild.Number &&
+                    b.BuildTypeId.StartsWith(new BuildGroup(b.BuildTypeId).BuildTypeGroup, StringComparison.InvariantCultureIgnoreCase));
+
+            return buildStep;
+        }
+
         private List<Build> GetBuildsFromRepo()
         {
             var results = new List<Build>();
