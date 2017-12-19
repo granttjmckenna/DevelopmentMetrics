@@ -85,19 +85,15 @@ namespace DevelopmentMetrics.Builds
 
         private List<Build> GetBuildsFromRepo()
         {
-            var results = new List<Build>();
-
             var allBuilds = GetAllBuilds()
                 .Where(b =>
                     !_buildsToExclude.Builds()
                         .Contains(new BuildGroup(b.BuildTypeId).BuildTypeGroup))
                 .ToList();
 
-            foreach (var build in allBuilds)
-            {
-                var buildDetails = GetBuildDetails(build.Href);
-
-                results.Add(new Build
+            return (from build in allBuilds
+                let buildDetails = GetBuildDetails(build.Href)
+                select new Build
                 {
                     Id = build.Id,
                     BuildTypeId = build.BuildTypeId,
@@ -109,10 +105,8 @@ namespace DevelopmentMetrics.Builds
                     FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
                     QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
                     AgentName = buildDetails.Agent.Name
-                });
-            }
-
-            return results;
+                })
+                .ToList();
         }
 
         private List<Build> GetAllBuilds()
