@@ -75,9 +75,10 @@ namespace DevelopmentMetrics.Builds
         public Build GetMatchingBuildStep(Build productionBuild)
         {
             var buildStep = GetSuccessfulBuildStepsContaining("01")
-                .First(b =>
+                .FirstOrDefault(b =>
                     b.Number == productionBuild.Number &&
-                    b.BuildTypeId.StartsWith(new BuildGroup(b.BuildTypeId).BuildTypeGroup, StringComparison.InvariantCultureIgnoreCase));
+                    b.BuildTypeId.StartsWith(
+                        new BuildGroup(b.BuildTypeId).BuildTypeGroup, StringComparison.InvariantCultureIgnoreCase));
 
             return buildStep;
         }
@@ -86,10 +87,10 @@ namespace DevelopmentMetrics.Builds
         {
             var results = new List<Build>();
 
-            var allBuilds = GetAllBuilds().Where(b =>
+            var allBuilds = GetAllBuilds()
+                .Where(b =>
                     !_buildsToExclude.Builds()
-                        .Contains(b.BuildTypeId.Substring(0,
-                            b.BuildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase))))
+                        .Contains(new BuildGroup(b.BuildTypeId).BuildTypeGroup))
                 .ToList();
 
             foreach (var build in allBuilds)

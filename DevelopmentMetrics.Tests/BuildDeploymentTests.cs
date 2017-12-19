@@ -16,11 +16,12 @@ namespace DevelopmentMetrics.Tests
         private ITellTheTime _tellTheTime;
         private ITeamCityWebClient _teamCityWebClient;
         private IBuildsToExclude _buildsToExclude;
+        private List<Build> _builds;
 
         [SetUp]
         public void Setup()
         {
-            var builds = GetBuildDataFrom(new DateTime(2017, 01, 01), 300);
+            _builds = GetBuildDataFrom(new DateTime(2017, 01, 01), 300);
 
             _build = Substitute.For<IBuild>();
             _teamCityWebClient = Substitute.For<ITeamCityWebClient>();
@@ -30,15 +31,10 @@ namespace DevelopmentMetrics.Tests
             _teamCityWebClient.GetBuildData().Returns(GetAllBuildJsonResponse());
             _teamCityWebClient.GetBuildDetailsDataFor(Arg.Any<string>()).Returns(GetBuildDetailsJsonResponse());
 
-            _buildsToExclude.Builds().Returns(new List<string> { "CcEnergyhelplineCom" });
-            //_build.GetBuilds().Returns(builds);
-            _build.GetSuccessfulBuildStepsContaining(Arg.Any<string>()).Returns(
-                builds
-                    .Where(b =>
-                        b.BuildTypeId.Contains("Production")
-                        && b.Status.Equals(BuildStatus.Success.ToString())
-                        && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
-                    .ToList());
+            _build.GetBuilds().Returns(_builds);
+            _buildsToExclude.Builds().Returns(new List<string> { "blah" });
+            _build.GetSuccessfulBuildStepsContaining("Production")
+                .Returns(_builds.Where(b => b.BuildTypeId.Contains("Production")).ToList());
 
             _tellTheTime.Today().Returns(new DateTime(2017, 12, 04));
             _tellTheTime.Now().Returns(new DateTime(2017, 12, 04));
@@ -81,19 +77,26 @@ namespace DevelopmentMetrics.Tests
             Assert.That(duration, Is.EqualTo(3600000d));
         }
 
-        //[Test]
-        //public void Return_list_of_lead_time_in_milliseconds_between_production_and_build_step()
-        //{
-        //    var leadTimes = (from productionBuild in
-        //                         _build.GetSuccessfulBuildStepsContaining("Production")
-        //                     let buildStep =
-        //                        new Build(_teamCityWebClient, _tellTheTime, _buildsToExclude)
-        //                            .GetMatchingBuildStep(productionBuild)
-        //                     select (productionBuild.FinishDateTime - buildStep.StartDateTime).TotalMilliseconds)
-        //                     .ToList();
+        [Test]
+        public void Return_list_of_lead_time_in_milliseconds_between_production_and_build_step()
+        {
+            var leadTimes = new List<double>();
 
-        //    Assert.That(leadTimes.Count, Is.EqualTo(200));
-        //}
+            var productionBuilds = new Build(_teamCityWebClient, _tellTheTime, _buildsToExclude).GetSuccessfulBuildStepsContaining("Production");
+
+            foreach (var productionBuild in productionBuilds)
+            {
+                var buildStep = new Build(_teamCityWebClient, _tellTheTime, _buildsToExclude)
+                    .GetMatchingBuildStep(productionBuild);
+
+                if (buildStep != null)
+                {
+                    leadTimes.Add((productionBuild.FinishDateTime - buildStep.StartDateTime).TotalMilliseconds);
+                }
+            }
+
+            Assert.That(leadTimes.Count, Is.EqualTo(27));
+        }
 
         private List<Build> GetBuildDataFrom(DateTime fromDate, int rows)
         {
@@ -111,7 +114,7 @@ namespace DevelopmentMetrics.Tests
                         FinishDateTime = fromDate.AddDays(i).AddMinutes(2),
                         QueueDateTime = fromDate.AddDays(i),
                         State = "Finished",
-                        Status = GetStatus(i),
+                        Status = "Success",
                         Number = "999"
                     }
                 );
@@ -123,11 +126,6 @@ namespace DevelopmentMetrics.Tests
         private string GetBuildStep(int i)
         {
             return (i % 3) == 0 ? $"blah_blah_{i}" : $"blah_blah_Production";
-        }
-
-        private string GetStatus(int i)
-        {
-            return ((i % 3) == 0) ? BuildStatus.Failure.ToString() : BuildStatus.Success.ToString();
         }
 
         private string GetAllBuildJsonResponse()
