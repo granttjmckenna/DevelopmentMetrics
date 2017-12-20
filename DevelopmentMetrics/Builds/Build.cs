@@ -78,24 +78,26 @@ namespace DevelopmentMetrics.Builds
 
         public Build GetMatchingBuildStep(Build productionBuild)
         {
-            var buildStep = GetSuccessfulBuildStepsContaining("01")
-                .FirstOrDefault(b =>
-                    b.Number == productionBuild.Number &&
-                    b.BuildTypeId.StartsWith(
-                        new BuildGroup(b.BuildTypeId).BuildTypeGroup, StringComparison.InvariantCultureIgnoreCase));
+            var buildStep = GetMatchingBuilds("01", productionBuild.BuildTypeId)
+                .FirstOrDefault(b => b.Number == productionBuild.Number);
 
             return buildStep;
         }
 
         public List<Build> GetMatchingProductionSteps(Build productionBuild)
         {
-            var productionSteps = GetSuccessfulBuildStepsContaining("Production")
-                .Where(b =>
-                    b.BuildTypeId.Equals(productionBuild.BuildTypeId, StringComparison.InvariantCultureIgnoreCase))
-                .OrderBy(b => b.StartDateTime)
-                .ToList();
+            var productionSteps = GetMatchingBuilds("Production", productionBuild.BuildTypeId);
 
             return productionSteps;
+        }
+
+        private List<Build> GetMatchingBuilds(string match, string buildTypeId)
+        {
+            return GetSuccessfulBuildStepsContaining(match)
+                .Where(b =>
+                    b.BuildTypeId.StartsWith(new BuildGroup(buildTypeId).BuildTypeGroup, StringComparison.InvariantCultureIgnoreCase))
+                .OrderBy(b => b.StartDateTime)
+                .ToList();
         }
 
         private List<Build> GetBuildsFromRepo()
