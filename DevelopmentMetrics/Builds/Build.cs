@@ -12,6 +12,10 @@ namespace DevelopmentMetrics.Builds
         List<Build> GetBuilds();
 
         List<Build> GetSuccessfulBuildStepsContaining(string step);
+
+        Build GetMatchingBuildStep(Build productionBuild);
+
+        List<Build> GetMatchingProductionSteps(Build productionBuild);
     }
 
     public class Build : IBuild
@@ -83,6 +87,17 @@ namespace DevelopmentMetrics.Builds
             return buildStep;
         }
 
+        public List<Build> GetMatchingProductionSteps(Build productionBuild)
+        {
+            var productionSteps = GetSuccessfulBuildStepsContaining("Production")
+                .Where(b =>
+                    b.BuildTypeId.Equals(productionBuild.BuildTypeId, StringComparison.InvariantCultureIgnoreCase))
+                .OrderBy(b => b.StartDateTime)
+                .ToList();
+
+            return productionSteps;
+        }
+
         private List<Build> GetBuildsFromRepo()
         {
             var allBuilds = GetAllBuilds()
@@ -92,20 +107,20 @@ namespace DevelopmentMetrics.Builds
                 .ToList();
 
             return (from build in allBuilds
-                let buildDetails = GetBuildDetails(build.Href)
-                select new Build
-                {
-                    Id = build.Id,
-                    BuildTypeId = build.BuildTypeId,
-                    Number = build.Number,
-                    Status = build.Status,
-                    State = build.State,
-                    Href = build.Href,
-                    StartDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.StartDateTime),
-                    FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
-                    QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
-                    AgentName = buildDetails.Agent.Name
-                })
+                    let buildDetails = GetBuildDetails(build.Href)
+                    select new Build
+                    {
+                        Id = build.Id,
+                        BuildTypeId = build.BuildTypeId,
+                        Number = build.Number,
+                        Status = build.Status,
+                        State = build.State,
+                        Href = build.Href,
+                        StartDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.StartDateTime),
+                        FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
+                        QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
+                        AgentName = buildDetails.Agent.Name
+                    })
                 .ToList();
         }
 
