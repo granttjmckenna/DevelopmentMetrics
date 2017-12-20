@@ -65,10 +65,32 @@ namespace DevelopmentMetrics.Tests
                 FinishDateTime = new DateTime(2015, 01, 01, 12, 30, 45)
             };
 
-            var buildStep = new Build
+            var productionBuildTwo = new Build
             {
                 BuildTypeId = "Tools_DomainEventsApi_01Build",
                 Number = "1.0.121.117",
+                StartDateTime = new DateTime(2015, 01, 01, 11, 30, 45)
+            };
+
+            var duration = (productionBuild.FinishDateTime - productionBuildTwo.StartDateTime).TotalMilliseconds;
+
+            Assert.That(duration, Is.EqualTo(3600000d));
+        }
+
+        [Test]
+        public void Return_interval_in_milliseconds_between_production_steps()
+        {
+            var productionBuild = new Build
+            {
+                BuildTypeId = "Tools_DomainEventsApi_04PromoteToProduction",
+                Number = "1.0.121.117",
+                FinishDateTime = new DateTime(2015, 01, 01, 12, 30, 45)
+            };
+
+            var buildStep = new Build
+            {
+                BuildTypeId = "Tools_DomainEventsApi_04PromoteToProduction",
+                Number = "1.0.121.118",
                 StartDateTime = new DateTime(2015, 01, 01, 11, 30, 45)
             };
 
