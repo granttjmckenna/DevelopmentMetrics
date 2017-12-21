@@ -120,6 +120,46 @@ namespace DevelopmentMetrics.Tests
             Assert.That(leadTimes.Count, Is.EqualTo(27));
         }
 
+        [Test]
+        public void Return_list_of_interval_time_in_milliseconds_between_production_steps()
+        {
+            var intervalTimes = new List<double>();
+
+            var builds = new List<Build>
+            {
+                new Build
+                {
+                    BuildTypeId = "Tools_DomainEventsApi_04PromoteToProduction",
+                    Number = "1.0.121.117",
+                    FinishDateTime = new DateTime(2015, 01, 01, 12, 30, 45)
+                },
+                new Build
+                {
+                    BuildTypeId = "Tools_DomainEventsApi_04PromoteToProduction",
+                    Number = "1.0.121.118",
+                    FinishDateTime = new DateTime(2015, 01, 02, 12, 30, 45)
+                },
+                new Build
+                {
+                    BuildTypeId = "Tools_DomainEventsApi_04PromoteToProduction",
+                    Number = "1.0.121.119",
+                    FinishDateTime = new DateTime(2015, 01, 03, 12, 30, 45)
+                }
+            };
+
+            _build.GetMatchingProductionSteps(builds.First()).Returns(builds);
+
+            for (var x = 0; x < builds.Count; x++)
+            {
+                if (x + 1 < builds.Count)
+                {
+                    intervalTimes.Add((builds[x + 1].FinishDateTime - builds[x].FinishDateTime).TotalMilliseconds);
+                }
+            }
+
+            Assert.That(intervalTimes, Is.EqualTo(new List<double> { 86400000d, 86400000d }));
+        }
+
         private List<Build> GetBuildDataFrom(DateTime fromDate, int rows)
         {
             var dummyBuilds = new List<Build>();
