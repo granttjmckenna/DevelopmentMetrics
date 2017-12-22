@@ -86,7 +86,7 @@ function renderBuildThroughputChartData(data) {
 
     $.each(data,
         function (i, item) {
-            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.BuildIntervalTime, item.BuildIntervalTimeStdDev, item.BuildDurationTime, item.BuildDurationTimeStdDev]]);
+            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.IntervalTime, item.IntervalTimeStdDev, item.DurationTime, item.DurationTimeStdDev]]);
         });
 
     var options = {

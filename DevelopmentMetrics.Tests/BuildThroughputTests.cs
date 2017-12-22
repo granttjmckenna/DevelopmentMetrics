@@ -41,7 +41,7 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_calculate_build_interval_by_week()
         {
-            var results = _buildThroughput.CalculateBuildIntervalByWeekFor(
+            var results = _buildThroughput.CalculateBuildThroughputByWeekFor(
                 new BuildFilter(6, "blah", "blah")
                 );
 
