@@ -20,6 +20,13 @@ namespace DevelopmentMetrics.Builds
         {
             var results = new List<BuildMetric>();
 
+            Calculate(buildFilter, results);
+
+            return results;
+        }
+
+        private void Calculate(BuildFilter buildFilter, List<BuildMetric> results)
+        {
             var filteredBuilds = new FilterBuilds(_builds).Filter(buildFilter);
 
             var fromDate = GetFromDate(buildFilter.NumberOfWeeks);
@@ -43,8 +50,6 @@ namespace DevelopmentMetrics.Builds
 
                 results.Add(buildMetric.Calculate());
             }
-
-            return results;
         }
 
         private DateTime GetFromDate(int numberOfWeeks)
