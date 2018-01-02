@@ -26,6 +26,8 @@ namespace DevelopmentMetrics.Builds
                 .ToList();
         }
 
+
+
         private IBuildMetric Calculate(BuildFilter buildFilter, IBuildMetric buildMetric)
         {
             var filteredBuilds = new FilterBuilds(_builds).Filter(buildFilter);

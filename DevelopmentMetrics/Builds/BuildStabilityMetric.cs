@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DevelopmentMetrics
+namespace DevelopmentMetrics.Builds
 {
     public class BuildStabilityMetric
     {
