@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DevelopmentMetrics.Helpers;
 
 namespace DevelopmentMetrics.Builds
@@ -14,7 +15,7 @@ namespace DevelopmentMetrics.Builds
             _tellTheTime = tellTheTime;
         }
 
-        public List<BuildMetric> CalculateBuildThroughputByWeekFor(BuildFilter buildFilter)
+        public List<BuildThroughputMetric> CalculateBuildThroughputByWeekFor(BuildFilter buildFilter)
         {
             if (IsClearCache(buildFilter.NumberOfWeeks))
             {
@@ -23,7 +24,10 @@ namespace DevelopmentMetrics.Builds
 
             var builds = _build.GetSuccessfulBuildStepsContaining("_01");
 
-            return new BuildMetricCalculator(_tellTheTime, builds).CalculateBuildThroughput(buildFilter);
+            return new BuildMetricCalculator(_tellTheTime, builds)
+                .CalculateBuildThroughput(
+                    buildFilter,
+                    new BuildThroughputMetric());
         }
 
         private bool IsClearCache(int numberOfWeeks)

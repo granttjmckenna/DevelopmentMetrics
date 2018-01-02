@@ -16,16 +16,17 @@ namespace DevelopmentMetrics.Builds
             _builds = builds;
         }
 
-        public List<BuildMetric> CalculateBuildThroughput(BuildFilter buildFilter)
+        public List<BuildThroughputMetric> CalculateBuildThroughput(BuildFilter buildFilter, IBuildMetric buildMetric)
         {
-            var results = new List<BuildMetric>();
+            var buildMetrics = ((BuildThroughputMetric)Calculate(buildFilter, buildMetric));
 
-            Calculate(buildFilter, results);
-
-            return results;
+            return buildMetrics
+                .GetResults()
+                .OrderBy(result => result.Date)
+                .ToList();
         }
 
-        private void Calculate(BuildFilter buildFilter, List<BuildMetric> results)
+        private IBuildMetric Calculate(BuildFilter buildFilter, IBuildMetric buildMetric)
         {
             var filteredBuilds = new FilterBuilds(_builds).Filter(buildFilter);
 
@@ -35,7 +36,7 @@ namespace DevelopmentMetrics.Builds
             {
                 var startDate = fromDate.AddDays(x * 7);
 
-                var buildMetric = new BuildMetric(startDate);
+                buildMetric.SetDate(startDate);
 
                 var buildsForDateRange = GetBuildsForDateRange(filteredBuilds, startDate);
 
@@ -48,8 +49,10 @@ namespace DevelopmentMetrics.Builds
                     buildMetric.Add(buildsByType);
                 }
 
-                results.Add(buildMetric.Calculate());
+                buildMetric.Calculate();
             }
+
+            return buildMetric;
         }
 
         private DateTime GetFromDate(int numberOfWeeks)
