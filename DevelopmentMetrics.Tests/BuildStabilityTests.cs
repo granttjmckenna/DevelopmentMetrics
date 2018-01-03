@@ -96,16 +96,13 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_calculate_failure_percentage_by_week()
         {
-            var builds = GetBuildDataFrom(new DateTime(2017, 1, 1), 365);
+            _build.GetBuilds().Returns(GetBuilds());
 
-            var results = new BuildMetricCalculator(_tellTheTime, builds).CalculateBuildStability(
+            var results = new BuildMetricCalculator(_tellTheTime, _build).CalculateBuildStability(
                 new BuildFilter(6, "All", "All"), new BuildStabilityMetric());
 
-            Assert.That(results.Count(), Is.EqualTo(6));
+            Assert.That(results.Count, Is.EqualTo(6));
             Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
-            Assert.That(results.First().FailureRate, Is.GreaterThan(0));
-            Assert.That(results.First().RecoveryTime, Is.GreaterThan(0));
-            Assert.That(results.First().RecoveryTimeStdDev, Is.GreaterThanOrEqualTo(0));
         }
 
         [Test]
@@ -145,7 +142,9 @@ namespace DevelopmentMetrics.Tests
                 }
             };
 
-            var results = new BuildMetricCalculator(_tellTheTime, builds).CalculateBuildStability(
+            _build.GetBuilds().Returns(builds);
+
+            var results = new BuildMetricCalculator(_tellTheTime, _build).CalculateBuildStability(
                 new BuildFilter(6, "All", "All"), new BuildStabilityMetric());
 
             Assert.That(results.First().RecoveryTime, Is.EqualTo(1));
@@ -180,7 +179,8 @@ namespace DevelopmentMetrics.Tests
                     StartDateTime = new DateTime(2017, 11, 1, 12, 0, 0),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
                     Status = "Failure",
-                    State = "Finished"
+                    State = "Finished",
+                    AgentName = "agent name"
                 },
 
                 new Build
@@ -190,7 +190,8 @@ namespace DevelopmentMetrics.Tests
                     StartDateTime = new DateTime(2017, 11, 1, 12, 1, 0),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
                     Status = "Failure",
-                    State = "Finished"
+                    State = "Finished",
+                    AgentName = "agent name"
                 },
 
                 new Build
@@ -200,7 +201,8 @@ namespace DevelopmentMetrics.Tests
                     StartDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 3, 0),
                     Status = "Success",
-                    State = "Finished"
+                    State = "Finished",
+                    AgentName = "agent name"
                 },
 
                 new Build
@@ -210,7 +212,8 @@ namespace DevelopmentMetrics.Tests
                     StartDateTime = new DateTime(2017, 11, 2, 12, 0, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 3, 0),
                     Status = "Success",
-                    State = "Finished"
+                    State = "Finished",
+                    AgentName = "agent name"
                 },
 
                 new Build
@@ -220,7 +223,8 @@ namespace DevelopmentMetrics.Tests
                     StartDateTime = new DateTime(2017, 11, 2, 12, 3, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 4, 0),
                     Status = "Failure",
-                    State = "Finished"
+                    State = "Finished",
+                    AgentName = "agent name"
                 },
 
                 new Build
@@ -230,7 +234,8 @@ namespace DevelopmentMetrics.Tests
                     StartDateTime = new DateTime(2017, 11, 2, 12, 3, 30),
                     FinishDateTime = new DateTime(2017, 11, 2, 12, 5, 30),
                     Status = "Success",
-                    State = "Finished"
+                    State = "Finished",
+                    AgentName = "agent name"
                 }
             };
         }

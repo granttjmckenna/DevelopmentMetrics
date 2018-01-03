@@ -24,7 +24,7 @@ namespace DevelopmentMetrics.Builds
                 CacheHelper.ClearObjectFromCache(Build.CacheKey);
             }
 
-            return new BuildMetricCalculator(_tellTheTime, _build.GetBuilds())
+            return new BuildMetricCalculator(_tellTheTime, _build)
                 .CalculateBuildStability(
                     buildFilter,
                     new BuildStabilityMetric());

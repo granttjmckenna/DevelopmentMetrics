@@ -24,7 +24,7 @@ namespace DevelopmentMetrics.Builds.Metrics
             Date = date;
         }
 
-        public void Add(List<Build> builds)
+        public void Add(IBuild build, List<Build> builds)
         {
             Intervals.AddRange(GetIntervalsInMilliseconds(builds));
             Durations.AddRange(GetDurationsInMilliseconds(builds));

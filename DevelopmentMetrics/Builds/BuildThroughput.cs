@@ -23,9 +23,7 @@ namespace DevelopmentMetrics.Builds
                 CacheHelper.ClearObjectFromCache(Build.CacheKey);
             }
 
-            var builds = _build.GetSuccessfulBuildStepsContaining("_01");
-
-            return new BuildMetricCalculator(_tellTheTime, builds)
+            return new BuildMetricCalculator(_tellTheTime, _build)
                 .CalculateBuildThroughput(
                     buildFilter,
                     new BuildThroughputMetric());

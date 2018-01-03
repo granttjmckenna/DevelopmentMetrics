@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DevelopmentMetrics.Builds;
+using DevelopmentMetrics.Builds.Metrics;
 using DevelopmentMetrics.Helpers;
 using DevelopmentMetrics.Repository;
 using NSubstitute;
@@ -44,117 +45,11 @@ namespace DevelopmentMetrics.Tests
         [Test]
         public void Should_calculate_build_deployment_interval_by_week()
         {
-            var results = new BuildDeployment(_build, _tellTheTime).CalculateBuildDeploymentIntervalByWeekFor(
-                new BuildFilter(6, "blah", "blah")
-            );
+            var results = new BuildMetricCalculator(_tellTheTime, _build).CalculateBuildDeployment(
+                new BuildFilter(6, "All", "All"), new BuildDeploymentMetric());
 
             Assert.That(results.Count(), Is.EqualTo(6));
             Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
-        }
-
-        [Test]
-        public void Return_duration_in_milliseconds_between_production_and_build_step()
-        {
-            var productionBuild = new Build
-            {
-                BuildTypeId = "Tools_DomainEventsApi_04PromoteToProduction",
-                Number = "1.0.121.117",
-                FinishDateTime = new DateTime(2015, 01, 01, 12, 30, 45)
-            };
-
-            var productionBuildTwo = new Build
-            {
-                BuildTypeId = "Tools_DomainEventsApi_01Build",
-                Number = "1.0.121.117",
-                StartDateTime = new DateTime(2015, 01, 01, 11, 30, 45)
-            };
-
-            var duration = (productionBuild.FinishDateTime - productionBuildTwo.StartDateTime).TotalMilliseconds;
-
-            Assert.That(duration, Is.EqualTo(3600000d));
-        }
-
-        [Test]
-        public void Return_interval_in_milliseconds_between_production_steps()
-        {
-            var productionBuild = new Build
-            {
-                BuildTypeId = "Tools_DomainEventsApi_04PromoteToProduction",
-                Number = "1.0.121.117",
-                FinishDateTime = new DateTime(2015, 01, 01, 12, 30, 45)
-            };
-
-            var buildStep = new Build
-            {
-                BuildTypeId = "Tools_DomainEventsApi_04PromoteToProduction",
-                Number = "1.0.121.118",
-                StartDateTime = new DateTime(2015, 01, 01, 11, 30, 45)
-            };
-
-            var duration = (productionBuild.FinishDateTime - buildStep.StartDateTime).TotalMilliseconds;
-
-            Assert.That(duration, Is.EqualTo(3600000d));
-        }
-
-        [Test]
-        public void Return_list_of_lead_time_in_milliseconds_between_production_and_build_step()
-        {
-            var leadTimes = new List<double>();
-
-            var productionBuilds = new Build(_teamCityWebClient, _tellTheTime, _buildsToExclude).GetSuccessfulBuildStepsContaining("Production");
-
-            foreach (var productionBuild in productionBuilds)
-            {
-                var buildStep = new Build(_teamCityWebClient, _tellTheTime, _buildsToExclude)
-                    .GetMatchingBuildStep(productionBuild);
-
-                if (buildStep != null)
-                {
-                    leadTimes.Add((productionBuild.FinishDateTime - buildStep.StartDateTime).TotalMilliseconds);
-                }
-            }
-
-            Assert.That(leadTimes.Count, Is.EqualTo(27));
-        }
-
-        [Test]
-        public void Return_list_of_interval_time_in_milliseconds_between_production_steps()
-        {
-            var intervalTimes = new List<double>();
-
-            var builds = new List<Build>
-            {
-                new Build
-                {
-                    BuildTypeId = "Tools_DomainEventsApi_04PromoteToProduction",
-                    Number = "1.0.121.117",
-                    FinishDateTime = new DateTime(2015, 01, 01, 12, 30, 45)
-                },
-                new Build
-                {
-                    BuildTypeId = "Tools_DomainEventsApi_04PromoteToProduction",
-                    Number = "1.0.121.118",
-                    FinishDateTime = new DateTime(2015, 01, 02, 12, 30, 45)
-                },
-                new Build
-                {
-                    BuildTypeId = "Tools_DomainEventsApi_04PromoteToProduction",
-                    Number = "1.0.121.119",
-                    FinishDateTime = new DateTime(2015, 01, 03, 12, 30, 45)
-                }
-            };
-
-            _build.GetMatchingProductionSteps(builds.First()).Returns(builds);
-
-            for (var x = 0; x < builds.Count; x++)
-            {
-                if (x + 1 < builds.Count)
-                {
-                    intervalTimes.Add((builds[x + 1].FinishDateTime - builds[x].FinishDateTime).TotalMilliseconds);
-                }
-            }
-
-            Assert.That(intervalTimes, Is.EqualTo(new List<double> { 86400000d, 86400000d }));
         }
 
         private List<Build> GetBuildDataFrom(DateTime fromDate, int rows)

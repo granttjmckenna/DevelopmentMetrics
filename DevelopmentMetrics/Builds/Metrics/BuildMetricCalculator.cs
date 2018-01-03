@@ -8,17 +8,19 @@ namespace DevelopmentMetrics.Builds.Metrics
     public class BuildMetricCalculator
     {
         private readonly ITellTheTime _tellTheTime;
-        private readonly List<Build> _builds;
+        private readonly IBuild _build;
 
-        public BuildMetricCalculator(ITellTheTime tellTheTime, List<Build> builds)
+        public BuildMetricCalculator(ITellTheTime tellTheTime, IBuild build)
         {
             _tellTheTime = tellTheTime;
-            _builds = builds;
+            _build = build;
         }
 
         public List<BuildThroughputMetric> CalculateBuildThroughput(BuildFilter buildFilter, IBuildMetric buildMetric)
         {
-            var buildMetrics = ((BuildThroughputMetric)Calculate(buildFilter, buildMetric));
+            var builds = _build.GetSuccessfulBuildStepsContaining("_01");
+
+            var buildMetrics = (BuildThroughputMetric)Calculate(builds, buildFilter, buildMetric);
 
             return buildMetrics
                 .GetResults()
@@ -28,7 +30,9 @@ namespace DevelopmentMetrics.Builds.Metrics
 
         public List<BuildStabilityMetric> CalculateBuildStability(BuildFilter buildFilter, IBuildMetric buildMetric)
         {
-            var buildMetrics = ((BuildStabilityMetric)Calculate(buildFilter, buildMetric));
+            var builds = _build.GetBuilds();
+
+            var buildMetrics = (BuildStabilityMetric)Calculate(builds, buildFilter, buildMetric);
 
             return buildMetrics
                 .GetResults()
@@ -38,17 +42,18 @@ namespace DevelopmentMetrics.Builds.Metrics
 
         public List<BuildDeploymentMetric> CalculateBuildDeployment(BuildFilter buildFilter, IBuildMetric buildMetric)
         {
-            var buildMetrics = ((BuildDeploymentMetric)Calculate(buildFilter, buildMetric));
+            var builds = _build.GetSuccessfulBuildStepsContaining("Production");
+
+            var buildMetrics = (BuildDeploymentMetric)Calculate(builds, buildFilter, buildMetric);
 
             return buildMetrics
                 .GetResults()
                 .OrderBy(result => result.Date)
                 .ToList();
         }
-
-        private IBuildMetric Calculate(BuildFilter buildFilter, IBuildMetric buildMetric)
+        private IBuildMetric Calculate(List<Build> builds, BuildFilter buildFilter, IBuildMetric buildMetric)
         {
-            var filteredBuilds = new FilterBuilds(_builds).Filter(buildFilter);
+            var filteredBuilds = new FilterBuilds(builds).Filter(buildFilter);
 
             var fromDate = GetFromDate(buildFilter.NumberOfWeeks);
 
@@ -66,7 +71,7 @@ namespace DevelopmentMetrics.Builds.Metrics
                         .Where(b => b.BuildTypeId.Equals(build.BuildTypeId, StringComparison.InvariantCultureIgnoreCase))
                         .ToList();
 
-                    buildMetric.Add(buildsByType);
+                    buildMetric.Add(_build, buildsByType);
                 }
 
                 buildMetric.Calculate();

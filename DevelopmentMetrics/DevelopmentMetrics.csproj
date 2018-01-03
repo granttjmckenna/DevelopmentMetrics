@@ -51,7 +51,7 @@
     <Compile Include="Builds\Metrics\BuildDeploymentMetric.cs" />
     <Compile Include="Builds\BuildFilter.cs" />
     <Compile Include="Builds\BuildGroup.cs" />
-    <Compile Include="Builds\Metrics\BuildMetric.cs" />
+    <Compile Include="Builds\Metrics\IBuildMetric.cs" />
     <Compile Include="Builds\Metrics\BuildMetricCalculator.cs" />
     <Compile Include="Builds\BuildStability.cs" />
     <Compile Include="Builds\BuildsToExclude.cs" />

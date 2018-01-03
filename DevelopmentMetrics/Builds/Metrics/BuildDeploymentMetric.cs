@@ -24,10 +24,10 @@ namespace DevelopmentMetrics.Builds.Metrics
             Date = date;
         }
 
-        public void Add(List<Build> builds)
+        public void Add(IBuild build, List<Build> builds)
         {
             Intervals.AddRange(GetIntervalsInMilliseconds(builds));
-            Durations.AddRange(GetDurationsInMilliseconds(builds));
+            Durations.AddRange(GetDurationsInMilliseconds(build, builds));
         }
 
         public void Calculate()
@@ -66,12 +66,12 @@ namespace DevelopmentMetrics.Builds.Metrics
             return results;
         }
 
-        private List<double> GetDurationsInMilliseconds(List<Build> builds)
+        private List<double> GetDurationsInMilliseconds(IBuild build, List<Build> builds)
         {
-            return (from build in builds
-                    let buildStep = new Build().GetMatchingBuildStep(build)
+            return (from bld in builds
+                    let buildStep = build.GetMatchingBuildStep(bld)
                     where buildStep != null
-                    select (build.FinishDateTime - buildStep.StartDateTime).TotalMilliseconds)
+                    select (bld.FinishDateTime - buildStep.StartDateTime).TotalMilliseconds)
                     .ToList();
         }
 
