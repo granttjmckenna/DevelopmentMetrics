@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DevelopmentMetrics.Builds;
+using DevelopmentMetrics.Builds.Metrics;
 using DevelopmentMetrics.Helpers;
 using NSubstitute;
 using NUnit.Framework;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DevelopmentMetrics.Helpers;
 
-namespace DevelopmentMetrics.Builds
+namespace DevelopmentMetrics.Builds.Metrics
 {
     public class BuildMetricCalculator
     {

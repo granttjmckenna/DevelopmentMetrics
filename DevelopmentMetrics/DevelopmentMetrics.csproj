@@ -47,14 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builds\Build.cs" />
+    <Compile Include="Builds\BuildDeployment.cs" />
+    <Compile Include="Builds\Metrics\BuildDeploymentMetric.cs" />
     <Compile Include="Builds\BuildFilter.cs" />
     <Compile Include="Builds\BuildGroup.cs" />
-    <Compile Include="Builds\BuildMetric.cs" />
-    <Compile Include="Builds\BuildMetricCalculator.cs" />
+    <Compile Include="Builds\Metrics\BuildMetric.cs" />
+    <Compile Include="Builds\Metrics\BuildMetricCalculator.cs" />
     <Compile Include="Builds\BuildStability.cs" />
     <Compile Include="Builds\BuildsToExclude.cs" />
     <Compile Include="Builds\BuildThroughput.cs" />
-    <Compile Include="Builds\BuildThroughputMetric.cs" />
+    <Compile Include="Builds\Metrics\BuildThroughputMetric.cs" />
     <Compile Include="Builds\BuildType.cs" />
     <Compile Include="Builds\BuildFailureRate.cs" />
     <Compile Include="Builds\FilterBuilds.cs" />
@@ -64,7 +66,7 @@
     <Compile Include="Helpers\Configuration.cs" />
     <Compile Include="Helpers\Display.cs" />
     <Compile Include="Helpers\TellTheTime.cs" />
-    <Compile Include="Builds\BuildStabilityMetric.cs" />
+    <Compile Include="Builds\Metrics\BuildStabilityMetric.cs" />
     <Compile Include="Cards\Card.cs" />
     <Compile Include="Cards\CardCount.cs" />
     <Compile Include="Cards\CardMetric.cs" />

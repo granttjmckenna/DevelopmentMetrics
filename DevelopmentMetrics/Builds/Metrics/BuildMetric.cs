@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DevelopmentMetrics.Builds
+namespace DevelopmentMetrics.Builds.Metrics
 {
     public interface IBuildMetric
     {
