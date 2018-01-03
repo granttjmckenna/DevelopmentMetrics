@@ -17,7 +17,7 @@ namespace DevelopmentMetrics.Builds.Metrics
 
         public void SetDate(DateTime date)
         {
-            throw new NotImplementedException();
+            Date = date;
         }
 
         public void Add(List<Build> builds)
