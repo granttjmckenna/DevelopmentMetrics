@@ -97,13 +97,14 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuildDataFrom(new DateTime(2017, 1, 1), 365);
 
-            _build.GetBuilds().Returns(builds);
-
-            var results =
-                new BuildStability(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(new BuildFilter(6, "All", "All"));
+            var results = new BuildMetricCalculator(_tellTheTime, builds).CalculateBuildStability(
+                new BuildFilter(6, "All", "All"), new BuildStabilityMetric());
 
             Assert.That(results.Count(), Is.EqualTo(6));
             Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
+            Assert.That(results.First().FailureRate, Is.GreaterThan(0));
+            Assert.That(results.First().RecoveryTime, Is.GreaterThan(0));
+            Assert.That(results.First().RecoveryTimeStdDev, Is.GreaterThanOrEqualTo(0));
         }
 
         [Test]
@@ -125,8 +126,8 @@ namespace DevelopmentMetrics.Tests
                 {
                     Id = 999,
                     BuildTypeId = "blah blah",
-                    StartDateTime = new DateTime(2017, 11, 27, 15, 3, 30),
-                    FinishDateTime = new DateTime(2017, 11, 27, 15, 5, 30),
+                    StartDateTime = new DateTime(2017, 10, 24, 15, 3, 30),
+                    FinishDateTime = new DateTime(2017, 10, 24, 15, 5, 30),
                     AgentName = "agent name",
                     Status = "Failure",
                     State = "Finished"
@@ -135,20 +136,18 @@ namespace DevelopmentMetrics.Tests
                 {
                     Id = 1001,
                     BuildTypeId = "blah blah",
-                    StartDateTime = new DateTime(2017, 11, 27, 15, 3, 30),
-                    FinishDateTime = new DateTime(2017, 11, 27, 16, 5, 30),
+                    StartDateTime = new DateTime(2017, 10, 24, 15, 3, 30),
+                    FinishDateTime = new DateTime(2017, 10, 24, 16, 5, 30),
                     AgentName = "agent name",
                     Status = "Success",
                     State = "Finished"
                 }
             };
 
-            _build.GetBuilds().Returns(builds);
+            var results = new BuildMetricCalculator(_tellTheTime, builds).CalculateBuildStability(
+                new BuildFilter(6, "All", "All"), new BuildStabilityMetric());
 
-            var metrics =
-                new BuildStability(_tellTheTime, _build).CalculateBuildFailingRateByWeekFor(new BuildFilter(1, "All", "All"));
-
-            Assert.That(metrics.First().RecoveryTime, Is.EqualTo(1));
+            Assert.That(results.First().RecoveryTime, Is.EqualTo(1));
         }
 
         [Test]

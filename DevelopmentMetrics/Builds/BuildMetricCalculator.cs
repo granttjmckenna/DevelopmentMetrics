@@ -26,7 +26,15 @@ namespace DevelopmentMetrics.Builds
                 .ToList();
         }
 
+        public List<BuildStabilityMetric> CalculateBuildStability(BuildFilter buildFilter,IBuildMetric buildMetric)
+        {
+            var buildMetrics = ((BuildStabilityMetric)Calculate(buildFilter, buildMetric));
 
+            return buildMetrics
+                .GetResults()
+                .OrderBy(result => result.Date)
+                .ToList();
+        }
 
         private IBuildMetric Calculate(BuildFilter buildFilter, IBuildMetric buildMetric)
         {

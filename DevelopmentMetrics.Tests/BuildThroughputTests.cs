@@ -47,6 +47,10 @@ namespace DevelopmentMetrics.Tests
 
             Assert.That(results.Count(), Is.EqualTo(6));
             Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
+            Assert.That(results.First().DurationTime, Is.GreaterThan(0));
+            Assert.That(results.First().DurationTimeStdDev, Is.GreaterThanOrEqualTo(0));
+            Assert.That(results.First().IntervalTime, Is.GreaterThan(0));
+            Assert.That(results.First().IntervalTimeStdDev, Is.GreaterThan(0));
         }
 
         [Test]
