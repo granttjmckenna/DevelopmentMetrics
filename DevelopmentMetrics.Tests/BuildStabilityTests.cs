@@ -160,7 +160,7 @@ namespace DevelopmentMetrics.Tests
 
             _build.GetBuilds().Returns(builds);
 
-            var buildTypes = new BuildStability(_tellTheTime, _build).GetDistinctBuildGroups();
+            var buildTypes = new BuildGroup(_build).GetDistinctBuildGroups();
 
             Assert.That(buildTypes.Count, Is.EqualTo(2));
             Assert.That(buildTypes.First().BuildTypeGroup, Is.EqualTo("BuildType1"));

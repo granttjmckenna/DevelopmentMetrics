@@ -40,20 +40,6 @@ namespace DevelopmentMetrics.Builds
             return new BuildStabilityMetric().GetPassingBuildsByRate(_build.GetBuilds());
         }
 
-        public List<BuildGroup> GetDistinctBuildGroups()
-        {
-            var results = new List<BuildGroup>();
-
-            foreach (var buildGroup in _build.GetBuilds()
-                .Select(b => new BuildGroup(b.BuildTypeId)))
-            {
-                if (!results.Exists(b => b.BuildTypeGroup.Equals(buildGroup.BuildTypeGroup)))
-                    results.Add(buildGroup);
-            }
-
-            return results.OrderBy(b => b.BuildTypeGroup).ToList();
-        }
-
         private bool IsClearCache(int numberOfWeeks)
         {
             return numberOfWeeks == -1;

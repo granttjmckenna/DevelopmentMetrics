@@ -36,6 +36,16 @@ namespace DevelopmentMetrics.Builds.Metrics
                 .ToList();
         }
 
+        public List<BuildDeploymentMetric> CalculateBuildDeployment(BuildFilter buildFilter, IBuildMetric buildMetric)
+        {
+            var buildMetrics = ((BuildDeploymentMetric)Calculate(buildFilter, buildMetric));
+
+            return buildMetrics
+                .GetResults()
+                .OrderBy(result => result.Date)
+                .ToList();
+        }
+
         private IBuildMetric Calculate(BuildFilter buildFilter, IBuildMetric buildMetric)
         {
             var filteredBuilds = new FilterBuilds(_builds).Filter(buildFilter);
