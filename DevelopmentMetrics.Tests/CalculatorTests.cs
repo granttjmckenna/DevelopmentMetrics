@@ -46,5 +46,28 @@ namespace DevelopmentMetrics.Tests
             Assert.That(standardDeviationInHours, Is.EqualTo(0));
         }
 
+        [Test]
+        public void Return_one_day()
+        {
+            var result = Calculator.ConvertMillisecondsToDays(3600000d * 24d);
+
+            Assert.That(result, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Return_one_hour()
+        {
+            var result = Calculator.ConvertMillisecondsToHours(3600000d);
+
+            Assert.That(result, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Return_10_minutes()
+        {
+            var result = Calculator.ConvertMillisecondsToMinutes(600000d);
+
+            Assert.That(result, Is.EqualTo(10));
+        }
     }
 }
