@@ -21,7 +21,9 @@ namespace DevelopmentMetrics.Builds
                 CacheHelper.ClearObjectFromCache(Build.CacheKey);
             }
 
-            return new BuildMetricCalculator(_tellTheTime, _build.GetBuilds())
+            var builds = _build.GetSuccessfulBuildStepsContaining("Production");
+
+            return new BuildMetricCalculator(_tellTheTime, builds)
                 .CalculateBuildDeployment(
                     buildFilter,
                     new BuildDeploymentMetric());
