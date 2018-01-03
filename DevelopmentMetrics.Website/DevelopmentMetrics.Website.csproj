@@ -158,6 +158,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Controllers\BuildDeploymentController.cs" />
     <Compile Include="Controllers\BuildStabilityController.cs" />
     <Compile Include="Controllers\BuildThroughputController.cs" />
     <Compile Include="Controllers\CardsController.cs" />
@@ -171,6 +172,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BuildChartMenu.cs" />
+    <Compile Include="Models\BuildDeploymentViewModel.cs" />
     <Compile Include="Models\BuildStabilityViewModel.cs" />
     <Compile Include="Models\BuildThroughputViewModel.cs" />
     <Compile Include="Models\CardsViewModel.cs" />
@@ -188,6 +190,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\build-deployment-chart.js" />
     <Content Include="Scripts\build-throughput-chart.js" />
     <Content Include="Scripts\build-chart.js" />
     <Content Include="Scripts\card-chart.js" />
@@ -220,6 +223,7 @@
     <Content Include="Views\BuildStability\_BuildList.cshtml" />
     <Content Include="Views\Shared\_ChartFilter.cshtml" />
     <Content Include="Views\BuildThroughput\Index.cshtml" />
+    <Content Include="Views\BuildDeployment\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

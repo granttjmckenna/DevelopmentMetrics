@@ -17,6 +17,7 @@ namespace DevelopmentMetrics.Website
             bundles.Add(new ScriptBundle("~/bundles/google-charts").Include(
                 "~/Scripts/chart.js",
                 "~/Scripts/card-chart.js",
+                "~/Scripts/build-deployment-chart.js",
                 "~/Scripts/build-throughput-chart.js",
                 "~/Scripts/build-chart.js"));
 

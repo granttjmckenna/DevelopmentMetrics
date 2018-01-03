@@ -1,0 +1,63 @@
+﻿@using DevelopmentMetrics.Website.Models
+@model BuildThroughputViewModel
+
+@{
+    ViewBag.Title = "Build Deployment";
+}
+
+<script type="text/javascript" src="https://www.google.com/jsapi"> </script>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Build deployment</h2>
+    </div>
+    <div class="col-md-4">
+        @Html.Partial("_ChartFilter",
+            new ChartFilterViewModel(
+                "menu1",
+                "Builds",
+                "deploymentBuildTypeMenuItem",
+                @Model.GetBuildGroupList(),
+                new Dictionary<string, string> { { "All (default)", "All" } }
+                ))
+    </div>
+    <div class="col-md-2">
+        @Html.Partial("_ChartFilter",
+            new ChartFilterViewModel(
+                "menu2",
+                "Agents",
+                "deploymentAgentsMenuItem",
+                @Model.GetAgentsList(),
+                new Dictionary<string, string> { { "All (default)", "All" } }
+                ))
+    </div>
+    <div class="col-md-2">
+        @Html.Partial("_ChartFilter",
+            new ChartFilterViewModel(
+                "menu3",
+                "Chart data",
+                "dataDeploymentMenuItem",
+                @Model.GetBuildWeeksList(),
+                new Dictionary<string, string> { { "Refresh data", "-1" } }
+                ))
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div id="chart_div" class="chartWrapper"></div>
+    </div>
+</div>
+
+<input type="hidden" id="numberOfWeeks" value="6" />
+<input type="hidden" id="buildAgent" value="All" />
+<input type="hidden" id="buildTypeId" value="All" />
+
+<script type="text/javascript">
+    google.load("visualization", "1",
+        {
+            packages: ["line", "corechart"]
+        });
+
+    google.setOnLoadCallback(filterBuildDeploymentChart);
+</script>
+
