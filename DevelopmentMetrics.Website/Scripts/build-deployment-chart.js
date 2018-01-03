@@ -79,13 +79,10 @@ function drawBuildDeploymentChart(weeks, buildAgent, buildTypeId) {
 function renderBuildThroughputChartData(data) {
     var dataTable = new google.visualization.DataTable();
     dataTable.addColumn("date", "Day");
-    dataTable.addColumn("number", "Build Interval");
-    dataTable.addColumn("number", "Build Interval (std dev)");
-    dataTable.addColumn("number", "Build Duration");
-    dataTable.addColumn("number", "Build Duration (std dev)");
-
-    //TODO: check values
-    //TODO: set axis values etc
+    dataTable.addColumn("number", "Deployment Interval");
+    dataTable.addColumn("number", "Deployment Interval (std dev)");
+    dataTable.addColumn("number", "Deployment Duration");
+    dataTable.addColumn("number", "Deployment Duration (std dev)");
 
     $.each(data,
         function (i, item) {
@@ -118,7 +115,7 @@ function renderBuildThroughputChartData(data) {
                 gridlines: {
                     color: "transparent"
                 },
-                title: "Build Interval (hours)",
+                title: "Deployment Interval (days)",
                 titleTextStyle: {
                     fontSize: 20,
                     italic: false
@@ -132,7 +129,7 @@ function renderBuildThroughputChartData(data) {
                 gridlines: {
                     color: "transparent"
                 },
-                title: "Build Duration (minutes)",
+                title: "Deployment Duration (hours)",
                 titleTextStyle: {
                     fontSize: 20,
                     italic: false
