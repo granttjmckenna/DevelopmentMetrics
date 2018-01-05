@@ -1,4 +1,6 @@
-﻿using DevelopmentMetrics.Helpers;
+﻿using System.Threading;
+using DevelopmentMetrics.Builds;
+using DevelopmentMetrics.Helpers;
 using DevelopmentMetrics.Website.Models;
 using NSubstitute;
 using NUnit.Framework;
@@ -10,21 +12,15 @@ namespace DevelopmentMetrics.Website.Tests.Models
     {
         private Cache _cache;
         private ICacheChecker _cacheChecker;
+        private IBuild _build;
 
         [SetUp]
         public void Setup()
         {
             _cacheChecker = Substitute.For<ICacheChecker>();
+            _build = Substitute.For<IBuild>();
 
-            _cache = new Cache(_cacheChecker);
-        }
-
-        [Test]
-        public void Return_false_when_data_NOT_cached_for_cache_key()
-        {
-            var result = _cache.IsDataCachedFor("cache key");
-
-            Assert.False(result);
+            _cache = new Cache(_cacheChecker, _build);
         }
 
         [Test]
@@ -32,7 +28,7 @@ namespace DevelopmentMetrics.Website.Tests.Models
         {
             _cacheChecker.IsDataCachedFor(Arg.Any<string>()).Returns(true);
 
-            var result = _cache.IsDataCachedFor("cache key");
+            var result = _cache.IsBuildDataCached();
 
             Assert.True(result);
         }
