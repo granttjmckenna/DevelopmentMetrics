@@ -1,5 +1,5 @@
-﻿using System.Threading;
-using DevelopmentMetrics.Builds;
+﻿using DevelopmentMetrics.Builds;
+using DevelopmentMetrics.Cards;
 using DevelopmentMetrics.Helpers;
 using DevelopmentMetrics.Website.Models;
 using NSubstitute;
@@ -12,23 +12,33 @@ namespace DevelopmentMetrics.Website.Tests.Models
     {
         private Cache _cache;
         private ICacheChecker _cacheChecker;
-        private IBuild _build;
 
         [SetUp]
         public void Setup()
         {
             _cacheChecker = Substitute.For<ICacheChecker>();
-            _build = Substitute.For<IBuild>();
+            var build = Substitute.For<IBuild>();
+            var card = Substitute.For<ICard>();
 
-            _cache = new Cache(_cacheChecker, _build);
+            _cache = new Cache(_cacheChecker, build, card);
         }
 
         [Test]
-        public void Return_true_when_data_cached_for_cache_key()
+        public void Return_true_when_build_data_cached_for_cache_key()
         {
             _cacheChecker.IsDataCachedFor(Arg.Any<string>()).Returns(true);
 
             var result = _cache.IsBuildDataCached();
+
+            Assert.True(result);
+        }
+
+        [Test]
+        public void Return_true_when_card_data_cached_for_cache_key()
+        {
+            _cacheChecker.IsDataCachedFor(Arg.Any<string>()).Returns(true);
+
+            var result = _cache.IsCardDataCached();
 
             Assert.True(result);
         }

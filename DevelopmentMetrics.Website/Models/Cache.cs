@@ -1,4 +1,5 @@
 ﻿using DevelopmentMetrics.Builds;
+using DevelopmentMetrics.Cards;
 using DevelopmentMetrics.Helpers;
 
 namespace DevelopmentMetrics.Website.Models
@@ -7,11 +8,13 @@ namespace DevelopmentMetrics.Website.Models
     {
         private readonly ICacheChecker _cacheChecker;
         private readonly IBuild _build;
+        private readonly ICard _card;
 
-        public Cache(ICacheChecker cacheChecker, IBuild build)
+        public Cache(ICacheChecker cacheChecker, IBuild build, ICard card)
         {
             _cacheChecker = cacheChecker;
             _build = build;
+            _card = card;
         }
 
         public bool IsBuildDataCached()
@@ -19,6 +22,21 @@ namespace DevelopmentMetrics.Website.Models
             CacheBuildData();
 
             return IsDataCachedFor(Build.CacheKey);
+        }
+
+        public bool IsCardDataCached()
+        {
+            CacheCardData();
+
+            return IsDataCachedFor(Card.CacheKey);
+        }
+
+        private void CacheCardData()
+        {
+            if (!_cacheChecker.IsDataCachedFor(Card.CacheKey))
+            {
+                _card.GetCards();
+            }
         }
 
         private void CacheBuildData()
