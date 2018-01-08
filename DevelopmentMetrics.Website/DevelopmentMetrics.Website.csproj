@@ -192,9 +192,10 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\build-chart.js" />
     <Content Include="Scripts\build-deployment-chart.js" />
     <Content Include="Scripts\build-throughput-chart.js" />
-    <Content Include="Scripts\build-chart.js" />
+    <Content Include="Scripts\build-stability-chart.js" />
     <Content Include="Scripts\card-chart.js" />
     <Content Include="Scripts\chart.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

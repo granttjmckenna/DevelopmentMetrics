@@ -24,6 +24,12 @@ namespace DevelopmentMetrics.Website.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public JsonResult ReturnWhenBuildDataCached()
+        {
+            return GetBuildChartDataFor(6, "All", "All");
+        }
+
         [HttpPost]
         public JsonResult GetBuildChartDataFor(int numberOfWeeks, string buildAgent, string buildTypeId)
         {
