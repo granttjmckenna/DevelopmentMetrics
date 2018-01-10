@@ -57,3 +57,11 @@ textarea {
 .hideBuildItem {
     display: none;
 }
+
+.loadingCache, .loadedCache {
+    width: inherit;
+}
+
+.loadedCache {
+    display: none;
+}

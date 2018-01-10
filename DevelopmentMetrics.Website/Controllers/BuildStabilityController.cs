@@ -27,7 +27,9 @@ namespace DevelopmentMetrics.Website.Controllers
         [HttpGet]
         public JsonResult ReturnWhenBuildDataCached()
         {
-            return GetBuildChartDataFor(6, "All", "All");
+            GetBuildChartDataFor(6, "All", "All");
+
+            return Json(true);
         }
 
         [HttpPost]

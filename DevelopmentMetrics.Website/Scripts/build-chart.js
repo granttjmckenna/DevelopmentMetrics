@@ -5,13 +5,15 @@
         dataType: "json",
         data: {},
         type: "GET",
-        error: function () {
+        error: function() {
         },
-        beforeSend: function () {
+        beforeSend: function() {
         },
-        success: function (data) {
+        success: function(data) {
         },
         complete: function () {
+            $(".loadingCache").toggle();
+            $(".loadedCache").toggle();
         }
     });
 

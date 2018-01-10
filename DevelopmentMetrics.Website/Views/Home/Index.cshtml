@@ -38,9 +38,14 @@
 </div>
 <div class="row">
     <div class="col-md-4">
-        <p>
-            <a class="btn btn-default" href="/buildstability">View build stability</a>
-        </p>
+        <div class="loadingCache">
+            <img src="/Content/loading-sm.gif" alt="loading" />
+        </div>
+        <div class="loadedCache">
+            <p>
+                <a class="btn btn-default" href="/buildstability">View build stability</a>
+            </p>
+        </div>
     </div>
     <div class="col-md-4">
         <p>
@@ -85,3 +90,9 @@
         </p>
     </div>
 </div>
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        loadBuildCache();
+    });
+</script>
