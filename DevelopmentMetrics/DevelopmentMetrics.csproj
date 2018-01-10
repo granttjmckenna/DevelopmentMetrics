@@ -61,7 +61,6 @@
     <Compile Include="Builds\BuildFailureRate.cs" />
     <Compile Include="Builds\FilterBuilds.cs" />
     <Compile Include="Count.cs" />
-    <Compile Include="Helpers\CacheChecker.cs" />
     <Compile Include="Helpers\CacheHelper.cs" />
     <Compile Include="Helpers\Calculator.cs" />
     <Compile Include="Helpers\Configuration.cs" />

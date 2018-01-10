@@ -162,7 +162,6 @@
     <Compile Include="Controllers\BuildDeploymentController.cs" />
     <Compile Include="Controllers\BuildStabilityController.cs" />
     <Compile Include="Controllers\BuildThroughputController.cs" />
-    <Compile Include="Controllers\CacheController.cs" />
     <Compile Include="Controllers\CardsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
@@ -177,7 +176,6 @@
     <Compile Include="Models\BuildDeploymentViewModel.cs" />
     <Compile Include="Models\BuildStabilityViewModel.cs" />
     <Compile Include="Models\BuildThroughputViewModel.cs" />
-    <Compile Include="Models\Cache.cs" />
     <Compile Include="Models\CardsViewModel.cs" />
     <Compile Include="Models\ChartFilterViewModel.cs" />
     <Compile Include="Models\PartialViewModel.cs" />

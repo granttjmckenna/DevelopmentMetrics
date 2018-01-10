@@ -46,7 +46,6 @@ namespace DevelopmentMetrics.Website.DependencyResolution
             For<IBuildsToExclude>().Use<BuildsToExclude>();
             For<IBuild>().Use<Build>();
             For<ICard>().Use<Card>();
-            For<ICacheChecker>().Use<CacheChecker>();
         }
 
         #endregion
