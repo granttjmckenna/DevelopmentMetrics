@@ -181,6 +181,7 @@
     <Compile Include="Models\CardsViewModel.cs" />
     <Compile Include="Models\ChartFilterViewModel.cs" />
     <Compile Include="Models\PartialViewModel.cs" />
+    <Compile Include="Models\ViewButton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -230,6 +231,7 @@
     <Content Include="Views\Shared\_ChartFilter.cshtml" />
     <Content Include="Views\BuildThroughput\Index.cshtml" />
     <Content Include="Views\BuildDeployment\Index.cshtml" />
+    <Content Include="Views\Shared\_ViewButton.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
