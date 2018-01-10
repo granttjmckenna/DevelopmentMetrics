@@ -25,6 +25,14 @@ namespace DevelopmentMetrics.Website.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public JsonResult ReturnWhenBuildDataCached()
+        {
+            GetCardChartDataFor(6);
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public JsonResult GetCardChartDataFor(int numberOfDays)
         {

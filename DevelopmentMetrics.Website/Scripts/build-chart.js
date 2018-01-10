@@ -4,8 +4,8 @@
         url: "/BuildStability/ReturnWhenBuildDataCached",
         type: "GET",
         complete: function () {
-            $(".loadingCache").toggle();
-            $(".loadedCache").toggle();
+            $(".Builds-LoadingCache").toggle();
+            $(".Builds-LoadedCache").toggle();
         }
     });
 

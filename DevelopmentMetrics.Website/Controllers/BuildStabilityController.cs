@@ -29,7 +29,7 @@ namespace DevelopmentMetrics.Website.Controllers
         {
             GetBuildChartDataFor(6, "All", "All");
 
-            return Json(true);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

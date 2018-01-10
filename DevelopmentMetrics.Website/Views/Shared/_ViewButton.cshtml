@@ -1,10 +1,10 @@
 ﻿@model DevelopmentMetrics.Website.Models.ViewButton
 
-<div class="loadingCache">
+<div class="@Model.Type-LoadingCache">
     <img src="/Content/loading-sm.gif" alt="loading"/>
 </div>
-<div class="loadedCache">
+<div class="@Model.Type-LoadedCache">
     <p>
-        <a class="btn btn-default" href="/@Model.Action">View build @Model.Label</a>
+        <a class="btn btn-default" href="/@Model.Action">@Model.Label</a>
     </p>
 </div>

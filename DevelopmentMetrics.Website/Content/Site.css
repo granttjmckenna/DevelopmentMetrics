@@ -58,10 +58,10 @@ textarea {
     display: none;
 }
 
-.loadingCache, .loadedCache {
+.Builds-LoadingCache, .Builds-LoadedCache, .Cards-LoadingCache, .Cards-LoadedCache {
     width: inherit;
 }
 
-.loadedCache {
+.Builds-LoadedCache, .Cards-LoadedCache {
     display: none;
 }

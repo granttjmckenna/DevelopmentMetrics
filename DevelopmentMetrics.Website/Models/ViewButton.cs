@@ -2,11 +2,13 @@
 {
     public class ViewButton
     {
+        public string Type;
         public string Label { get; }
         public string Action { get; }
 
-        public ViewButton(string label, string action)
+        public ViewButton(string type, string label, string action)
         {
+            Type = type;
             Label = label;
             Action = action;
         }

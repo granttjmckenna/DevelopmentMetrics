@@ -39,6 +39,20 @@ function drawCardChart(days) {
     return false;
 };
 
+function loadCardCache() {
+
+    $.ajax({
+        url: "/Cards/ReturnWhenBuildDataCached",
+        type: "GET",
+        complete: function () {
+            $(".Cards-LoadingCache").toggle();
+            $(".Cards-LoadedCache").toggle();
+        }
+    });
+
+    return false;
+};
+
 function renderChartData(data, chartDays) {
     var dataTable = new google.visualization.DataTable();
     dataTable.addColumn("date", "Day");
