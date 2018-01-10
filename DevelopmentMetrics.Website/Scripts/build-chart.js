@@ -2,15 +2,7 @@
 
     $.ajax({
         url: "/BuildStability/ReturnWhenBuildDataCached",
-        dataType: "json",
-        data: {},
         type: "GET",
-        error: function() {
-        },
-        beforeSend: function() {
-        },
-        success: function(data) {
-        },
         complete: function () {
             $(".loadingCache").toggle();
             $(".loadedCache").toggle();
