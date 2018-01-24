@@ -49,7 +49,7 @@ namespace DevelopmentMetrics.Tests
                 new BuildFilter(6, "All", "All"), new BuildDeploymentMetric());
 
             Assert.That(results.Count(), Is.EqualTo(6));
-            Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
+            Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 29)));
         }
 
         private List<Build> GetBuildDataFrom(DateTime fromDate, int rows)

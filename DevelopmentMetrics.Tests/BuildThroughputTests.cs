@@ -32,8 +32,8 @@ namespace DevelopmentMetrics.Tests
                     && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
                 .ToList());
 
-            _tellTheTime.Today().Returns(new DateTime(2017, 12, 04));
-            _tellTheTime.Now().Returns(new DateTime(2017, 12, 04));
+            _tellTheTime.Today().Returns(new DateTime(2017, 11, 27));
+            _tellTheTime.Now().Returns(new DateTime(2017, 11, 27));
 
             _buildThroughput = new BuildThroughput(_build, _tellTheTime);
         }

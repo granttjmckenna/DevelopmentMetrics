@@ -102,7 +102,7 @@ namespace DevelopmentMetrics.Tests
                 new BuildFilter(6, "All", "All"), new BuildStabilityMetric());
 
             Assert.That(results.Count, Is.EqualTo(6));
-            Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 22)));
+            Assert.That(results.First().Date, Is.EqualTo(new DateTime(2017, 10, 29)));
         }
 
         [Test]
@@ -124,8 +124,8 @@ namespace DevelopmentMetrics.Tests
                 {
                     Id = 999,
                     BuildTypeId = "blah blah",
-                    StartDateTime = new DateTime(2017, 10, 24, 15, 3, 30),
-                    FinishDateTime = new DateTime(2017, 10, 24, 15, 5, 30),
+                    StartDateTime = new DateTime(2017, 10, 31, 15, 3, 30),
+                    FinishDateTime = new DateTime(2017, 10, 31, 15, 5, 30),
                     AgentName = "agent name",
                     Status = "Failure",
                     State = "Finished"
@@ -134,8 +134,8 @@ namespace DevelopmentMetrics.Tests
                 {
                     Id = 1001,
                     BuildTypeId = "blah blah",
-                    StartDateTime = new DateTime(2017, 10, 24, 15, 3, 30),
-                    FinishDateTime = new DateTime(2017, 10, 24, 16, 5, 30),
+                    StartDateTime = new DateTime(2017, 10, 31, 15, 3, 30),
+                    FinishDateTime = new DateTime(2017, 10, 31, 16, 5, 30),
                     AgentName = "agent name",
                     Status = "Success",
                     State = "Finished"
