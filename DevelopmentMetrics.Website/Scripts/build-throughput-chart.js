@@ -103,6 +103,7 @@ function renderBuildThroughputChartData(data) {
             gridlines: {
                 color: "transparent"
             },
+            type: "category",
             title: "Date",
             format: "dd MMM",
             titleTextStyle: {

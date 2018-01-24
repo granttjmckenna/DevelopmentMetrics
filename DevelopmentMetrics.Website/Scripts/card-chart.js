@@ -79,6 +79,7 @@ function renderChartData(data, chartDays) {
             gridlines: {
                 color: "transparent"
             },
+            type: "category",
             title: "Date",
             format: "dd MMM",
             titleTextStyle: {
