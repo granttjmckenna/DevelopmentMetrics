@@ -27,5 +27,16 @@ namespace DevelopmentMetrics.Builds
 
             return temp;
         }
+
+        public List<Build> GetBuildsForOneWeekFrom(DateTime startDate)
+        {
+            var endDate = startDate.AddDays(7);
+
+            return _builds
+                .Where(b =>
+                    b.StartDateTime >= startDate
+                    && b.StartDateTime < endDate)
+                .ToList();
+        }
     }
 }

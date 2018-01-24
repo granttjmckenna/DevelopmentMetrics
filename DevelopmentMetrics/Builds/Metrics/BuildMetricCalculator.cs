@@ -63,9 +63,9 @@ namespace DevelopmentMetrics.Builds.Metrics
 
                 buildMetric.SetDate(startDate);
 
-                var buildsForDateRange = GetBuildsForDateRange(filteredBuilds, startDate);
+                var buildsForDateRange = new FilterBuilds(filteredBuilds).GetBuildsForOneWeekFrom(startDate);
 
-                foreach (var build in new BuildType().GetDistinctBuildTypeIds(filteredBuilds))
+                foreach (var build in new BuildType().GetDistinctBuildTypeIds(buildsForDateRange))
                 {
                     var buildsByType = buildsForDateRange
                         .Where(b => b.BuildTypeId.Equals(build.BuildTypeId, StringComparison.InvariantCultureIgnoreCase))
@@ -82,25 +82,16 @@ namespace DevelopmentMetrics.Builds.Metrics
 
         private DateTime GetFromDate(int numberOfWeeks)
         {
-            return GetStartOfWeekFor(_tellTheTime.Today()).AddDays(numberOfWeeks * -7);
+            return GetStartOfWeekFor().AddDays((numberOfWeeks - 1) * -7);
         }
 
-        private DateTime GetStartOfWeekFor(DateTime today)
+        private DateTime GetStartOfWeekFor()
         {
+            var today = _tellTheTime.Today();
+
             var offset = (int)today.DayOfWeek * -1;
 
             return today.AddDays(offset);
-        }
-
-        private List<Build> GetBuildsForDateRange(List<Build> builds, DateTime startDate)
-        {
-            var endDate = startDate.AddDays(7);
-
-            return builds
-                .Where(b =>
-                    b.StartDateTime >= startDate
-                    && b.StartDateTime < endDate)
-                .ToList();
         }
     }
 }
