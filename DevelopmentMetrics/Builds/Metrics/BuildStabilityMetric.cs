@@ -44,6 +44,9 @@ namespace DevelopmentMetrics.Builds.Metrics
                 RecoveryTimeStdDev = Calculator.ConvertMillisecondsToHours(
                     Calculator.CalculateStandardDeviation(Intervals))
             });
+
+            Intervals.Clear();
+            Builds.Clear();
         }
 
         public List<BuildStabilityMetric> GetResults()
@@ -74,16 +77,16 @@ namespace DevelopmentMetrics.Builds.Metrics
             return from buildTypeId in builds
                     .Select(b => b.BuildTypeId)
                     .Distinct()
-                let selectedBuilds = builds
-                    .Where(
-                        b => b.BuildTypeId.Equals(buildTypeId, StringComparison.InvariantCultureIgnoreCase)
-                             && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
-                    .ToList()
-                select new BuildFailureRate
-                {
-                    BuildTypeId = buildTypeId,
-                    Rate = CalculateBuildFailingRate(selectedBuilds)
-                };
+                   let selectedBuilds = builds
+                       .Where(
+                           b => b.BuildTypeId.Equals(buildTypeId, StringComparison.InvariantCultureIgnoreCase)
+                                && b.State.Equals("Finished", StringComparison.InvariantCultureIgnoreCase))
+                       .ToList()
+                   select new BuildFailureRate
+                   {
+                       BuildTypeId = buildTypeId,
+                       Rate = CalculateBuildFailingRate(selectedBuilds)
+                   };
         }
 
         private double CalculateBuildFailingRate(List<Build> builds)
