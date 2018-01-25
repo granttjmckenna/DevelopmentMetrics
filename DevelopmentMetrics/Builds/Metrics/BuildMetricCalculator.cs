@@ -68,7 +68,7 @@ namespace DevelopmentMetrics.Builds.Metrics
                 foreach (var build in new BuildType().GetDistinctBuildTypeIds(buildsForDateRange))
                 {
                     var buildsByType = buildsForDateRange
-                        .Where(b => b.BuildTypeId.Equals(build.BuildTypeId, StringComparison.InvariantCultureIgnoreCase))
+                        .Where(b => b.BuildTypeId.StartsWith(build.BuildGroup.BuildTypeGroup))
                         .ToList();
 
                     buildMetric.Add(_build, buildsByType);

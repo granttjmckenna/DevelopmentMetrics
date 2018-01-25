@@ -24,6 +24,10 @@ namespace DevelopmentMetrics.Tests
                 new Build
                 {
                     BuildTypeId = "EHLInsight_10Test"
+                },
+                new Build
+                {
+                    BuildTypeId = "EHLInsight_01Trunk"
                 }
             };
         }
