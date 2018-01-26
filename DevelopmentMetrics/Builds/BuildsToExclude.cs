@@ -11,7 +11,7 @@ namespace DevelopmentMetrics.Builds
     {
         public List<string> Builds()
         {
-            return new List<string> {"CodemanshipDrivingTest", "PoolLeague", "Forks"};
+            return new List<string> {"CodemanshipDrivingTest", "PoolLeague", "Forks", "Core" }; //Core is Core_Update_Fri_References
         }
     }
 }
