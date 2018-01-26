@@ -37,8 +37,8 @@ namespace DevelopmentMetrics.Tests
 
             builds = new FilterBuilds(builds).Filter(new BuildFilter(0, "All", "All"));
 
-            Assert.That(builds.Any(b => b.BuildTypeId.Equals("build type 1")));
-            Assert.That(builds.Any(b => b.BuildTypeId.Equals("build type 2")));
+            Assert.That(builds.Any(b => b.BuildTypeId.Equals("buildType1_A")));
+            Assert.That(builds.Any(b => b.BuildTypeId.Equals("buildType2_B")));
         }
 
         [Test]
@@ -46,9 +46,9 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuilds();
 
-            builds = new FilterBuilds(builds).Filter(new BuildFilter(0, "All", "build type 1"));
+            builds = new FilterBuilds(builds).Filter(new BuildFilter(0, "All", "buildType1_A"));
 
-            Assert.That(builds.All(b => b.BuildTypeId.Equals("build type 1")));
+            Assert.That(builds.All(b => b.BuildTypeId.Equals("buildType1_A")));
         }
 
         [Test]
@@ -56,10 +56,10 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuilds();
 
-            builds = new FilterBuilds(builds).Filter(new BuildFilter(0, "agent 1", "build type 1"));
+            builds = new FilterBuilds(builds).Filter(new BuildFilter(0, "agent 1", "buildType1_A"));
 
             Assert.That(builds.All(b => b.AgentName.Equals("agent 1")));
-            Assert.That(builds.All(b => b.BuildTypeId.Equals("build type 1")));
+            Assert.That(builds.All(b => b.BuildTypeId.Equals("buildType1_A")));
         }
 
         [Test]
@@ -70,79 +70,90 @@ namespace DevelopmentMetrics.Tests
             Assert.That(builds.Count, Is.EqualTo(2));
         }
 
+        [Test]
+        public void Return_builds_by_build_group()
+        {
+            var buildGroup = new BuildGroup("buildType1_A");
+
+            var builds = new FilterBuilds(GetBuilds()).GetBuildsFor(buildGroup);
+
+            Assert.That(builds.All(b => b.BuildTypeId.Equals("buildType1_A", StringComparison.InvariantCultureIgnoreCase)));
+            Assert.That(builds.Count, Is.EqualTo(10));
+        }
+
         private List<Build> GetBuilds()
         {
             return new List<Build>
             {
                 new Build
                 {
-                    BuildTypeId = "build type 2",
+                    BuildTypeId = "buildType2_B",
                     AgentName = "agent 1",
                     StartDateTime = new DateTime(2016,12,30)
                 },
                 new Build
                 {
-                    BuildTypeId = "build type 1",
+                    BuildTypeId = "buildType1_A",
                     AgentName = "agent 1",
                     StartDateTime = new DateTime(2017,01,03)
                 },
                 new Build
                 {
-                    BuildTypeId = "build type 1",
+                    BuildTypeId = "buildType1_A",
                     AgentName = "agent 2",
                     StartDateTime = new DateTime(2017,01,04)
                 },
                 new Build
                 {
-                    BuildTypeId = "build type 2",
+                    BuildTypeId = "buildType2_B",
                     AgentName = "agent 2",
                     StartDateTime = new DateTime(2017,01,08)
                 },
                 new Build
                 {
-                    BuildTypeId = "build type 1",
+                    BuildTypeId = "buildType1_A",
                     AgentName = "agent 1",
                     StartDateTime = new DateTime(2017,01,11)
                 },
                 new Build
                 {
-                    BuildTypeId = "build type 1",
+                    BuildTypeId = "buildType1_A",
                     AgentName = "agent 2",
                     StartDateTime = new DateTime(2017,01,14)
                 },
                 new Build
                 {
-                    BuildTypeId = "build type 1",
+                    BuildTypeId = "buildType1_A",
                     AgentName = "agent 1",
                     StartDateTime = new DateTime(2017,01,14)
                 },
                 new Build
                 {
-                    BuildTypeId = "build type 1",
+                    BuildTypeId = "buildType1_A",
                     AgentName = "agent 1",
                     StartDateTime = new DateTime(2017,01,14)
                 },
                 new Build
                 {
-                    BuildTypeId = "build type 1",
+                    BuildTypeId = "buildType1_A",
                     AgentName = "agent 2",
                     StartDateTime = new DateTime(2017,01,14)
                 },
                 new Build
                 {
-                    BuildTypeId = "build type 1",
+                    BuildTypeId = "buildType1_A",
                     AgentName = "agent 1",
                     StartDateTime = new DateTime(2017,01,21)
                 },
                 new Build
                 {
-                    BuildTypeId = "build type 1",
+                    BuildTypeId = "buildType1_A",
                     AgentName = "agent 2",
                     StartDateTime = new DateTime(2017,01,21)
                 },
                 new Build
                 {
-                    BuildTypeId = "build type 1",
+                    BuildTypeId = "buildType1_A",
                     AgentName = "agent 2",
                     StartDateTime = new DateTime(2017,01,25)
                 }

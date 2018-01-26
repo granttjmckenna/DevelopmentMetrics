@@ -38,5 +38,12 @@ namespace DevelopmentMetrics.Builds
                     && b.StartDateTime < endDate)
                 .ToList();
         }
+
+        public List<Build> GetBuildsFor(BuildGroup buildGroup)
+        {
+            return _builds
+                .Where(b => b.BuildTypeId.StartsWith(buildGroup.BuildTypeGroup))
+                .ToList();
+        }
     }
 }
