@@ -80,10 +80,10 @@ namespace DevelopmentMetrics.Builds.Metrics
 
         private DateTime GetFromDate(int numberOfWeeks)
         {
-            return GetStartOfWeekFor().AddDays((numberOfWeeks - 1) * -7);
+            return GetStartOfWeek().AddDays((numberOfWeeks - 1) * -7);
         }
 
-        private DateTime GetStartOfWeekFor()
+        private DateTime GetStartOfWeek()
         {
             var today = _tellTheTime.Today();
 
