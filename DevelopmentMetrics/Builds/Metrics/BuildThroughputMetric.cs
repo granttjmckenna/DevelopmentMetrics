@@ -44,6 +44,9 @@ namespace DevelopmentMetrics.Builds.Metrics
                 Calculator.ConvertMillisecondsToMinutes(
                 Calculator.CalculateStandardDeviation(Durations))
             });
+
+            Intervals.Clear();
+            Durations.Clear();
         }
 
         public List<BuildThroughputMetric> GetResults()
