@@ -16,7 +16,7 @@ namespace DevelopmentMetrics.Builds
 
         public BuildType() { }
 
-        public List<BuildType> GetDistinctBuildTypeIds(List<Build> builds)
+        public List<BuildType> GetDistinctBuildTypes(List<Build> builds)
         {
             var buildTypes = new List<BuildType>();
 

@@ -65,13 +65,11 @@ namespace DevelopmentMetrics.Builds.Metrics
 
                 var buildsForDateRange = new FilterBuilds(filteredBuilds).GetBuildsForOneWeekFrom(startDate);
 
-                foreach (var build in new BuildType().GetDistinctBuildTypeIds(buildsForDateRange))
+                foreach (var build in new BuildType().GetDistinctBuildTypes(buildsForDateRange))
                 {
-                    var buildsByType = buildsForDateRange
-                        .Where(b => b.BuildTypeId.StartsWith(build.BuildGroup.BuildTypeGroup))
-                        .ToList();
-
-                    buildMetric.Add(_build, buildsByType);
+                    buildMetric.Add(_build,
+                        new FilterBuilds(buildsForDateRange).GetBuildsFor(
+                            new BuildGroup(build.BuildTypeId)));
                 }
 
                 buildMetric.Calculate();

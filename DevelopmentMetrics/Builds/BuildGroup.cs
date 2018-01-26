@@ -19,7 +19,14 @@ namespace DevelopmentMetrics.Builds
 
         public BuildGroup(string buildTypeId)
         {
-            BuildTypeGroup = buildTypeId.Substring(0, buildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase));
+            BuildTypeGroup = GetBuildTypeGroup(buildTypeId);
+        }
+
+        private static string GetBuildTypeGroup(string buildTypeId)
+        {
+            return buildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase) > 0
+                ? buildTypeId.Substring(0, buildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase))
+                : buildTypeId;
         }
 
         public List<BuildGroup> GetDistinctBuildGroups()

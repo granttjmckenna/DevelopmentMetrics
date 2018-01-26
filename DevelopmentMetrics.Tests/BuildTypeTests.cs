@@ -12,7 +12,7 @@ namespace DevelopmentMetrics.Tests
         {
             var builds = GetBuilds();
 
-            var list = new BuildType().GetDistinctBuildTypeIds(builds);
+            var list = new BuildType().GetDistinctBuildTypes(builds);
 
             Assert.That(list.Count, Is.EqualTo(1));
         }
