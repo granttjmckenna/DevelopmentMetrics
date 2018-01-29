@@ -22,13 +22,6 @@ namespace DevelopmentMetrics.Builds
             BuildTypeGroup = GetBuildTypeGroup(buildTypeId);
         }
 
-        private static string GetBuildTypeGroup(string buildTypeId)
-        {
-            return buildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase) > 0
-                ? buildTypeId.Substring(0, buildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase))
-                : buildTypeId;
-        }
-
         public List<BuildGroup> GetDistinctBuildGroups()
         {
             var results = new List<BuildGroup>();
@@ -41,6 +34,16 @@ namespace DevelopmentMetrics.Builds
             }
 
             return results.OrderBy(b => b.BuildTypeGroup).ToList();
+        }
+
+        private string GetBuildTypeGroup(string buildTypeId)
+        {
+            if (buildTypeId.Equals("MvcWebProject_Build_CoreBuildRelease", StringComparison.InvariantCultureIgnoreCase))
+                return "Core";
+
+            return buildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase) > 0
+                ? buildTypeId.Substring(0, buildTypeId.IndexOf("_", StringComparison.InvariantCultureIgnoreCase))
+                : buildTypeId;
         }
     }
 }

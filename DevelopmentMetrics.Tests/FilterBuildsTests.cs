@@ -81,6 +81,15 @@ namespace DevelopmentMetrics.Tests
             Assert.That(builds.Count, Is.EqualTo(10));
         }
 
+        [Test]
+        public void Return_Core_build_group_when_mvc_web_project_is_constructor_argument()
+        {
+            var buildGroup = new BuildGroup("MvcWebProject_Build_CoreBuildRelease");
+
+            Assert.That(buildGroup.BuildTypeGroup, Is.EqualTo("Core"));
+            Assert.That(buildGroup.BuildTypeGroupDisplay, Is.EqualTo("Core"));
+        }
+
         private List<Build> GetBuilds()
         {
             return new List<Build>
