@@ -31,7 +31,6 @@ namespace DevelopmentMetrics.Tests
             _tellTheTime.ParseBuildDetailDateTimes(Arg.Any<string>()).Returns(new DateTime(2017, 01, 01));
         }
 
-
         [Test]
         public void Return_builds_excluding_designated_builds()
         {
@@ -39,7 +38,6 @@ namespace DevelopmentMetrics.Tests
 
             Assert.That(builds.Count(b => b.BuildTypeId.Equals("CcEnergyhelplineCom_03RunEndToEndTests")), Is.EqualTo(0));
         }
-
 
         [Test]
         public void Return_builds_from_build_data()
@@ -54,6 +52,8 @@ namespace DevelopmentMetrics.Tests
             Assert.That(builds.First().StartDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
             Assert.That(builds.First().FinishDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
             Assert.That(builds.First().QueueDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
+            Assert.That(builds.First().StatisticsHref, Is.EqualTo("/guestAuth/app/rest/builds/id:365628/statistics"));
+            //Assert.That(builds.First().IgnoredTests, Is.EqualTo(5));
         }
 
         [Test]
@@ -97,6 +97,12 @@ namespace DevelopmentMetrics.Tests
             Assert.That(productionBuilds.All(b => b.BuildTypeId.Equals("Tools_DomainEventsApi_04PromoteToProduction",
                 StringComparison.InvariantCultureIgnoreCase)));
         }
+
+        //[Test]
+        //public void Return_build_statistics_href()
+        //{
+
+        //}
 
         private string GetAllBuildJsonResponse()
         {

@@ -47,6 +47,7 @@ namespace DevelopmentMetrics.Builds
         public DateTime QueueDateTime { get; set; }
 
         public string Href { get; set; }
+        public string StatisticsHref { get; set; }
 
         public static string CacheKey = "builds";
 
@@ -121,7 +122,8 @@ namespace DevelopmentMetrics.Builds
                         StartDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.StartDateTime),
                         FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
                         QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
-                        AgentName = buildDetails.Agent.Name
+                        AgentName = buildDetails.Agent.Name,
+                        StatisticsHref = buildDetails.Statistics.Href
                     })
                 .ToList();
         }
@@ -156,9 +158,16 @@ internal class BuildDetail
 
     [JsonProperty(PropertyName = "queuedDate")]
     public string QueuedDateTime { get; set; }
+
+    public Statistics Statistics { get; set; }
 }
 
 internal class Agent
 {
     public string Name { get; set; }
+}
+
+internal class Statistics
+{
+    public string Href { get; set; }
 }
