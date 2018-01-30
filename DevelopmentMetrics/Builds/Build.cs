@@ -49,8 +49,6 @@ namespace DevelopmentMetrics.Builds
 
         public string Href { get; set; }
 
-        public string StatisticsHref { get; set; }
-
         public int IgnoredTests { get; set; }
 
         public static string CacheKey = "builds";
@@ -127,7 +125,6 @@ namespace DevelopmentMetrics.Builds
                         FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
                         QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
                         AgentName = buildDetails.Agent.Name,
-                        StatisticsHref = buildDetails.Statistics.Href,
                         IgnoredTests = 5
                     })
                 .ToList();

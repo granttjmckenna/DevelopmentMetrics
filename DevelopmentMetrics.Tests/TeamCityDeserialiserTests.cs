@@ -53,7 +53,6 @@ namespace DevelopmentMetrics.Tests
             Assert.That(builds.First().StartDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
             Assert.That(builds.First().FinishDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
             Assert.That(builds.First().QueueDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
-            Assert.That(builds.First().StatisticsHref, Is.EqualTo("/guestAuth/app/rest/builds/id:365628/statistics"));
             Assert.That(builds.First().IgnoredTests, Is.EqualTo(5));
         }
 
