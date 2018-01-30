@@ -153,9 +153,11 @@ namespace DevelopmentMetrics.Builds
 
         private int GetBuildIgnoredTestsCountFor(string statisticsHref)
         {
-            var buildStatistics = _teamCityWebClient.GetBuildStatisticsFor(statisticsHref);
+            var data = _teamCityWebClient.GetBuildStatisticsFor(statisticsHref);
 
-            return 5;
+            var buildStatistics = JsonConvert.DeserializeObject<BuildStatistics>(data);
+
+            return buildStatistics.IgnoredTests;
         }
     }
 }
@@ -186,4 +188,9 @@ internal class Agent
 internal class Statistics
 {
     public string Href { get; set; }
+}
+
+internal class BuildStatistics
+{
+    public int IgnoredTests { get; set; }
 }

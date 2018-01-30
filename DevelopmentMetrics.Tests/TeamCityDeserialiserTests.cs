@@ -27,7 +27,7 @@ namespace DevelopmentMetrics.Tests
 
             _teamCityWebClient.GetBuildData().Returns(GetAllBuildJsonResponse());
             _teamCityWebClient.GetBuildDetailsDataFor(Arg.Any<string>()).Returns(GetBuildDetailsJsonResponse());
-            _teamCityWebClient.GetBuildStatisticsFor(Arg.Any<string>()).Returns("{\"IgnoredTests\":\"5\"}");
+            _teamCityWebClient.GetBuildStatisticsFor(Arg.Any<string>()).Returns("{\"BuildStatistics\":{\"IgnoredTests\":\"5\"}}");
 
             _tellTheTime.ParseBuildDetailDateTimes(Arg.Any<string>()).Returns(new DateTime(2017, 01, 01));
         }
