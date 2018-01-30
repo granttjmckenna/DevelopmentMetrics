@@ -7,6 +7,7 @@ namespace DevelopmentMetrics.Repository
     {
         string GetBuildData();
         string GetBuildDetailsDataFor(string buildHref);
+        string GetBuildStatisticsFor(string statisticsHref);
     }
 
     public class TeamCityWebClient : ITeamCityWebClient
@@ -26,6 +27,11 @@ namespace DevelopmentMetrics.Repository
         }
 
         public string GetBuildDetailsDataFor(string uri)
+        {
+            return ExecuteGetRequest(uri);
+        }
+
+        public string GetBuildStatisticsFor(string uri)
         {
             return ExecuteGetRequest(uri);
         }

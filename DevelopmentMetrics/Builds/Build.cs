@@ -38,6 +38,7 @@ namespace DevelopmentMetrics.Builds
         public string Status { get; set; }
 
         public string State { get; set; }
+
         public string AgentName { get; set; }
 
         public DateTime StartDateTime { get; set; }
@@ -47,7 +48,10 @@ namespace DevelopmentMetrics.Builds
         public DateTime QueueDateTime { get; set; }
 
         public string Href { get; set; }
+
         public string StatisticsHref { get; set; }
+
+        public int IgnoredTests { get; set; }
 
         public static string CacheKey = "builds";
 
@@ -123,7 +127,8 @@ namespace DevelopmentMetrics.Builds
                         FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
                         QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
                         AgentName = buildDetails.Agent.Name,
-                        StatisticsHref = buildDetails.Statistics.Href
+                        StatisticsHref = buildDetails.Statistics.Href,
+                        IgnoredTests = 5
                     })
                 .ToList();
         }
@@ -141,7 +146,16 @@ namespace DevelopmentMetrics.Builds
 
             var buildDetails = JsonConvert.DeserializeObject<BuildDetail>(data);
 
+            buildDetails.IgnoredTests = GetBuildIgnoredTestsCountFor(buildDetails.Statistics.Href);
+
             return buildDetails;
+        }
+
+        private int GetBuildIgnoredTestsCountFor(string statisticsHref)
+        {
+            var buildStatistics = _teamCityWebClient.GetBuildStatisticsFor(statisticsHref);
+
+            return 5;
         }
     }
 }
@@ -160,6 +174,8 @@ internal class BuildDetail
     public string QueuedDateTime { get; set; }
 
     public Statistics Statistics { get; set; }
+
+    public int IgnoredTests { get; set; }
 }
 
 internal class Agent

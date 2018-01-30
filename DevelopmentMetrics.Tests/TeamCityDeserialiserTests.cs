@@ -27,6 +27,7 @@ namespace DevelopmentMetrics.Tests
 
             _teamCityWebClient.GetBuildData().Returns(GetAllBuildJsonResponse());
             _teamCityWebClient.GetBuildDetailsDataFor(Arg.Any<string>()).Returns(GetBuildDetailsJsonResponse());
+            _teamCityWebClient.GetBuildStatisticsFor(Arg.Any<string>()).Returns("{\"IgnoredTests\":\"5\"}");
 
             _tellTheTime.ParseBuildDetailDateTimes(Arg.Any<string>()).Returns(new DateTime(2017, 01, 01));
         }
@@ -53,7 +54,7 @@ namespace DevelopmentMetrics.Tests
             Assert.That(builds.First().FinishDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
             Assert.That(builds.First().QueueDateTime, Is.GreaterThanOrEqualTo(new DateTime(2015, 01, 01)));
             Assert.That(builds.First().StatisticsHref, Is.EqualTo("/guestAuth/app/rest/builds/id:365628/statistics"));
-            //Assert.That(builds.First().IgnoredTests, Is.EqualTo(5));
+            Assert.That(builds.First().IgnoredTests, Is.EqualTo(5));
         }
 
         [Test]
