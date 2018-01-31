@@ -47,8 +47,7 @@ namespace DevelopmentMetrics.Website.Models
                 {"9 weeks", "9"},
                 {"10 weeks", "10"},
                 {"15 weeks", "15"},
-                {"20 weeks", "20"},
-                {"All", "-2"}
+                {"20 weeks", "20"}
             };
 
             return results;

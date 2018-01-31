@@ -145,8 +145,6 @@ function getChartTitleDays(days) {
     switch (days) {
         case -1:
             return "6";
-        case -2:
-            return "All";
         default:
             return days / 7;
     }

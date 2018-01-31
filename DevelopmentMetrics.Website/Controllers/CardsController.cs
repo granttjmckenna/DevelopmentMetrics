@@ -28,7 +28,7 @@ namespace DevelopmentMetrics.Website.Controllers
         [HttpGet]
         public JsonResult ReturnWhenBuildDataCached()
         {
-            GetCardChartDataFor(6);
+            GetCardChartDataFor(42);
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
