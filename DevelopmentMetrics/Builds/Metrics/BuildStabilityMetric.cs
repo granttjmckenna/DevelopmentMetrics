@@ -44,23 +44,11 @@ namespace DevelopmentMetrics.Builds.Metrics
                 RecoveryTime = CalculateAverageRecoveryTimeInHoursFor(Intervals),
                 RecoveryTimeStdDev = Calculator.ConvertMillisecondsToHours(
                     Calculator.CalculateStandardDeviation(Intervals)),
-                IgnoredTestCount = SumIgnoredTestCountsFor(Builds)
+                IgnoredTestCount = Builds.Sum(build => build.IgnoredTestCount)
             });
 
             Intervals.Clear();
             Builds.Clear();
-        }
-
-        private int SumIgnoredTestCountsFor(List<Build> builds)
-        {
-            int total = 0;
-
-            foreach (var build in Builds)
-            {
-                total += build.IgnoredTestCount;
-            }
-
-            return total;
         }
 
         public List<BuildStabilityMetric> GetResults()
