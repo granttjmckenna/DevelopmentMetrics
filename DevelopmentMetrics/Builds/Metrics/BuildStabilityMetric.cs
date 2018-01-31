@@ -15,6 +15,7 @@ namespace DevelopmentMetrics.Builds.Metrics
         public double FailureRate { get; private set; }
         public int RecoveryTime { get; private set; }
         public double RecoveryTimeStdDev { get; private set; }
+        public int IgnoredTestCount { get; private set; }
 
         public void SetDate(DateTime date)
         {
@@ -42,7 +43,8 @@ namespace DevelopmentMetrics.Builds.Metrics
                 FailureRate = CalculateFailureRateFor(Builds),
                 RecoveryTime = CalculateAverageRecoveryTimeInHoursFor(Intervals),
                 RecoveryTimeStdDev = Calculator.ConvertMillisecondsToHours(
-                    Calculator.CalculateStandardDeviation(Intervals))
+                    Calculator.CalculateStandardDeviation(Intervals)),
+                IgnoredTestCount = 2
             });
 
             Intervals.Clear();

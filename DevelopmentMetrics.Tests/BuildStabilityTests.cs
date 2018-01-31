@@ -106,6 +106,17 @@ namespace DevelopmentMetrics.Tests
         }
 
         [Test]
+        public void Return_ignored_test_count_by_week()
+        {
+            _build.GetBuilds().Returns(GetBuilds());
+
+            var results = new BuildMetricCalculator(_tellTheTime,_build).CalculateBuildStability(
+                new BuildFilter(6,"All","All"),new BuildStabilityMetric() );
+
+            Assert.That(results.First().IgnoredTestCount, Is.EqualTo(2));
+        }
+
+        [Test]
         public void Return_nearest_previous_Sunday_to_date()
         {
             var today = new DateTime(2017, 12, 04);
