@@ -49,7 +49,7 @@ namespace DevelopmentMetrics.Builds
 
         public string Href { get; set; }
 
-        public int IgnoredTests { get; set; }
+        public int IgnoredTestCount { get; set; }
 
         public static string CacheKey = "builds";
 
@@ -125,7 +125,7 @@ namespace DevelopmentMetrics.Builds
                         FinishDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.FinishDateTime),
                         QueueDateTime = _tellTheTime.ParseBuildDetailDateTimes(buildDetails.QueuedDateTime),
                         AgentName = buildDetails.Agent.Name,
-                        IgnoredTests = 5
+                        IgnoredTestCount = buildDetails.IgnoredTestCount
                     })
                 .ToList();
         }
@@ -143,7 +143,7 @@ namespace DevelopmentMetrics.Builds
 
             var buildDetails = JsonConvert.DeserializeObject<BuildDetail>(data);
 
-            buildDetails.IgnoredTests = GetBuildIgnoredTestsCountFor(buildDetails.Statistics.Href);
+            buildDetails.IgnoredTestCount = GetBuildIgnoredTestsCountFor(buildDetails.Statistics.Href);
 
             return buildDetails;
         }
@@ -154,7 +154,10 @@ namespace DevelopmentMetrics.Builds
 
             var buildStatistics = JsonConvert.DeserializeObject<BuildStatistics>(data);
 
-            return buildStatistics.IgnoredTests;
+            return (from prop in buildStatistics.Property
+                    where prop.Values.First() == "IgnoredTestCount"
+                    select int.Parse(prop.Values.Last()))
+                    .FirstOrDefault();
         }
     }
 }
@@ -174,7 +177,7 @@ internal class BuildDetail
 
     public Statistics Statistics { get; set; }
 
-    public int IgnoredTests { get; set; }
+    public int IgnoredTestCount { get; set; }
 }
 
 internal class Agent
@@ -189,5 +192,7 @@ internal class Statistics
 
 internal class BuildStatistics
 {
-    public int IgnoredTests { get; set; }
+    public IEnumerable<IDictionary<string, string>> Property { get; set; }
+
+    public int IgnoredTestCount { get; set; }
 }
