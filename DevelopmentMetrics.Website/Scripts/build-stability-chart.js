@@ -79,7 +79,7 @@ function drawBuildChart(weeks, buildAgent, buildTypeId) {
             showChartLoading();
         },
         success: function (data) {
-            renderBuildChartData(data);
+            renderBuildData(data);
         },
         complete: function () {
             showChartLoaded();
@@ -88,6 +88,57 @@ function drawBuildChart(weeks, buildAgent, buildTypeId) {
 
     return false;
 };
+
+function renderBuildData(data) {
+    renderBuildChartData(data);
+
+    renderBuildIgnoredTestsData(data);
+}
+
+function renderBuildIgnoredTestsData(data) {
+    var dataTable = new google.visualization.DataTable();
+    dataTable.addColumn("date", "Day");
+    dataTable.addColumn("number", "Ignored test count");
+
+    $.each(data,
+        function (i, item) {
+            dataTable.addRows([[new Date(getDateIfDate(item.Date)), item.IgnoredTestCount]]);
+        });
+
+    var options = {
+        height: 200,
+        hAxis: {
+            gridlines: {
+                color: "transparent"
+            },
+            title: "Ignored tests (count)",
+            minValue: 0,
+            titleTextStyle: {
+                fontSize: 20,
+                italic: false
+            }
+        },
+        vAxis: {
+            gridlines: {
+                color: "transparent"
+            },
+            type: "category",
+            title: "Date",
+            format: "dd MMM",
+            titleTextStyle: {
+                fontSize: 20,
+                italic: false
+            }
+        },
+        legend: {
+            position: "none"
+        }
+    };
+
+    var chart = new google.visualization.BarChart(document.getElementById("chart_IgnoredTests"));
+
+    chart.draw(dataTable, options);
+}
 
 function renderBuildChartData(data) {
     var dataTable = new google.visualization.DataTable();
@@ -212,3 +263,13 @@ function showAllItems() {
 function showBuildItem(id) {
     $("#" + id).removeClass("hideBuildItem").addClass("showBuildItem");
 };
+
+function formatDate(date) {
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+
+    return day + ' ' + monthNames[monthIndex] + ' ' + year;
+}

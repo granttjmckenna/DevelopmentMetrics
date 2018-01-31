@@ -51,6 +51,15 @@
         <span class="glyphicon glyphicon-star-empty"></span>Build Failure Rate (percentage of builds that failed) & Build Failure Recovery Time (time to recover from failed build)
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Ignored tests in builds run by week</h2>
+    
+        <div id="chart_IgnoredTests"></div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-10">
         <h2>Failing and passing builds by rate (all time)</h2>
@@ -66,6 +75,7 @@
                 ))
     </div>
 </div>
+
 <div class="row">
     <div class="col-md-6">
         @Html.Partial("_BuildList", new PartialViewModel(Model.GetFailingBuildsByRate(), "alert alert-danger", "failingBuild"))
