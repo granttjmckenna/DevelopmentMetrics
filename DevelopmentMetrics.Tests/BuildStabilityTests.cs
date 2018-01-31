@@ -92,7 +92,7 @@ namespace DevelopmentMetrics.Tests
 
             Assert.That(failingBuilds.All(b => b.BuildTypeId.Equals("passing build type id")));
         }
-        
+
         [Test]
         public void Should_calculate_failure_percentage_by_week()
         {
@@ -110,8 +110,8 @@ namespace DevelopmentMetrics.Tests
         {
             _build.GetBuilds().Returns(GetBuilds());
 
-            var results = new BuildMetricCalculator(_tellTheTime,_build).CalculateBuildStability(
-                new BuildFilter(6,"All","All"),new BuildStabilityMetric() );
+            var results = new BuildMetricCalculator(_tellTheTime, _build).CalculateBuildStability(
+                new BuildFilter(6, "All", "All"), new BuildStabilityMetric());
 
             Assert.That(results.First().IgnoredTestCount, Is.EqualTo(2));
         }
@@ -191,7 +191,8 @@ namespace DevelopmentMetrics.Tests
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 0, 30),
                     Status = "Failure",
                     State = "Finished",
-                    AgentName = "agent name"
+                    AgentName = "agent name",
+                    IgnoredTestCount = 1
                 },
 
                 new Build
@@ -202,7 +203,8 @@ namespace DevelopmentMetrics.Tests
                     FinishDateTime = new DateTime(2017, 11, 1, 12, 1, 30),
                     Status = "Failure",
                     State = "Finished",
-                    AgentName = "agent name"
+                    AgentName = "agent name",
+                    IgnoredTestCount = 1
                 },
 
                 new Build
